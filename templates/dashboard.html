@@ -646,23 +646,23 @@
 
     /* Sidebar Navigation Links */
     .sidebar-link {
-      padding: 11px 16px !important;
-      font-size: 14.5px !important;
-      font-weight: 700 !important;
-      border-radius: 12px !important;
-      min-height: 46px !important;
+      padding: 8px 12px !important;
+      font-size: 13px !important;
+      font-weight: 600 !important;
+      border-radius: 10px !important;
+      min-height: 38px !important;
       letter-spacing: 0.01em !important;
     }
     .sidebar-link span {
-      font-size: 14.5px !important;
-      font-weight: 700 !important;
+      font-size: 13px !important;
+      font-weight: 600 !important;
       color: #ffffff !important;
     }
     .sidebar-link i,
     .sidebar-link svg {
-      width: 19px !important;
-      height: 19px !important;
-      stroke-width: 2.2 !important;
+      width: 17px !important;
+      height: 17px !important;
+      stroke-width: 2 !important;
     }
     .sidebar-link:not(.bg-amber-500) {
       color: #ffffff !important;
@@ -689,7 +689,7 @@
     }
     .sidebar-link.bg-amber-500 span {
       color: #0f172a !important;
-      font-weight: 800 !important;
+      font-weight: 700 !important;
     }
     .sidebar-link.bg-amber-500 i,
     .sidebar-link.bg-amber-500 svg {
@@ -740,63 +740,58 @@
       </div>
 
       <!-- Left Navigation Menu -->
-      <nav class="p-3 space-y-1.5 flex-1">
-        <p class="px-3 pt-2 pb-1 text-[11px] font-black uppercase tracking-wider text-slate-400">Asosiy Bo'limlar</p>
+      <nav class="p-2 space-y-1 flex-1">
+        <p class="px-2.5 pt-1.5 pb-1 text-[10px] font-black uppercase tracking-wider text-slate-400">Asosiy Bo'limlar</p>
 
-        <button onclick="switchView('pos')" id="nav-pos" class="sidebar-link w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-bold transition bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20">
-          <i data-lucide="shopping-cart" class="w-5 h-5 shrink-0"></i>
+        <button onclick="switchView('pos')" id="nav-pos" class="sidebar-link w-full flex items-center space-x-2.5 px-3 py-2 rounded-xl text-xs font-bold transition bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20">
+          <i data-lucide="shopping-cart" class="w-4 h-4 shrink-0"></i>
           <span>Skanerli Kassa (POS)</span>
         </button>
 
-        <button onclick="switchView('warehouse')" id="nav-warehouse" class="sidebar-link w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-bold transition text-white hover:bg-slate-800 hover:text-white">
-          <i data-lucide="package" class="w-5 h-5 shrink-0"></i>
+        <button onclick="switchView('warehouse')" id="nav-warehouse" class="sidebar-link w-full flex items-center space-x-2.5 px-3 py-2 rounded-xl text-xs font-bold transition text-white hover:bg-slate-800 hover:text-white">
+          <i data-lucide="package" class="w-4 h-4 shrink-0"></i>
           <span>Omborxona (Kirim & Qoldiq)</span>
         </button>
 
-        <button onclick="switchView('barcodes')" id="nav-barcodes" class="sidebar-link w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-bold transition text-white hover:bg-slate-800 hover:text-white">
-          <i data-lucide="barcode" class="w-5 h-5 shrink-0"></i>
+        <button onclick="switchView('barcodes')" id="nav-barcodes" class="sidebar-link w-full flex items-center space-x-2.5 px-3 py-2 rounded-xl text-xs font-bold transition text-white hover:bg-slate-800 hover:text-white">
+          <i data-lucide="barcode" class="w-4 h-4 shrink-0"></i>
           <span>Shtrix-kodlar (Termoprinter)</span>
         </button>
 
-        <button onclick="switchView('suppliers')" id="nav-suppliers" class="sidebar-link w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-bold transition text-white hover:bg-slate-800 hover:text-white">
-          <i data-lucide="truck" class="w-5 h-5 shrink-0"></i>
+        <button onclick="switchView('suppliers')" id="nav-suppliers" class="sidebar-link w-full flex items-center space-x-2.5 px-3 py-2 rounded-xl text-xs font-bold transition text-white hover:bg-slate-800 hover:text-white">
+          <i data-lucide="truck" class="w-4 h-4 shrink-0"></i>
           <span>Ta'minotchilar</span>
         </button>
 
-        <button onclick="switchView('employees')" id="nav-employees" class="sidebar-link w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-bold transition text-white hover:bg-slate-800 hover:text-white">
-          <i data-lucide="users" class="w-5 h-5 shrink-0 text-amber-400"></i>
+        <button onclick="switchView('employees')" id="nav-employees" class="sidebar-link w-full flex items-center space-x-2.5 px-3 py-2 rounded-xl text-xs font-bold transition text-white hover:bg-slate-800 hover:text-white">
+          <i data-lucide="users" class="w-4 h-4 shrink-0 text-amber-400"></i>
           <span>Xodimlar (Sotuvchilar)</span>
         </button>
 
-        <button onclick="switchView('expenses')" id="nav-expenses" class="sidebar-link w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-bold transition text-white hover:bg-slate-800 hover:text-white">
-          <i data-lucide="credit-card" class="w-5 h-5 shrink-0"></i>
+        <button onclick="switchView('expenses')" id="nav-expenses" class="sidebar-link w-full flex items-center space-x-2.5 px-3 py-2 rounded-xl text-xs font-bold transition text-white hover:bg-slate-800 hover:text-white">
+          <i data-lucide="credit-card" class="w-4 h-4 shrink-0"></i>
           <span>Chiqimlar (Xarajat)</span>
         </button>
 
-        <button onclick="switchView('finance')" id="nav-finance" class="sidebar-link w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-bold transition text-white hover:bg-slate-800 hover:text-white">
-          <i data-lucide="wallet" class="w-5 h-5 shrink-0 text-emerald-400"></i>
+        <button onclick="switchView('finance')" id="nav-finance" class="sidebar-link w-full flex items-center space-x-2.5 px-3 py-2 rounded-xl text-xs font-bold transition text-white hover:bg-slate-800 hover:text-white">
+          <i data-lucide="wallet" class="w-4 h-4 shrink-0 text-emerald-400"></i>
           <span>Asosiy Balans (Finans)</span>
         </button>
 
-        <button onclick="switchView('reports')" id="nav-reports" class="sidebar-link w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-bold transition text-white hover:bg-slate-800 hover:text-white">
-          <i data-lucide="receipt" class="w-5 h-5 shrink-0"></i>
+        <button onclick="switchView('reports')" id="nav-reports" class="sidebar-link w-full flex items-center space-x-2.5 px-3 py-2 rounded-xl text-xs font-bold transition text-white hover:bg-slate-800 hover:text-white">
+          <i data-lucide="receipt" class="w-4 h-4 shrink-0"></i>
           <span>Buyurtmalar & Savdo Tarixi</span>
         </button>
 
-        <button onclick="switchView('nasiya')" id="nav-nasiya" class="sidebar-link w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-bold transition text-white hover:bg-slate-800 hover:text-white">
-          <i data-lucide="book-open" class="w-5 h-5 shrink-0 text-amber-400"></i>
+        <button onclick="switchView('nasiya')" id="nav-nasiya" class="sidebar-link w-full flex items-center space-x-2.5 px-3 py-2 rounded-xl text-xs font-bold transition text-white hover:bg-slate-800 hover:text-white">
+          <i data-lucide="book-open" class="w-4 h-4 shrink-0 text-amber-400"></i>
           <span>Nasiyalar (Qarz daftari)</span>
         </button>
 
-        <button onclick="switchView('shifts')" id="nav-shifts" class="sidebar-link w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-bold transition text-white hover:bg-slate-800 hover:text-white">
-          <i data-lucide="clock" class="w-5 h-5 shrink-0 text-amber-400"></i>
+        <button onclick="switchView('shifts')" id="nav-shifts" class="sidebar-link w-full flex items-center space-x-2.5 px-3 py-2 rounded-xl text-xs font-bold transition text-white hover:bg-slate-800 hover:text-white">
+          <i data-lucide="clock" class="w-4 h-4 shrink-0 text-amber-400"></i>
           <span>Kassa Smenalari (Z-Hisobot)</span>
         </button>
-
-        <a href="/admin" id="superAdminLink" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-bold transition text-amber-400 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 mt-3">
-          <i data-lucide="shield-check" class="w-5 h-5 shrink-0 text-amber-400"></i>
-          <span>Super Admin Paneli</span>
-        </a>
       </nav>
 
       <!-- Bottom User & Logout -->
@@ -4130,7 +4125,7 @@
         const nav = document.getElementById(`nav-${v}`);
         if (sec) sec.classList.add('hidden');
         if (nav) {
-          nav.className = "sidebar-link w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-bold transition text-white hover:bg-slate-800 hover:text-white";
+          nav.className = "sidebar-link w-full flex items-center space-x-2.5 px-3 py-2 rounded-xl text-xs font-bold transition text-white hover:bg-slate-800 hover:text-white";
         }
       });
 
@@ -4138,7 +4133,7 @@
       const activeNav = document.getElementById(`nav-${viewName}`);
       if (activeSec) activeSec.classList.remove('hidden');
       if (activeNav) {
-        activeNav.className = "sidebar-link w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-bold transition bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20";
+        activeNav.className = "sidebar-link w-full flex items-center space-x-2.5 px-3 py-2 rounded-xl text-xs font-bold transition bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20";
       }
 
       const titleMap = {
