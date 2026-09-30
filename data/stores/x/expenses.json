@@ -1,5 +1,13 @@
 [
   {
+    "id": "EXP-142007",
+    "title": "Tushlik",
+    "category": "Tushlik va Oziq-ovqat",
+    "amount": 30000.0,
+    "date": "2026-09-30",
+    "note": "Hamma olmadi"
+  },
+  {
     "id": "EXP-001628",
     "title": "Hisobdan chiqarish: Veshilka",
     "category": "Hisobdan chiqarish",

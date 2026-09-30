@@ -80,7 +80,21 @@ def init_system():
     default_store_slug = "baraka_market"
     store_dir = get_store_dir(default_store_slug)
     
-    # 1. Default user: 998901234567 / 123456
+    # Ensure existing users have status and role
+    changed = False
+    for u in users:
+        if "status" not in u:
+            u["status"] = "active"
+            changed = True
+        if u.get("phone") in ("998901234567", "admin"):
+            if u.get("role") != "superadmin":
+                u["role"] = "superadmin"
+                changed = True
+            if u.get("status") != "active":
+                u["status"] = "active"
+                changed = True
+
+    # 1. Default Super Admin: 998901234567 / admin
     if not any(u.get("phone") == "998901234567" for u in users):
         users.append({
             "phone": "998901234567",
@@ -88,8 +102,14 @@ def init_system():
             "store_id": default_store_slug,
             "store_name": "Baraka Savdo Markazi",
             "owner_name": "Jaloliddin",
-            "token": "demo_token_123"
+            "token": "demo_token_123",
+            "status": "active",
+            "role": "superadmin",
+            "created_at": datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
         })
+        changed = True
+
+    if changed:
         save_json(USERS_FILE, users)
 
     # 2. Default store files
@@ -435,14 +455,30 @@ def require_user(request: Request) -> Dict[str, Any]:
     user = get_current_user(request)
     if not user:
         raise HTTPException(status_code=401, detail="Tizimga kirish talab etiladi")
+    
+    is_superadmin = (user.get("role") == "superadmin") or (user.get("phone") in ("998901234567", "admin"))
+    if not is_superadmin:
+        u_status = user.get("status", "active")
+        if u_status == "blocked":
+            raise HTTPException(status_code=403, detail="Ushbu do'kon administrator tomonidan bloklangan! Murojaat uchun: +998 90 123 45 67")
+        if u_status == "pending":
+            raise HTTPException(status_code=403, detail="Do'koningiz administrator tasdiqlashini kutilmoqda!")
+    return user
+
+def require_admin(request: Request) -> Dict[str, Any]:
+    user = require_user(request)
+    is_superadmin = (user.get("role") == "superadmin") or (user.get("phone") in ("998901234567", "admin"))
+    if not is_superadmin:
+        raise HTTPException(status_code=403, detail="Faqat Super Administrator uchun ruxsat berilgan!")
     return user
 
 def require_store(request: Request, store_id: Optional[str] = None) -> str:
     user = require_user(request)
     user_store = user.get("store_id")
-    if store_id and store_id != user_store:
+    is_superadmin = (user.get("role") == "superadmin") or (user.get("phone") in ("998901234567", "admin"))
+    if store_id and store_id != user_store and not is_superadmin:
         raise HTTPException(status_code=403, detail="Ruxsat berilmagan! Siz faqat o'z do'koningiz ma'lumotlariga kira olasiz.")
-    return user_store
+    return user_store if not is_superadmin or not store_id else store_id
 
 @app.post("/api/auth/register")
 def auth_register(req: RegisterRequest, response: Response):
@@ -455,6 +491,12 @@ def auth_register(req: RegisterRequest, response: Response):
         raise HTTPException(status_code=400, detail="Ushbu telefon raqami bilan do'kon mavjud! Iltimos, tizimga kiring.")
 
     slug = slugify(req.store_name)
+    base_slug = slug
+    c = 1
+    while any(u.get("store_id") == slug for u in users):
+        slug = f"{base_slug}_{c}"
+        c += 1
+
     store_dir = get_store_dir(slug)
     
     # Store settings
@@ -481,17 +523,22 @@ def auth_register(req: RegisterRequest, response: Response):
         "store_id": slug,
         "store_name": req.store_name.strip(),
         "owner_name": req.owner_name.strip(),
-        "token": token
+        "token": token,
+        "tokens": [token],
+        "status": "pending",  # Yangi do'kon: Super admin tasdiqlashi shart
+        "role": "store_owner",
+        "created_at": datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
     }
     users.append(user_record)
     save_json(USERS_FILE, users)
 
-    response.set_cookie(key="bee_token", value=token, max_age=86400*30, httponly=False)
+    # Note: don't set cookie because it's not active yet
     return {
-        "token": token,
+        "status": "pending",
         "store_id": slug,
         "store_name": req.store_name.strip(),
-        "owner_name": req.owner_name.strip()
+        "owner_name": req.owner_name.strip(),
+        "message": "Do'kon ochish so'rovingiz qabul qilindi! Administrator tasdiqlaganidan so'ng tizimga kirishingiz mumkin."
     }
 
 @app.post("/api/auth/login")
@@ -499,13 +546,22 @@ def auth_login(req: LoginRequest, response: Response):
     phone_clean = clean_phone(req.phone)
     users = load_json(USERS_FILE, [])
     
-    user = next((u for u in users if u.get("phone") == phone_clean and u.get("password") == req.password.strip()), None)
+    user = next((u for u in users if (u.get("phone") == phone_clean or u.get("phone") == req.phone.strip()) and u.get("password") == req.password.strip()), None)
     if not user:
-        # Fallback check raw
-        user = next((u for u in users if (u.get("phone") == req.phone.strip()) and u.get("password") == req.password.strip()), None)
+        # Fallback check raw or admin alias
+        user = next((u for u in users if (str(u.get("phone")).lower() == req.phone.strip().lower()) and u.get("password") == req.password.strip()), None)
 
     if not user:
         raise HTTPException(status_code=401, detail="Telefon raqami yoki parol noto'g'ri!")
+
+    is_superadmin = (user.get("role") == "superadmin") or (user.get("phone") in ("998901234567", "admin"))
+    u_status = user.get("status", "active")
+
+    if not is_superadmin:
+        if u_status == "pending":
+            raise HTTPException(status_code=403, detail="Do'koningiz administrator tomonidan hali tasdiqlanmagan. Iltimos, admin tasdiqlashini kuting!")
+        if u_status == "blocked":
+            raise HTTPException(status_code=403, detail="Ushbu do'kon administrator tomonidan bloklangan! Murojaat uchun: +998 90 123 45 67")
 
     token = secrets.token_hex(24)
     raw_tokens = user.get("tokens", [])
@@ -526,9 +582,12 @@ def auth_login(req: LoginRequest, response: Response):
     response.set_cookie(key="bee_token", value=token, max_age=86400*30, httponly=False)
     return {
         "token": token,
-        "store_id": user["store_id"],
-        "store_name": user["store_name"],
-        "owner_name": user["owner_name"]
+        "store_id": user.get("store_id", ""),
+        "store_name": user.get("store_name", ""),
+        "owner_name": user.get("owner_name", ""),
+        "role": user.get("role", "store_owner"),
+        "status": u_status,
+        "is_admin": is_superadmin
     }
 
 @app.get("/api/auth/me")
@@ -536,17 +595,182 @@ def auth_me(request: Request):
     user = get_current_user(request)
     if not user:
         raise HTTPException(status_code=401, detail="Kirilmagan")
+    is_superadmin = (user.get("role") == "superadmin") or (user.get("phone") in ("998901234567", "admin"))
     return {
         "phone": user["phone"],
-        "store_id": user["store_id"],
-        "store_name": user["store_name"],
-        "owner_name": user["owner_name"]
+        "store_id": user.get("store_id", ""),
+        "store_name": user.get("store_name", ""),
+        "owner_name": user.get("owner_name", ""),
+        "role": user.get("role", "store_owner"),
+        "status": user.get("status", "active"),
+        "is_admin": is_superadmin
     }
 
 @app.post("/api/auth/logout")
 def auth_logout(response: Response):
     response.delete_cookie(key="bee_token")
     return {"message": "Tizimdan chiqildi"}
+
+# ----------------- SUPER ADMIN ENDPOINTS ----------------- #
+
+class AdminChangePassReq(BaseModel):
+    new_password: str
+
+class AdminCreateStoreReq(BaseModel):
+    store_name: str
+    owner_name: str
+    phone: str
+    password: str
+    address: Optional[str] = "O'zbekiston"
+    status: Optional[str] = "active"
+
+@app.get("/api/admin/stores")
+def admin_get_stores(request: Request):
+    require_admin(request)
+    users = load_json(USERS_FILE, [])
+    stores_data = []
+
+    for u in users:
+        s_id = u.get("store_id", "")
+        store_dir = STORES_DIR / s_id if s_id else None
+        
+        prod_count = 0
+        order_count = 0
+        total_sales = 0.0
+
+        if store_dir and store_dir.exists():
+            prods = load_json(store_dir / "products.json", [])
+            orders = load_json(store_dir / "orders.json", [])
+            prod_count = len(prods)
+            order_count = len(orders)
+            total_sales = sum(float(o.get("totalAmount", 0)) for o in orders if isinstance(o, dict))
+
+        stores_data.append({
+            "phone": u.get("phone", ""),
+            "password": u.get("password", ""),
+            "store_id": s_id,
+            "store_name": u.get("store_name", "Do'kon"),
+            "owner_name": u.get("owner_name", ""),
+            "status": u.get("status", "active"),
+            "role": u.get("role", "store_owner"),
+            "created_at": u.get("created_at", "Noma'lum"),
+            "product_count": prod_count,
+            "order_count": order_count,
+            "total_sales": total_sales
+        })
+    return stores_data
+
+@app.post("/api/admin/stores/{store_id}/approve")
+def admin_approve_store(store_id: str, request: Request):
+    require_admin(request)
+    users = load_json(USERS_FILE, [])
+    target = next((u for u in users if u.get("store_id") == store_id), None)
+    if not target:
+        raise HTTPException(status_code=404, detail="Do'kon topilmadi")
+    target["status"] = "active"
+    save_json(USERS_FILE, users)
+    return {"success": True, "message": f"'{target.get('store_name')}' do'koni tasdiqlandi va faollashtirildi!"}
+
+@app.post("/api/admin/stores/{store_id}/block")
+def admin_block_store(store_id: str, request: Request):
+    require_admin(request)
+    users = load_json(USERS_FILE, [])
+    target = next((u for u in users if u.get("store_id") == store_id), None)
+    if not target:
+        raise HTTPException(status_code=404, detail="Do'kon topilmadi")
+    if target.get("role") == "superadmin":
+        raise HTTPException(status_code=400, detail="Super Administrator do'konini bloklab bo'lmaydi!")
+    target["status"] = "blocked"
+    save_json(USERS_FILE, users)
+    return {"success": True, "message": f"'{target.get('store_name')}' do'koni bloklandi!"}
+
+@app.post("/api/admin/stores/{store_id}/unblock")
+def admin_unblock_store(store_id: str, request: Request):
+    require_admin(request)
+    users = load_json(USERS_FILE, [])
+    target = next((u for u in users if u.get("store_id") == store_id), None)
+    if not target:
+        raise HTTPException(status_code=404, detail="Do'kon topilmadi")
+    target["status"] = "active"
+    save_json(USERS_FILE, users)
+    return {"success": True, "message": f"'{target.get('store_name')}' blokdan chiqarildi va faollashtirildi!"}
+
+@app.post("/api/admin/stores/{store_id}/change-password")
+def admin_change_password(store_id: str, req: AdminChangePassReq, request: Request):
+    require_admin(request)
+    new_pass = req.new_password.strip()
+    if len(new_pass) < 2:
+        raise HTTPException(status_code=400, detail="Parol juda qisqa!")
+    users = load_json(USERS_FILE, [])
+    target = next((u for u in users if u.get("store_id") == store_id), None)
+    if not target:
+        raise HTTPException(status_code=404, detail="Do'kon topilmadi")
+    target["password"] = new_pass
+    save_json(USERS_FILE, users)
+    return {"success": True, "message": f"'{target.get('store_name')}' do'koni paroli yangilandi!"}
+
+@app.delete("/api/admin/stores/{store_id}")
+def admin_delete_store(store_id: str, request: Request):
+    require_admin(request)
+    users = load_json(USERS_FILE, [])
+    target = next((u for u in users if u.get("store_id") == store_id), None)
+    if not target:
+        raise HTTPException(status_code=404, detail="Do'kon topilmadi")
+    if target.get("role") == "superadmin":
+        raise HTTPException(status_code=400, detail="Super Administratorni o'chirib bo'lmaydi!")
+    
+    users = [u for u in users if u.get("store_id") != store_id]
+    save_json(USERS_FILE, users)
+    return {"success": True, "message": "Do'kon muvaffaqiyatli o'chirildi!"}
+
+@app.post("/api/admin/stores/create")
+def admin_create_store(req: AdminCreateStoreReq, request: Request):
+    require_admin(request)
+    phone_clean = clean_phone(req.phone)
+    if not phone_clean or len(phone_clean) < 7:
+        raise HTTPException(status_code=400, detail="Telefon raqami noto'g'ri")
+    
+    users = load_json(USERS_FILE, [])
+    if any(u.get("phone") == phone_clean for u in users):
+        raise HTTPException(status_code=400, detail="Ushbu telefon raqami bilan do'kon mavjud!")
+    
+    slug = slugify(req.store_name)
+    base_slug = slug
+    c = 1
+    while any(u.get("store_id") == slug for u in users):
+        slug = f"{base_slug}_{c}"
+        c += 1
+
+    store_dir = get_store_dir(slug)
+    save_json(store_dir / "settings.json", {
+        "id": slug,
+        "name": req.store_name.strip(),
+        "owner_name": req.owner_name.strip(),
+        "phone": req.phone.strip(),
+        "address": req.address.strip() if req.address else "O'zbekiston",
+        "created_at": datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+    })
+    save_json(store_dir / "products.json", [])
+    save_json(store_dir / "orders.json", [])
+    save_json(store_dir / "nasiya.json", [])
+    save_json(store_dir / "suppliers.json", [])
+    save_json(store_dir / "expenses.json", [])
+
+    token = secrets.token_hex(24)
+    users.append({
+        "phone": phone_clean,
+        "password": req.password.strip(),
+        "store_id": slug,
+        "store_name": req.store_name.strip(),
+        "owner_name": req.owner_name.strip(),
+        "token": token,
+        "tokens": [token],
+        "status": req.status if req.status in ("active", "pending", "blocked") else "active",
+        "role": "store_owner",
+        "created_at": datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+    })
+    save_json(USERS_FILE, users)
+    return {"success": True, "message": f"'{req.store_name}' do'koni yaratildi!"}
 
 @app.post("/api/my/change-password")
 def change_my_password(req: ChangePasswordReq, request: Request):
@@ -2373,6 +2597,25 @@ def page_dashboard(request: Request):
         return HTMLResponse("<h1>Sotuvchi Dashboardi yuklanmoqda...</h1>")
     with open(dashboard_file, "r", encoding="utf-8") as f:
         return HTMLResponse(content=f.read())
+
+# 4. Super Admin Boshqaruv Paneli
+@app.get("/admin", response_class=HTMLResponse)
+def page_admin():
+    admin_file = TEMPLATES_DIR / "admin.html"
+    if not admin_file.exists():
+        return HTMLResponse("<h1>Super Admin Paneli yuklanmoqda...</h1>")
+    with open(admin_file, "r", encoding="utf-8") as f:
+        return HTMLResponse(content=f.read())
+
+@app.get("/api/admin/check")
+def api_admin_check(request: Request):
+    user = require_admin(request)
+    return {
+        "status": "ok",
+        "phone": user.get("phone"),
+        "owner_name": user.get("owner_name"),
+        "role": user.get("role")
+    }
 
 if __name__ == "__main__":
     import uvicorn

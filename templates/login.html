@@ -227,10 +227,20 @@
         localStorage.setItem('bee_token', data.token);
         localStorage.setItem('bee_store_id', data.store_id);
         localStorage.setItem('bee_store_name', data.store_name);
-        showAlert("Muvaffaqiyatli kirildi! Dashboard ochilmoqda...", false);
+        if (data.is_admin) {
+          localStorage.setItem('bee_is_admin', 'true');
+        } else {
+          localStorage.removeItem('bee_is_admin');
+        }
+
+        showAlert(data.is_admin ? "Super Admin sifatida kirildi! Admin panel ochilmoqda..." : "Muvaffaqiyatli kirildi! Dashboard ochilmoqda...", false);
 
         setTimeout(() => {
-          window.location.href = '/dashboard';
+          if (data.is_admin) {
+            window.location.href = '/admin';
+          } else {
+            window.location.href = '/dashboard';
+          }
         }, 600);
 
       } catch (err) {
@@ -251,7 +261,7 @@
       const btn = document.getElementById('regSubmitBtn');
 
       btn.disabled = true;
-      btn.innerHTML = `<span>Do'kon yaratilmoqda...</span>`;
+      btn.innerHTML = `<span>So'rov yuborilmoqda...</span>`;
 
       try {
         const res = await fetch('/api/auth/register', {
@@ -269,14 +279,18 @@
           return;
         }
 
-        localStorage.setItem('bee_token', data.token);
-        localStorage.setItem('bee_store_id', data.store_id);
-        localStorage.setItem('bee_store_name', data.store_name);
-        showAlert("Do'koningiz va JSON ombor bazasi yaratildi! Kabinetga yo'naltirilmoqda...", false);
+        btn.disabled = false;
+        btn.innerHTML = `<span>Do'konni Ro'yxatdan O'tkazish</span> <i data-lucide="check-circle" class="w-4 h-4"></i>`;
+        lucide.createIcons();
 
+        document.getElementById('registerForm').reset();
+        showAlert(data.message || "Do'kon ochish so'rovingiz qabul qilindi! Administrator tasdiqlaganidan so'ng tizimga kirishingiz mumkin.", false);
+
+        // 3 soniyadan keyin Kirish tabiga o'tkazish
         setTimeout(() => {
-          window.location.href = '/dashboard';
-        }, 700);
+          switchTab('login');
+          document.getElementById('loginPhone').value = phone;
+        }, 2500);
 
       } catch (err) {
         showAlert("Server bilan ulanishda xatolik!", true);
