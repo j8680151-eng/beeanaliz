@@ -1032,18 +1032,21 @@ def pos_checkout(store_id: str, req: CheckoutReq):
     req_pay_type = req.paymentType.upper()
     cash_amount = float(req.cashAmount or 0.0)
     card_amount = float(req.cardAmount or 0.0)
-    if "ARALASH" in req_pay_type:
-        if cash_amount <= 0 and card_amount <= 0:
-            cash_amount = total_amount
-            card_amount = 0.0
-    elif "KARTA" in req_pay_type or "PLASTIK" in req_pay_type:
+    
+    if "KARTA" in req_pay_type or "PLASTIK" in req_pay_type:
         card_amount = total_amount
         cash_amount = 0.0
-    else:
+    elif "NAQD" in req_pay_type and "ARALASH" not in req_pay_type and "NASIYA" not in req_pay_type:
         cash_amount = total_amount
         card_amount = 0.0
 
+    # Nasiya (Qarz) summasini hisoblash
+    nasiya_debt = max(0.0, total_amount - (cash_amount + card_amount))
+    is_nasiya_sale = ("NASIYA" in req_pay_type) or (nasiya_debt > 0) or bool(req.nasiyaCustomer)
+
     order_id = f"ORD-{datetime.datetime.now().strftime('%M%S')}"
+    customer_display_name = (req.nasiyaCustomer or "").strip() or "Xaridor"
+
     order_record = {
         "id": order_id,
         "storeId": store_id,
@@ -1052,7 +1055,7 @@ def pos_checkout(store_id: str, req: CheckoutReq):
         "storeAddress": store_addr_val,
         "receiptFooter": receipt_footer_val,
         "date": datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
-        "customerName": "Xaridor",
+        "customerName": customer_display_name,
         "employeeId": req.employeeId or "",
         "employeeName": req.employeeName or "Bosh Kassir",
         "paymentMethod": req_pay_type,
@@ -1085,7 +1088,7 @@ def pos_checkout(store_id: str, req: CheckoutReq):
         active_shift["totalSales"] = float(active_shift.get("totalSales", 0)) + total_amount
         active_shift["cashSales"] = float(active_shift.get("cashSales", 0)) + cash_amount
         active_shift["cardSales"] = float(active_shift.get("cardSales", 0)) + card_amount
-        if "ARALASH" in req_pay_type:
+        if "ARALASH" in req_pay_type or is_nasiya_sale:
             active_shift["splitSales"] = float(active_shift.get("splitSales", 0)) + total_amount
         active_shift["ordersCount"] = int(active_shift.get("ordersCount", 0)) + 1
         active_shift.setdefault("orders", []).insert(0, order_id)
@@ -1095,6 +1098,49 @@ def pos_checkout(store_id: str, req: CheckoutReq):
     orders = load_json(o_file, [])
     orders.insert(0, order_record)
     save_json(o_file, orders)
+
+    # Agar Nasiya orqali sotilgan bo'lsa, Nasiyalar daftariga avtomatik yozish
+    if is_nasiya_sale and nasiya_debt > 0:
+        n_file = store_dir / "nasiya.json"
+        nasiya_list = load_json(n_file, [])
+        nasiya_id = f"NAS-{datetime.datetime.now().strftime('%M%S%f')[:8]}"
+        cust_phone = (req.nasiyaPhone or "").strip()
+        due_date = (req.nasiyaDueDate or "").strip()
+        upfront_paid = cash_amount + card_amount
+
+        nasiya_rec = {
+            "id": nasiya_id,
+            "orderId": order_id,
+            "customer": customer_display_name,
+            "phone": cust_phone,
+            "dueDate": due_date,
+            "date": datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
+            "totalAmount": total_amount,
+            "paidAmount": upfront_paid,
+            "remainingDebt": nasiya_debt,
+            "status": "To'liq yopilgan" if nasiya_debt <= 0 else ("Qisman to'langan" if upfront_paid > 0 else "To'lanmagan"),
+            "items": [
+                {
+                    "name": i.name,
+                    "quantity": i.quantity,
+                    "price": i.price
+                }
+                for i in req.items
+            ],
+            "paymentsHistory": [
+                {
+                    "date": datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
+                    "amount": upfront_paid,
+                    "paymentMethod": "Boshlang'ich to'lov",
+                    "note": f"Kassadagi to'lov (Naqd: {cash_amount:,.0f}, Karta: {card_amount:,.0f})"
+                }
+            ] if upfront_paid > 0 else []
+        }
+        nasiya_list.insert(0, nasiya_rec)
+        save_json(n_file, nasiya_list)
+        order_record["nasiyaId"] = nasiya_id
+        order_record["nasiyaAmount"] = nasiya_debt
+        order_record["customerPhone"] = cust_phone
 
     return order_record
 
@@ -1109,18 +1155,50 @@ def pay_nasiya(store_id: str, nasiya_id: str, req: PayReq):
     for nas in nasiya_list:
         if nas.get("id") == nasiya_id:
             pay_num = float(req.amount)
+            if pay_num <= 0:
+                raise HTTPException(status_code=400, detail="To'lov summasi 0 dan katta bo'lishi kerak!")
+            cur_remaining = float(nas.get("remainingDebt", 0))
+            if pay_num > cur_remaining:
+                pay_num = cur_remaining
+            
             nas["paidAmount"] = float(nas.get("paidAmount", 0)) + pay_num
-            nas["remainingDebt"] = max(0.0, float(nas.get("remainingDebt", 0)) - pay_num)
+            nas["remainingDebt"] = max(0.0, cur_remaining - pay_num)
             nas["status"] = "To'liq yopilgan" if nas["remainingDebt"] == 0 else "Qisman to'langan"
             hist = nas.setdefault("paymentsHistory", [])
             hist.insert(0, {
                 "date": datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
                 "amount": pay_num,
+                "paymentMethod": req.paymentMethod or "Naqd pul",
                 "note": req.note or "Qarz to'landi"
             })
             save_json(n_file, nasiya_list)
+
+            # Smena va kassa balansiga tushum
+            store_dir = get_store_dir(store_id)
+            s_file = store_dir / "shifts.json"
+            shifts = load_json(s_file, [])
+            active_shift = next((s for s in shifts if s.get("status") == "open"), None)
+            if active_shift:
+                active_shift["totalSales"] = float(active_shift.get("totalSales", 0)) + pay_num
+                if "karta" in str(req.paymentMethod).lower():
+                    active_shift["cardSales"] = float(active_shift.get("cardSales", 0)) + pay_num
+                else:
+                    active_shift["cashSales"] = float(active_shift.get("cashSales", 0)) + pay_num
+                save_json(s_file, shifts)
+
             return nas
     raise HTTPException(status_code=404, detail="Nasiya topilmadi")
+
+@app.delete("/api/stores/{store_id}/nasiya/{nasiya_id}")
+def delete_nasiya(store_id: str, nasiya_id: str):
+    n_file = get_store_dir(store_id) / "nasiya.json"
+    nasiya_list = load_json(n_file, [])
+    target = next((nas for nas in nasiya_list if nas.get("id") == nasiya_id), None)
+    if not target:
+        raise HTTPException(status_code=404, detail="Nasiya topilmadi")
+    nasiya_list = [nas for nas in nasiya_list if nas.get("id") != nasiya_id]
+    save_json(n_file, nasiya_list)
+    return {"message": "Nasiya o'chirildi"}
 
 @app.get("/api/stores/{store_id}/suppliers")
 def get_suppliers(store_id: str):
@@ -1283,6 +1361,11 @@ def get_my_nasiya(request: Request):
 def my_pay_nasiya(nasiya_id: str, req: PayReq, request: Request):
     store_id = require_store(request)
     return pay_nasiya(store_id, nasiya_id, req)
+
+@app.delete("/api/my/nasiya/{nasiya_id}")
+def my_delete_nasiya(nasiya_id: str, request: Request):
+    store_id = require_store(request)
+    return delete_nasiya(store_id, nasiya_id)
 
 @app.get("/api/my/suppliers")
 def get_my_suppliers(request: Request):
@@ -2459,7 +2542,14 @@ def print_receipt(store_id: str = "", order_id: str = ""):
     card_val = float(order.get("cardAmount") or 0.0)
 
     split_html = ""
-    if "ARALASH" in payment_method_str or (cash_val > 0 and card_val > 0):
+    nasiya_val = float(order.get("nasiyaAmount") or 0.0)
+    if "ARALASH" in payment_method_str or (cash_val > 0 and card_val > 0) or nasiya_val > 0:
+        nasiya_line = f"""
+            <div style="display: flex; justify-content: space-between; font-weight: bold; margin-top: 2px; color: #b45309;">
+                <span>📝 Nasiya (Qarz):</span>
+                <span>{nasiya_val:,.0f} so'm</span>
+            </div>
+        """ if nasiya_val > 0 else ""
         split_html = f"""
         <div style="font-size: 11px; margin-top: 4px; padding-top: 4px; border-top: 1px dotted #888;">
             <div style="display: flex; justify-content: space-between; font-weight: bold;">
@@ -2470,6 +2560,7 @@ def print_receipt(store_id: str = "", order_id: str = ""):
                 <span>💳 Plastik karta:</span>
                 <span>{card_val:,.0f} so'm</span>
             </div>
+            {nasiya_line}
         </div>
         """
 

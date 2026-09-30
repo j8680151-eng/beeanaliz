@@ -783,6 +783,11 @@
           <span>Buyurtmalar & Savdo Tarixi</span>
         </button>
 
+        <button onclick="switchView('nasiya')" id="nav-nasiya" class="sidebar-link w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-bold transition text-white hover:bg-slate-800 hover:text-white">
+          <i data-lucide="book-open" class="w-5 h-5 shrink-0 text-amber-400"></i>
+          <span>Nasiyalar (Qarz daftari)</span>
+        </button>
+
         <button onclick="switchView('shifts')" id="nav-shifts" class="sidebar-link w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-bold transition text-white hover:bg-slate-800 hover:text-white">
           <i data-lucide="clock" class="w-5 h-5 shrink-0 text-amber-400"></i>
           <span>Kassa Smenalari (Z-Hisobot)</span>
@@ -2160,6 +2165,125 @@
           </div>
         </div>
       </section>
+
+      <!-- ==================== VIEW 10: NASIYALAR (QARZ DAFTARI) ==================== -->
+      <section id="view-nasiya" class="space-y-4 hidden">
+        <!-- TOP KPI STATS -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <!-- Card 1: Jami Nasiya -->
+          <div class="bg-[#222222] p-5 rounded-3xl border border-[#333333] shadow-sm relative overflow-hidden">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-[10px] font-black uppercase tracking-wider text-slate-400">Jami Nasiya Savdo</span>
+              <div class="w-8 h-8 rounded-xl bg-amber-500/15 text-amber-400 flex items-center justify-center">
+                <i data-lucide="book-open" class="w-4 h-4"></i>
+              </div>
+            </div>
+            <p id="kpiNasiyaTotal" class="text-2xl font-black text-white">0 so'm</p>
+            <p id="kpiNasiyaTotalCount" class="text-[11px] text-slate-400 mt-1">Jami nasiya cheklari: 0 ta</p>
+          </div>
+
+          <!-- Card 2: Qaytarilgan To'lovlar -->
+          <div class="bg-[#222222] p-5 rounded-3xl border border-[#333333] shadow-sm relative overflow-hidden">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-[10px] font-black uppercase tracking-wider text-slate-400">Qaytarilgan Qarzlar</span>
+              <div class="w-8 h-8 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center">
+                <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+              </div>
+            </div>
+            <p id="kpiNasiyaPaid" class="text-2xl font-black text-emerald-400">0 so'm</p>
+            <p class="text-[11px] text-slate-400 mt-1">Mijozlar tomonidan to'langan qism</p>
+          </div>
+
+          <!-- Card 3: Qoldiq Qarz (Hali Olinmagan) -->
+          <div class="bg-[#222222] p-5 rounded-3xl border border-amber-500/40 shadow-sm relative overflow-hidden">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-[10px] font-black uppercase tracking-wider text-amber-400">Qoldiq Qarz (Olinishi kerak)</span>
+              <div class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center animate-pulse">
+                <i data-lucide="alert-circle" class="w-4 h-4"></i>
+              </div>
+            </div>
+            <p id="kpiNasiyaRemaining" class="text-2xl font-black text-amber-400">0 so'm</p>
+            <p class="text-[11px] text-slate-400 mt-1">Hozirda kutilayotgan faol qarzlar</p>
+          </div>
+
+          <!-- Card 4: Faol Qarzdorlar Soni -->
+          <div class="bg-[#222222] p-5 rounded-3xl border border-[#333333] shadow-sm relative overflow-hidden">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-[10px] font-black uppercase tracking-wider text-slate-400">Faol Qarzdorlar</span>
+              <div class="w-8 h-8 rounded-xl bg-sky-500/15 text-sky-400 flex items-center justify-center">
+                <i data-lucide="users" class="w-4 h-4"></i>
+              </div>
+            </div>
+            <p id="kpiNasiyaDebtorsCount" class="text-2xl font-black text-sky-400">0 ta mijoz</p>
+            <p class="text-[11px] text-slate-400 mt-1">Hali qarzi to'liq yopilmaganlar</p>
+          </div>
+        </div>
+
+        <!-- FILTER & CONTROLS -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-[#222222] p-4 rounded-2xl border border-[#333333] shadow-sm">
+          <!-- Tab filter buttons -->
+          <div class="flex items-center space-x-1.5 bg-[#181818] p-1 rounded-xl border border-[#333333]">
+            <button onclick="setNasiyaFilter('all')" id="nas-tab-all"
+              class="px-4 py-2 rounded-lg text-xs font-black transition bg-amber-500 text-slate-950 shadow-sm">
+              📋 Barchasi
+            </button>
+            <button onclick="setNasiyaFilter('active')" id="nas-tab-active"
+              class="px-4 py-2 rounded-lg text-xs font-black transition text-slate-300 hover:text-white hover:bg-[#252525]">
+              ⏳ Qarzi Borlar
+            </button>
+            <button onclick="setNasiyaFilter('paid')" id="nas-tab-paid"
+              class="px-4 py-2 rounded-lg text-xs font-black transition text-slate-300 hover:text-white hover:bg-[#252525]">
+              ✅ To'liq Yopilganlar
+            </button>
+          </div>
+
+          <div class="flex items-center space-x-2.5 w-full sm:w-auto">
+            <div class="relative flex-1 sm:w-72">
+              <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+              <input type="text" id="nasiyaSearchInput" oninput="renderNasiyaTable()"
+                placeholder="Mijoz ismi, telefon, chek..."
+                class="w-full bg-[#181818] border border-[#333333] rounded-xl pl-9 pr-3 py-2 text-xs font-bold text-white focus:border-amber-500 focus:outline-none transition">
+            </div>
+
+            <button onclick="loadNasiyaList()" title="Ro'yxatni yangilash" class="p-2.5 bg-[#181818] hover:bg-[#252525] border border-[#333333] text-slate-300 hover:text-white rounded-xl text-xs font-bold transition">
+              <i data-lucide="rotate-cw" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- NASIYA TABLE -->
+        <div class="bg-[#222222] rounded-3xl border border-[#333333] shadow-sm overflow-hidden">
+          <div class="p-4 border-b border-[#333333] flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+              <div class="w-2.5 h-2.5 rounded-full bg-amber-400"></div>
+              <h3 class="text-xs font-black text-white uppercase tracking-wider">Nasiya Savdolar Ro'yxati</h3>
+              <span id="nasiyaTableCountBadge" class="text-[10px] font-black px-2 py-0.5 rounded-lg bg-[#141414] text-slate-300 border border-[#333333]">0 ta</span>
+            </div>
+            <span class="text-[11px] text-slate-400">Faqatgina kassa savdosi orqali rasmiylashtirilgan nasiyalar</span>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-[#181818] border-b border-[#333333] text-[11px] font-black uppercase text-slate-400">
+                  <th class="p-3.5 pl-5">Chek / Nasiya #</th>
+                  <th class="p-3.5">Mijoz (F.I.SH & Telefon)</th>
+                  <th class="p-3.5">Olingan Tovarlar</th>
+                  <th class="p-3.5">Jami Summa</th>
+                  <th class="p-3.5">To'langan</th>
+                  <th class="p-3.5 text-amber-400">Qoldiq Qarz</th>
+                  <th class="p-3.5">Qaytarish Muddati</th>
+                  <th class="p-3.5">Holati</th>
+                  <th class="p-3.5 pr-5 text-right">Amallar</th>
+                </tr>
+              </thead>
+              <tbody id="nasiyaTableBody" class="divide-y divide-[#2a2a2a] text-xs font-medium text-slate-200">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
     </div>
   </main>
 
@@ -2616,23 +2740,23 @@
         <button type="button" onclick="selectPayType('Aralash')" id="payBtn-Aralash" 
           class="py-2.5 px-2 rounded-xl text-xs font-bold border border-slate-200 bg-slate-50 text-slate-400 hover:text-white hover:bg-slate-100 text-center flex flex-col items-center justify-center space-y-1 transition">
           <i data-lucide="split" class="w-4 h-4"></i>
-          <span>Aralash</span>
+          <span>Aralash / Nasiya</span>
         </button>
       </div>
 
       <!-- Mode 1: Naqd pul fields -->
-      <div id="checkoutCashFields" class="space-y-2 bg-slate-50 p-3.5 rounded-2xl border border-slate-200">
+      <div id="checkoutCashFields" class="space-y-2 bg-[#181818] p-3.5 rounded-2xl border border-[#333333]">
         <label class="block text-xs font-bold text-slate-300">Mijoz bergan naqd pul:</label>
         <input type="number" id="checkoutCashGiven" oninput="calculateChange()" placeholder="0" 
-          class="w-full bg-[#181818] border border-slate-300 rounded-xl px-3 py-2 text-sm font-black text-white focus:border-amber-500 focus:outline-none">
-        <div class="flex justify-between items-center text-xs font-bold text-slate-400 pt-1 border-t border-slate-200">
+          class="w-full bg-[#222222] border border-[#333333] rounded-xl px-3 py-2 text-sm font-black text-white focus:border-amber-500 focus:outline-none">
+        <div class="flex justify-between items-center text-xs font-bold text-slate-400 pt-1 border-t border-[#333333]">
           <span>Qaytim:</span>
           <span id="checkoutChangeAmount" class="text-sm font-black text-emerald-400">0 so'm</span>
         </div>
       </div>
 
       <!-- Mode 2: Karta fields -->
-      <div id="checkoutCardFields" class="hidden p-3.5 bg-slate-50 rounded-2xl border border-slate-200 text-xs font-bold space-y-1">
+      <div id="checkoutCardFields" class="hidden p-3.5 bg-[#181818] rounded-2xl border border-[#333333] text-xs font-bold space-y-1">
         <div class="flex items-center space-x-2 text-emerald-400">
           <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i>
           <span class="text-white">To'liq summa terminal (Humo/Uzcard) orqali yechiladi</span>
@@ -2640,38 +2764,85 @@
         <p class="text-[11px] font-normal text-slate-400 pl-6">Terminaldan to'lov o'tgach, "To'lovni Tasdiqlash" tugmasini bosing.</p>
       </div>
 
-      <!-- Mode 3: Aralash (Naqd + Karta) fields -->
-      <div id="checkoutSplitFields" class="hidden space-y-3 bg-slate-50 p-3.5 rounded-2xl border border-slate-200">
+      <!-- Mode 3: Aralash (Naqd + Karta + Nasiya) fields -->
+      <div id="checkoutSplitFields" class="hidden space-y-3 bg-[#181818] p-3.5 rounded-2xl border border-[#333333]">
         <div class="flex items-center justify-between text-xs font-black">
           <span class="flex items-center space-x-1.5 text-slate-200">
             <i data-lucide="split" class="w-4 h-4 text-amber-400"></i>
-            <span>Aralash to'lov taqsimoti:</span>
+            <span>Taqsimot (Naqd / Karta / Nasiya):</span>
           </span>
           <span id="splitBadgeStatus" class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800 font-bold">✓ To'liq qoplandi</span>
         </div>
 
-        <div class="grid grid-cols-2 gap-2.5">
+        <!-- 3 ta to'lov turi taqsimoti -->
+        <div class="grid grid-cols-3 gap-2">
           <div>
-            <label class="block text-[11px] font-bold text-slate-300 mb-1">💵 Naqd qismi:</label>
-            <input type="number" id="splitCashAmount" oninput="onSplitCashChange()" placeholder="0" 
-              class="w-full bg-[#181818] border border-slate-300 focus:border-amber-500 rounded-xl px-3 py-2 text-xs font-black text-white focus:outline-none">
+            <label class="block text-[11px] font-bold text-slate-300 mb-1">💵 Naqd:</label>
+            <input type="number" id="splitCashAmount" oninput="onSplitInputsChange('cash')" placeholder="0" 
+              class="w-full bg-[#222222] border border-[#333333] focus:border-amber-500 rounded-xl px-2.5 py-2 text-xs font-black text-white focus:outline-none">
           </div>
           <div>
-            <label class="block text-[11px] font-bold text-slate-300 mb-1">💳 Karta (terminal) qismi:</label>
-            <input type="number" id="splitCardAmount" oninput="onSplitCardChange()" placeholder="0" 
-              class="w-full bg-[#181818] border border-slate-300 focus:border-amber-500 rounded-xl px-3 py-2 text-xs font-black text-white focus:outline-none">
+            <label class="block text-[11px] font-bold text-slate-300 mb-1">💳 Karta:</label>
+            <input type="number" id="splitCardAmount" oninput="onSplitInputsChange('card')" placeholder="0" 
+              class="w-full bg-[#222222] border border-[#333333] focus:border-amber-500 rounded-xl px-2.5 py-2 text-xs font-black text-white focus:outline-none">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-amber-400 mb-1">📝 Nasiya (Qarz):</label>
+            <input type="number" id="splitNasiyaAmount" oninput="onSplitInputsChange('nasiya')" placeholder="0" 
+              class="w-full bg-[#222222] border border-amber-500/50 focus:border-amber-500 rounded-xl px-2.5 py-2 text-xs font-black text-amber-400 focus:outline-none">
+          </div>
+        </div>
+
+        <!-- Tezkor taqsimot tugmalari -->
+        <div class="flex items-center space-x-1.5 pt-0.5">
+          <button type="button" onclick="setSplitPreset('all-nasiya')" class="px-2 py-1 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 text-amber-400 border border-amber-500/30 text-[10px] font-bold transition">
+            100% Nasiya
+          </button>
+          <button type="button" onclick="setSplitPreset('all-cash')" class="px-2 py-1 rounded-lg bg-[#252525] hover:bg-[#303030] text-slate-300 text-[10px] font-bold transition">
+            100% Naqd
+          </button>
+          <button type="button" onclick="setSplitPreset('split-half')" class="px-2 py-1 rounded-lg bg-[#252525] hover:bg-[#303030] text-slate-300 text-[10px] font-bold transition">
+            50% Naqd / 50% Nasiya
+          </button>
+        </div>
+
+        <!-- NASIYA BERISH UCHUN XARIDOR MA'LUMOTLARI -->
+        <div id="splitNasiyaCustomerBox" class="p-3 bg-amber-950/20 border border-amber-500/30 rounded-xl space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-black text-amber-400 flex items-center space-x-1.5">
+              <i data-lucide="user-check" class="w-3.5 h-3.5"></i>
+              <span>Nasiya oluvchi mijoz:</span>
+            </span>
+            <span class="text-[10px] text-amber-300/80 font-bold">*Majburiy</span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <div>
+              <label class="block text-[10px] font-bold text-slate-300 mb-0.5">Mijoz Ismi / F.I.SH:</label>
+              <input type="text" id="splitNasiyaCustomer" placeholder="Masalan: Jamshid aka (bozorchi)" 
+                class="w-full bg-[#141414] border border-amber-500/40 rounded-xl px-2.5 py-1.5 text-xs font-bold text-white focus:border-amber-400 focus:outline-none">
+            </div>
+            <div>
+              <label class="block text-[10px] font-bold text-slate-300 mb-0.5">Telefon raqami:</label>
+              <input type="text" id="splitNasiyaPhone" placeholder="+998 90 123 45 67" 
+                class="w-full bg-[#141414] border border-amber-500/40 rounded-xl px-2.5 py-1.5 text-xs font-bold text-white focus:border-amber-400 focus:outline-none">
+            </div>
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-slate-300 mb-0.5">Qaytarish muddati (ixtiyoriy):</label>
+            <input type="date" id="splitNasiyaDueDate" 
+              class="w-full bg-[#141414] border border-[#333333] rounded-xl px-2.5 py-1.5 text-xs font-bold text-slate-300 focus:border-amber-400 focus:outline-none">
           </div>
         </div>
 
         <!-- Optional: Mijoz naqd qismi uchun bergan kupyura -->
-        <div class="pt-2 border-t border-slate-200">
+        <div id="splitCashChangeBox" class="pt-2 border-t border-[#333333]">
           <div class="flex items-center justify-between">
-            <label class="text-[10px] font-bold text-slate-300">Mijoz naqd qismi uchun bergan kupyura:</label>
+            <label class="text-[10px] font-bold text-slate-300">Naqd qismi uchun berilgan kupyura:</label>
             <span class="text-[10px] text-slate-500 font-semibold">(agar ko'proq bersa)</span>
           </div>
           <div class="flex items-center space-x-2 mt-1.5">
             <input type="number" id="splitCashGiven" oninput="calculateSplitChange()" placeholder="Masalan: 50000" 
-              class="flex-1 bg-[#181818] border border-slate-300 rounded-xl px-2.5 py-1.5 text-xs font-bold text-white focus:border-amber-500 focus:outline-none">
+              class="flex-1 bg-[#222222] border border-[#333333] rounded-xl px-2.5 py-1.5 text-xs font-bold text-white focus:border-amber-500 focus:outline-none">
             <div class="text-right shrink-0">
               <span class="text-[10px] text-slate-400 block">Qaytim:</span>
               <span id="splitChangeAmount" class="text-xs font-black text-emerald-400">0 so'm</span>
@@ -3506,6 +3677,189 @@
     </div>
   </div>
 
+  <!-- 10. NASIYA QARZINI TO'LASH MODAL -->
+  <div id="nasiyaPayModal" onclick="if (event.target === this) closeNasiyaPayModal(event)" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div onclick="event.stopPropagation()" class="bg-[#1c1c1c] w-full max-w-md rounded-3xl p-6 shadow-2xl border border-[#333333] space-y-4 animate-in fade-in zoom-in duration-200">
+      <div class="flex items-center justify-between border-b border-[#2d2d2d] pb-3">
+        <div class="flex items-center space-x-2.5">
+          <div class="p-2 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-emerald-400">
+            <i data-lucide="hand-coins" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="text-sm font-black text-white">Nasiya Qarzini To'lash</h3>
+            <p class="text-[11px] text-slate-400">Qarz summasini to'liq yoki qisman qabul qilish</p>
+          </div>
+        </div>
+        <button onclick="closeNasiyaPayModal(event)" class="text-slate-400 hover:text-white p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Mijoz va qarz ma'lumotlari kartasi -->
+      <div class="bg-[#242424] p-4 rounded-2xl border border-[#333333] space-y-2.5">
+        <div class="flex justify-between items-start">
+          <div>
+            <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Xaridor</span>
+            <p id="modalPayNasiyaCustomer" class="text-sm font-black text-white">-</p>
+            <p id="modalPayNasiyaPhone" class="text-xs text-slate-400 font-mono mt-0.5">-</p>
+          </div>
+          <span id="modalPayNasiyaStatusBadge" class="text-[10px] font-black px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30">
+            Qarzdor
+          </span>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2 pt-2 border-t border-[#333333] text-xs">
+          <div>
+            <span class="text-[10px] text-slate-400 block">Jami savdo:</span>
+            <span id="modalPayNasiyaTotal" class="font-black text-slate-200">0 so'm</span>
+          </div>
+          <div class="text-right">
+            <span class="text-[10px] text-amber-400 block font-bold">Hozirgi qoldiq qarz:</span>
+            <span id="modalPayNasiyaRemaining" class="text-base font-black text-amber-400">0 so'm</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- To'lov formasi -->
+      <form id="nasiyaPayForm" onsubmit="submitNasiyaPay(event)" class="space-y-3.5">
+        <div>
+          <label class="block text-xs font-bold text-slate-300 mb-1">To'lanayotgan summa (so'm) *</label>
+          <input type="number" id="nasiyaPayAmountInput" required min="100" placeholder="0" 
+            class="w-full bg-[#141414] border border-[#383838] focus:border-amber-500 rounded-xl px-3.5 py-2.5 text-base font-black text-emerald-400 focus:outline-none transition">
+        </div>
+
+        <!-- Quick preset buttons -->
+        <div class="flex items-center space-x-1.5">
+          <button type="button" onclick="setNasiyaPayPreset(1.0)" class="flex-1 py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-400 border border-emerald-500/30 text-[11px] font-black transition">
+            100% (To'liq yopish)
+          </button>
+          <button type="button" onclick="setNasiyaPayPreset(0.5)" class="flex-1 py-1.5 rounded-lg bg-[#282828] hover:bg-[#333333] text-slate-300 text-[11px] font-bold transition">
+            50% to'lash
+          </button>
+          <button type="button" onclick="setNasiyaPayPreset(0.25)" class="flex-1 py-1.5 rounded-lg bg-[#282828] hover:bg-[#333333] text-slate-300 text-[11px] font-bold transition">
+            25% to'lash
+          </button>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2.5">
+          <div>
+            <label class="block text-[11px] font-bold text-slate-300 mb-1">To'lov turi</label>
+            <select id="nasiyaPayMethodSelect" class="w-full bg-[#141414] border border-[#383838] focus:border-amber-500 rounded-xl px-3 py-2 text-xs font-bold text-white focus:outline-none">
+              <option value="Naqd pul" selected>💵 Naqd pul</option>
+              <option value="Plastik karta">💳 Plastik karta</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-300 mb-1">Izoh / Eslatma</label>
+            <input type="text" id="nasiyaPayNoteInput" placeholder="Masalan: Jamshid aka to'ladi" 
+              class="w-full bg-[#141414] border border-[#383838] focus:border-amber-500 rounded-xl px-3 py-2 text-xs font-bold text-white focus:outline-none">
+          </div>
+        </div>
+
+        <div class="pt-2 flex items-center space-x-2">
+          <button type="submit" id="btnSubmitNasiyaPay" class="flex-1 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-black rounded-xl text-xs transition flex items-center justify-center space-x-1.5 shadow-md shadow-emerald-600/20">
+            <i data-lucide="check" class="w-4 h-4"></i>
+            <span>To'lovni Tasdiqlash</span>
+          </button>
+          <button type="button" onclick="closeNasiyaPayModal(event)" class="px-4 py-3 bg-[#2a2a2a] hover:bg-[#333333] text-slate-300 border border-[#383838] font-bold rounded-xl text-xs transition">
+            Bekor
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 11. NASIYA TAFSILOTLARI & TO'LOVLAR TARIXI MODAL -->
+  <div id="nasiyaDetailsModal" onclick="if (event.target === this) closeNasiyaDetailsModal(event)" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div onclick="event.stopPropagation()" class="bg-[#1c1c1c] w-full max-w-2xl rounded-3xl p-6 shadow-2xl border border-[#333333] space-y-4 max-h-[90vh] overflow-y-auto animate-in fade-in zoom-in duration-200">
+      <div class="flex items-center justify-between border-b border-[#2d2d2d] pb-3">
+        <div class="flex items-center space-x-2.5">
+          <div class="p-2 bg-amber-500/10 border border-amber-500/20 rounded-xl text-amber-400">
+            <i data-lucide="file-text" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="text-sm font-black text-white">Nasiya Tafsilotlari</h3>
+            <p id="modalDtNasiyaSubtitle" class="text-[11px] text-slate-400">Nasiya # - Sana</p>
+          </div>
+        </div>
+        <button onclick="closeNasiyaDetailsModal(event)" class="text-slate-400 hover:text-white p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Xaridor & Qarz ko'rsatkichlari -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div class="bg-[#242424] p-3.5 rounded-2xl border border-[#333333]">
+          <span class="text-[10px] font-bold text-slate-400 block uppercase">Mijoz</span>
+          <p id="modalDtNasiyaCustomer" class="text-sm font-black text-white mt-0.5">-</p>
+          <p id="modalDtNasiyaPhone" class="text-xs text-amber-400 font-mono mt-0.5">-</p>
+        </div>
+        <div class="bg-[#242424] p-3.5 rounded-2xl border border-[#333333]">
+          <span class="text-[10px] font-bold text-slate-400 block uppercase">Umumiy Summa / To'langan</span>
+          <p id="modalDtNasiyaTotal" class="text-sm font-black text-slate-200 mt-0.5">0 so'm</p>
+          <p id="modalDtNasiyaPaid" class="text-xs text-emerald-400 font-bold mt-0.5">To'langan: 0 so'm</p>
+        </div>
+        <div class="bg-[#242424] p-3.5 rounded-2xl border border-amber-500/30">
+          <span class="text-[10px] font-bold text-amber-400 block uppercase">Qoldiq Qarz</span>
+          <p id="modalDtNasiyaRemaining" class="text-lg font-black text-amber-400 mt-0.5">0 so'm</p>
+          <p id="modalDtNasiyaDueDate" class="text-[11px] text-slate-400 mt-0.5">Muddati: belgilanmagan</p>
+        </div>
+      </div>
+
+      <!-- Olingan mahsulotlar -->
+      <div class="space-y-2">
+        <h4 class="text-xs font-black text-white uppercase tracking-wider flex items-center space-x-1.5">
+          <i data-lucide="shopping-bag" class="w-4 h-4 text-amber-400"></i>
+          <span>Xarid Qilingan Mahsulotlar</span>
+        </h4>
+        <div class="border border-[#333333] rounded-2xl overflow-hidden max-h-40 overflow-y-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-[#242424] border-b border-[#333333] text-[10px] uppercase font-black text-slate-400 sticky top-0">
+              <tr>
+                <th class="p-2.5 pl-3"># Tovar nomi</th>
+                <th class="p-2.5 text-center">Miqdori</th>
+                <th class="p-2.5 text-right">Narxi</th>
+                <th class="p-2.5 pr-3 text-right">Jami</th>
+              </tr>
+            </thead>
+            <tbody id="modalDtNasiyaItemsBody" class="divide-y divide-[#2a2a2a] text-slate-200">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- To'lovlar tarixi -->
+      <div class="space-y-2">
+        <h4 class="text-xs font-black text-white uppercase tracking-wider flex items-center space-x-1.5">
+          <i data-lucide="history" class="w-4 h-4 text-emerald-400"></i>
+          <span>Qarz To'lovlari Tarixi</span>
+        </h4>
+        <div class="border border-[#333333] rounded-2xl overflow-hidden max-h-44 overflow-y-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-[#242424] border-b border-[#333333] text-[10px] uppercase font-black text-slate-400 sticky top-0">
+              <tr>
+                <th class="p-2.5 pl-3">Sana va Vaqt</th>
+                <th class="p-2.5">To'lov Turi</th>
+                <th class="p-2.5">Izoh</th>
+                <th class="p-2.5 pr-3 text-right">To'langan Summa</th>
+              </tr>
+            </thead>
+            <tbody id="modalDtNasiyaPaymentsBody" class="divide-y divide-[#2a2a2a] text-slate-200">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="pt-2 flex justify-end">
+        <button type="button" onclick="closeNasiyaDetailsModal(event)" class="px-5 py-2.5 bg-[#2a2a2a] hover:bg-[#353535] text-white border border-[#383838] font-bold rounded-xl text-xs transition">
+          Yopish
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- ==================== JAVASCRIPT ==================== -->
   <script>
     // Global state
@@ -3525,6 +3879,9 @@
     let shiftsList = [];
     let currentShift = null;
     let currentShiftQuickFilter = 'all';
+    let nasiyaList = [];
+    let currentNasiyaFilter = 'all';
+    let currentNasiyaPayTarget = null;
 
     // Barcode print pending
     let printPendingName = '';
@@ -3767,7 +4124,7 @@
       if (event) event.stopPropagation();
       closeAllModals();
       currentView = viewName;
-      const views = ['pos', 'warehouse', 'barcodes', 'suppliers', 'expenses', 'finance', 'reports', 'employees', 'shifts'];
+      const views = ['pos', 'warehouse', 'barcodes', 'suppliers', 'expenses', 'finance', 'reports', 'employees', 'shifts', 'nasiya'];
       views.forEach(v => {
         const sec = document.getElementById(`view-${v}`);
         const nav = document.getElementById(`nav-${v}`);
@@ -3793,7 +4150,8 @@
         'finance': ['Asosiy Balans & Finans', 'Barcha savdo tushumlari, do\'kon chiqimlari, ta\'minotchilar qarzi va kassa sof balansi'],
         'reports': ['Buyurtmalar Tarixi & Savdo', 'Oylik savdolar tarixi, cheklar va sof foyda hisoboti'],
         'employees': ['Xodimlar & Sotuvchilar', 'Kassirlar ro\'yxati, shaxsiy savdo hisobi va oylik maosh'],
-        'shifts': ['Kassa Smenalari (Z-Hisobot)', 'Smenalarni ochish, yopish, kutilgan va haqiqiy naqd pul tahlili, xodimlar savdosi']
+        'shifts': ['Kassa Smenalari (Z-Hisobot)', 'Smenalarni ochish, yopish, kutilgan va haqiqiy naqd pul tahlili, xodimlar savdosi'],
+        'nasiya': ['Nasiyalar (Qarz Daftari)', 'Xaridorlar nasiyalari, to\'langan va qolgan qarzlar nazorati']
       };
       if (titleMap[viewName]) {
         document.getElementById('pageTitle').textContent = titleMap[viewName][0];
@@ -3812,6 +4170,9 @@
       }
       if (viewName === 'employees') {
         renderEmployeesView();
+      }
+      if (viewName === 'nasiya') {
+        loadNasiyaList();
       }
       if (viewName === 'shifts') {
         loadCurrentShift().then(() => loadShifts()).then(() => {
@@ -4357,14 +4718,22 @@
       calculateChange();
 
       // Initialize split values:
-      const half = Math.round(totalSum / 2);
       const splitCashInput = document.getElementById('splitCashAmount');
       const splitCardInput = document.getElementById('splitCardAmount');
+      const splitNasiyaInput = document.getElementById('splitNasiyaAmount');
       const splitGivenInput = document.getElementById('splitCashGiven');
+      const splitCustInput = document.getElementById('splitNasiyaCustomer');
+      const splitPhoneInput = document.getElementById('splitNasiyaPhone');
+      const splitDueDateInput = document.getElementById('splitNasiyaDueDate');
 
-      if (splitCashInput) splitCashInput.value = half;
-      if (splitCardInput) splitCardInput.value = totalSum - half;
-      if (splitGivenInput) splitGivenInput.value = half;
+      if (splitCashInput) splitCashInput.value = totalSum;
+      if (splitCardInput) splitCardInput.value = 0;
+      if (splitNasiyaInput) splitNasiyaInput.value = 0;
+      if (splitGivenInput) splitGivenInput.value = totalSum;
+      if (splitCustInput) splitCustInput.value = '';
+      if (splitPhoneInput) splitPhoneInput.value = '';
+      if (splitDueDateInput) splitDueDateInput.value = '';
+
       calculateSplitChange();
       updateSplitStatus();
 
@@ -4416,6 +4785,7 @@
       } else if (type === 'Aralash') {
         if (splitBox) {
           splitBox.classList.remove('hidden');
+          updateSplitStatus();
           const cashInput = document.getElementById('splitCashAmount');
           setTimeout(() => {
             if (cashInput) { cashInput.focus(); cashInput.select(); }
@@ -4431,12 +4801,47 @@
       document.getElementById('checkoutChangeAmount').textContent = `${change.toLocaleString()} so'm`;
     }
 
-    function onSplitCashChange() {
+    function onSplitInputsChange(changedSource) {
       const totalSum = cart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
-      const cashVal = parseFloat(document.getElementById('splitCashAmount').value) || 0;
-      const cardVal = Math.max(0, totalSum - cashVal);
-      document.getElementById('splitCardAmount').value = cardVal;
-      
+      let cashVal = parseFloat(document.getElementById('splitCashAmount').value) || 0;
+      let cardVal = parseFloat(document.getElementById('splitCardAmount').value) || 0;
+      let nasiyaVal = parseFloat(document.getElementById('splitNasiyaAmount').value) || 0;
+
+      if (changedSource === 'cash') {
+        if (cashVal > totalSum) cashVal = totalSum;
+        const rem = Math.max(0, totalSum - cashVal);
+        if (cardVal > rem) {
+          cardVal = rem;
+          nasiyaVal = 0;
+        } else {
+          nasiyaVal = Math.max(0, rem - cardVal);
+        }
+        document.getElementById('splitCardAmount').value = cardVal;
+        document.getElementById('splitNasiyaAmount').value = nasiyaVal;
+      } else if (changedSource === 'card') {
+        if (cardVal > totalSum) cardVal = totalSum;
+        const rem = Math.max(0, totalSum - cardVal);
+        if (cashVal > rem) {
+          cashVal = rem;
+          nasiyaVal = 0;
+        } else {
+          nasiyaVal = Math.max(0, rem - cashVal);
+        }
+        document.getElementById('splitCashAmount').value = cashVal;
+        document.getElementById('splitNasiyaAmount').value = nasiyaVal;
+      } else if (changedSource === 'nasiya') {
+        if (nasiyaVal > totalSum) nasiyaVal = totalSum;
+        const rem = Math.max(0, totalSum - nasiyaVal);
+        if (cashVal > rem) {
+          cashVal = rem;
+          cardVal = 0;
+        } else {
+          cardVal = Math.max(0, rem - cashVal);
+        }
+        document.getElementById('splitCashAmount').value = cashVal;
+        document.getElementById('splitCardAmount').value = cardVal;
+      }
+
       const splitGiven = document.getElementById('splitCashGiven');
       if (splitGiven && (!splitGiven.value || parseFloat(splitGiven.value) < cashVal)) {
         splitGiven.value = cashVal;
@@ -4445,15 +4850,28 @@
       updateSplitStatus();
     }
 
-    function onSplitCardChange() {
+    function setSplitPreset(preset) {
       const totalSum = cart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
-      const cardVal = parseFloat(document.getElementById('splitCardAmount').value) || 0;
-      const cashVal = Math.max(0, totalSum - cardVal);
-      document.getElementById('splitCashAmount').value = cashVal;
-      
-      const splitGiven = document.getElementById('splitCashGiven');
-      if (splitGiven && (!splitGiven.value || parseFloat(splitGiven.value) < cashVal)) {
-        splitGiven.value = cashVal;
+      if (preset === 'all-nasiya') {
+        document.getElementById('splitCashAmount').value = 0;
+        document.getElementById('splitCardAmount').value = 0;
+        document.getElementById('splitNasiyaAmount').value = totalSum;
+        document.getElementById('splitCashGiven').value = 0;
+        const custInput = document.getElementById('splitNasiyaCustomer');
+        if (custInput) setTimeout(() => custInput.focus(), 50);
+      } else if (preset === 'all-cash') {
+        document.getElementById('splitCashAmount').value = totalSum;
+        document.getElementById('splitCardAmount').value = 0;
+        document.getElementById('splitNasiyaAmount').value = 0;
+        document.getElementById('splitCashGiven').value = totalSum;
+      } else if (preset === 'split-half') {
+        const half = Math.round(totalSum / 2);
+        document.getElementById('splitCashAmount').value = half;
+        document.getElementById('splitCardAmount').value = 0;
+        document.getElementById('splitNasiyaAmount').value = totalSum - half;
+        document.getElementById('splitCashGiven').value = half;
+        const custInput = document.getElementById('splitNasiyaCustomer');
+        if (custInput) setTimeout(() => custInput.focus(), 50);
       }
       calculateSplitChange();
       updateSplitStatus();
@@ -4471,13 +4889,29 @@
       const totalSum = cart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
       const cashVal = parseFloat(document.getElementById('splitCashAmount').value) || 0;
       const cardVal = parseFloat(document.getElementById('splitCardAmount').value) || 0;
-      const sum = cashVal + cardVal;
+      const nasiyaVal = parseFloat(document.getElementById('splitNasiyaAmount').value) || 0;
+      const sum = cashVal + cardVal + nasiyaVal;
       const badge = document.getElementById('splitBadgeStatus');
+      const custBox = document.getElementById('splitNasiyaCustomerBox');
+
+      if (custBox) {
+        if (nasiyaVal > 0) {
+          custBox.classList.remove('hidden');
+        } else {
+          custBox.classList.add('hidden');
+        }
+      }
+
       if (!badge) return;
 
       if (Math.abs(sum - totalSum) < 1) {
-        badge.textContent = "✓ To'liq qoplandi";
-        badge.className = "text-[10px] px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800 font-black";
+        if (nasiyaVal > 0) {
+          badge.textContent = `✓ Nasiya: ${nasiyaVal.toLocaleString()} so'm`;
+          badge.className = "text-[10px] px-2 py-0.5 rounded-full bg-amber-950 text-amber-300 border border-amber-800 font-black";
+        } else {
+          badge.textContent = "✓ To'liq qoplandi";
+          badge.className = "text-[10px] px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800 font-black";
+        }
       } else if (sum < totalSum) {
         badge.textContent = `Yetmayapti: ${(totalSum - sum).toLocaleString()} so'm`;
         badge.className = "text-[10px] px-2 py-0.5 rounded-full bg-amber-950 text-amber-400 border border-amber-800 font-black";
@@ -4502,35 +4936,69 @@
 
       let cashAmount = totalSum;
       let cardAmount = 0;
+      let nasiyaAmount = 0;
       let cashGiven = totalSum;
+      let nasiyaCustomer = '';
+      let nasiyaPhone = '';
+      let nasiyaDueDate = '';
 
       if (currentPayType === 'Naqd pul' || currentPayType === 'Naqd') {
         cashAmount = totalSum;
         cardAmount = 0;
+        nasiyaAmount = 0;
         cashGiven = parseFloat(document.getElementById('checkoutCashGiven').value) || totalSum;
       } else if (currentPayType === 'Karta') {
         cashAmount = 0;
         cardAmount = totalSum;
+        nasiyaAmount = 0;
         cashGiven = 0;
       } else if (currentPayType === 'Aralash') {
         cashAmount = parseFloat(document.getElementById('splitCashAmount').value) || 0;
         cardAmount = parseFloat(document.getElementById('splitCardAmount').value) || 0;
+        nasiyaAmount = parseFloat(document.getElementById('splitNasiyaAmount').value) || 0;
         cashGiven = parseFloat(document.getElementById('splitCashGiven').value) || cashAmount;
 
-        if (Math.abs((cashAmount + cardAmount) - totalSum) > 1) {
-          alert(`Aralash to'lov summasi jami summaga (${totalSum.toLocaleString()} so'm) teng bo'lishi kerak!\nHozirda: Naqd (${cashAmount.toLocaleString()}) + Karta (${cardAmount.toLocaleString()}) = ${(cashAmount + cardAmount).toLocaleString()} so'm`);
+        const sum = cashAmount + cardAmount + nasiyaAmount;
+        if (Math.abs(sum - totalSum) > 1) {
+          alert(`Taqsimot summasi jami summaga (${totalSum.toLocaleString()} so'm) teng bo'lishi kerak!\nHozirda: Naqd (${cashAmount.toLocaleString()}) + Karta (${cardAmount.toLocaleString()}) + Nasiya (${nasiyaAmount.toLocaleString()}) = ${sum.toLocaleString()} so'm`);
           btn.disabled = false;
           btn.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i><span>To'lovni Qabul Qilish va Chek</span>`;
           lucide.createIcons();
           return;
         }
+
+        if (nasiyaAmount > 0) {
+          nasiyaCustomer = (document.getElementById('splitNasiyaCustomer').value || '').trim();
+          nasiyaPhone = (document.getElementById('splitNasiyaPhone').value || '').trim();
+          nasiyaDueDate = (document.getElementById('splitNasiyaDueDate').value || '').trim();
+
+          if (!nasiyaCustomer) {
+            alert("Nasiyaga sotish uchun iltimos mijoz ismini (F.I.SH) kiriting!");
+            document.getElementById('splitNasiyaCustomer').focus();
+            btn.disabled = false;
+            btn.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i><span>To'lovni Qabul Qilish va Chek</span>`;
+            lucide.createIcons();
+            return;
+          }
+          if (!nasiyaPhone) {
+            alert("Nasiyaga sotish uchun mijoz telefon raqamini kiriting!");
+            document.getElementById('splitNasiyaPhone').focus();
+            btn.disabled = false;
+            btn.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i><span>To'lovni Qabul Qilish va Chek</span>`;
+            lucide.createIcons();
+            return;
+          }
+        }
       }
 
       const payload = {
-        paymentType: currentPayType === 'Aralash' ? 'ARALASH' : currentPayType,
+        paymentType: nasiyaAmount > 0 ? (cashAmount > 0 || cardAmount > 0 ? 'ARALASH / NASIYA' : 'NASIYA') : (currentPayType === 'Aralash' ? 'ARALASH' : currentPayType),
         cashGiven: cashGiven,
         cashAmount: cashAmount,
         cardAmount: cardAmount,
+        nasiyaCustomer: nasiyaCustomer,
+        nasiyaPhone: nasiyaPhone,
+        nasiyaDueDate: nasiyaDueDate,
         items: cart,
         employeeId: employeeId,
         employeeName: employeeName
@@ -4552,7 +5020,7 @@
           return;
         }
 
-        // Clean thermal receipt popup (ZERO soliq.uz!)
+        // Clean thermal receipt popup
         printOrderReceipt(data.id);
 
         cart = [];
@@ -4562,6 +5030,9 @@
         await loadOrders();
         await loadCurrentShift();
         await loadShifts();
+        if (typeof loadNasiyaList === 'function') {
+          loadNasiyaList();
+        }
 
       } catch (err) {
         alert("Server bilan ulanishda xatolik!");
@@ -7935,7 +8406,8 @@
         'restockModal', 'productInfoModal', 'repriceModal', 
         'writeOffModal', 'expenseModal', 'paySupplierModal', 
         'addSupplierModal', 'addDebtModal', 'returnOrderModal', 
-        'employeeModal', 'employeePayoutModal', 'storeSettingsModal'
+        'employeeModal', 'employeePayoutModal', 'storeSettingsModal',
+        'nasiyaPayModal', 'nasiyaDetailsModal'
       ];
       modalIds.forEach(id => hideModal(id));
     }
@@ -8764,6 +9236,339 @@
     function closeShiftDetailsModal(event) {
       if (event) event.stopPropagation();
       hideModal('shiftDetailsModal');
+    }
+
+    // ==================== NASIYALAR (QARZ DAFTARI) ====================
+
+    async function loadNasiyaList() {
+      try {
+        const res = await fetch('/api/my/nasiya', { headers: getAuthHeaders() });
+        if (!res.ok) {
+          console.error("Nasiyalarni yuklashda xatolik:", res.status);
+          return;
+        }
+        nasiyaList = await res.json();
+        renderNasiyaKPIs();
+        renderNasiyaTable();
+      } catch (err) {
+        console.error("Nasiya yuklash xatosi:", err);
+      }
+    }
+
+    function renderNasiyaKPIs() {
+      const list = nasiyaList || [];
+      const totalAmount = list.reduce((sum, n) => sum + (parseFloat(n.totalAmount) || 0), 0);
+      const paidAmount = list.reduce((sum, n) => sum + (parseFloat(n.paidAmount) || 0), 0);
+      const remainingDebt = list.reduce((sum, n) => sum + (parseFloat(n.remainingDebt) || 0), 0);
+      const debtors = list.filter(n => (parseFloat(n.remainingDebt) || 0) > 0);
+
+      const elTotal = document.getElementById('kpiNasiyaTotal');
+      const elTotalCount = document.getElementById('kpiNasiyaTotalCount');
+      const elPaid = document.getElementById('kpiNasiyaPaid');
+      const elRemaining = document.getElementById('kpiNasiyaRemaining');
+      const elDebtors = document.getElementById('kpiNasiyaDebtorsCount');
+      const elBadge = document.getElementById('nasiyaTableCountBadge');
+
+      if (elTotal) elTotal.textContent = `${totalAmount.toLocaleString()} so'm`;
+      if (elTotalCount) elTotalCount.textContent = `Jami nasiya cheklari: ${list.length} ta`;
+      if (elPaid) elPaid.textContent = `${paidAmount.toLocaleString()} so'm`;
+      if (elRemaining) elRemaining.textContent = `${remainingDebt.toLocaleString()} so'm`;
+      if (elDebtors) elDebtors.textContent = `${debtors.length} ta mijoz`;
+      if (elBadge) elBadge.textContent = `${list.length} ta`;
+    }
+
+    function setNasiyaFilter(filter) {
+      currentNasiyaFilter = filter;
+      const tabs = ['all', 'active', 'paid'];
+      tabs.forEach(t => {
+        const btn = document.getElementById(`nas-tab-${t}`);
+        if (!btn) return;
+        if (t === filter) {
+          btn.className = "px-4 py-2 rounded-lg text-xs font-black transition bg-amber-500 text-slate-950 shadow-sm";
+        } else {
+          btn.className = "px-4 py-2 rounded-lg text-xs font-black transition text-slate-300 hover:text-white hover:bg-[#252525]";
+        }
+      });
+      renderNasiyaTable();
+    }
+
+    function renderNasiyaTable() {
+      const tbody = document.getElementById('nasiyaTableBody');
+      if (!tbody) return;
+
+      const searchInput = document.getElementById('nasiyaSearchInput');
+      const query = (searchInput ? searchInput.value : '').toLowerCase().trim();
+
+      let filtered = (nasiyaList || []).filter(item => {
+        const remaining = parseFloat(item.remainingDebt) || 0;
+        if (currentNasiyaFilter === 'active' && remaining <= 0) return false;
+        if (currentNasiyaFilter === 'paid' && remaining > 0) return false;
+
+        if (query) {
+          const matchCust = (item.customer || '').toLowerCase().includes(query);
+          const matchPhone = (item.phone || '').toLowerCase().includes(query);
+          const matchId = (item.id || '').toLowerCase().includes(query);
+          const matchOrder = (item.orderId || '').toLowerCase().includes(query);
+          return matchCust || matchPhone || matchId || matchOrder;
+        }
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="9" class="p-8 text-center text-slate-400 font-bold">
+              <div class="flex flex-col items-center justify-center space-y-2">
+                <i data-lucide="inbox" class="w-8 h-8 text-slate-500"></i>
+                <p>Nasiya yozuvlari topilmadi</p>
+              </div>
+            </td>
+          </tr>
+        `;
+        lucide.createIcons();
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(item => {
+        const total = parseFloat(item.totalAmount) || 0;
+        const paid = parseFloat(item.paidAmount) || 0;
+        const remaining = parseFloat(item.remainingDebt) || 0;
+        
+        let statusBadge = '';
+        if (remaining <= 0) {
+          statusBadge = `<span class="px-2.5 py-1 rounded-full text-[10px] font-black bg-emerald-950 text-emerald-400 border border-emerald-800">✓ To'liq yopilgan</span>`;
+        } else if (paid > 0) {
+          statusBadge = `<span class="px-2.5 py-1 rounded-full text-[10px] font-black bg-amber-950 text-amber-300 border border-amber-800">⏳ Qisman to'langan</span>`;
+        } else {
+          statusBadge = `<span class="px-2.5 py-1 rounded-full text-[10px] font-black bg-rose-950 text-rose-400 border border-rose-800">❌ To'lanmagan</span>`;
+        }
+
+        const itemsSummary = (item.items || []).map(i => `${i.name} (${i.quantity}x)`).join(', ') || 'Mahsulotlar';
+        const displayItems = itemsSummary.length > 32 ? itemsSummary.slice(0, 32) + '...' : itemsSummary;
+
+        return `
+          <tr class="hover:bg-[#1a1a1a] transition">
+            <td class="p-3.5 pl-5">
+              <div class="font-black text-white">${item.id || item.orderId || '-'}</div>
+              <div class="text-[10px] text-slate-400">${item.date || ''}</div>
+            </td>
+            <td class="p-3.5">
+              <div class="font-black text-white">${item.customer || 'Xaridor'}</div>
+              <div class="text-[11px] text-amber-400 font-mono">${item.phone || '-'}</div>
+            </td>
+            <td class="p-3.5 text-slate-300 text-[11px] max-w-xs truncate" title="${itemsSummary}">
+              ${displayItems}
+            </td>
+            <td class="p-3.5 font-bold text-slate-200">
+              ${total.toLocaleString()} so'm
+            </td>
+            <td class="p-3.5 font-bold text-emerald-400">
+              ${paid.toLocaleString()} so'm
+            </td>
+            <td class="p-3.5">
+              <span class="font-black text-sm ${remaining > 0 ? 'text-amber-400' : 'text-slate-400'}">
+                ${remaining.toLocaleString()} so'm
+              </span>
+            </td>
+            <td class="p-3.5 text-slate-400 text-[11px]">
+              ${item.dueDate ? `📅 ${item.dueDate}` : '<span class="text-slate-600">Belgilanmagan</span>'}
+            </td>
+            <td class="p-3.5">
+              ${statusBadge}
+            </td>
+            <td class="p-3.5 pr-5 text-right space-x-1.5 whitespace-nowrap">
+              ${remaining > 0 ? `
+                <button onclick="openNasiyaPayModal('${item.id}')" title="Qarzni to'lash"
+                  class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs transition shadow-sm inline-flex items-center space-x-1">
+                  <i data-lucide="hand-coins" class="w-3.5 h-3.5"></i>
+                  <span>To'lash</span>
+                </button>
+              ` : `
+                <button disabled title="Qarz to'liq yopilgan"
+                  class="px-2.5 py-1.5 rounded-xl bg-[#252525] text-slate-500 font-bold text-xs cursor-not-allowed inline-flex items-center space-x-1">
+                  <i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500"></i>
+                  <span>Yopilgan</span>
+                </button>
+              `}
+              <button onclick="openNasiyaDetailsModal('${item.id}')" title="Batafsil / Chek va To'lovlar tarixi"
+                class="px-2.5 py-1.5 rounded-xl bg-[#222222] hover:bg-[#303030] text-slate-300 hover:text-white border border-[#383838] font-bold text-xs transition inline-flex items-center space-x-1">
+                <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+                <span>Tarix</span>
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      lucide.createIcons();
+    }
+
+    function openNasiyaPayModal(nasiyaId) {
+      const item = (nasiyaList || []).find(n => n.id === nasiyaId);
+      if (!item) {
+        alert("Nasiya ma'lumoti topilmadi!");
+        return;
+      }
+      currentNasiyaPayTarget = item;
+
+      const remaining = parseFloat(item.remainingDebt) || 0;
+      const total = parseFloat(item.totalAmount) || 0;
+
+      document.getElementById('modalPayNasiyaCustomer').textContent = item.customer || 'Xaridor';
+      document.getElementById('modalPayNasiyaPhone').textContent = item.phone || '-';
+      document.getElementById('modalPayNasiyaTotal').textContent = `${total.toLocaleString()} so'm`;
+      document.getElementById('modalPayNasiyaRemaining').textContent = `${remaining.toLocaleString()} so'm`;
+      
+      const badge = document.getElementById('modalPayNasiyaStatusBadge');
+      if (badge) {
+        badge.textContent = remaining > 0 ? "Qarzdor" : "To'liq yopilgan";
+        badge.className = remaining > 0 
+          ? "text-[10px] font-black px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30"
+          : "text-[10px] font-black px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30";
+      }
+
+      const input = document.getElementById('nasiyaPayAmountInput');
+      if (input) {
+        input.value = remaining;
+        input.max = remaining;
+        setTimeout(() => { input.focus(); input.select(); }, 100);
+      }
+
+      const noteInput = document.getElementById('nasiyaPayNoteInput');
+      if (noteInput) noteInput.value = `${item.customer || 'Mijoz'} qarz to'lovi`;
+
+      showModal('nasiyaPayModal');
+    }
+
+    function closeNasiyaPayModal(event) {
+      if (event) event.stopPropagation();
+      hideModal('nasiyaPayModal');
+      currentNasiyaPayTarget = null;
+    }
+
+    function setNasiyaPayPreset(multiplier) {
+      if (!currentNasiyaPayTarget) return;
+      const remaining = parseFloat(currentNasiyaPayTarget.remainingDebt) || 0;
+      const calc = Math.round(remaining * multiplier);
+      const input = document.getElementById('nasiyaPayAmountInput');
+      if (input) {
+        input.value = calc;
+        input.focus();
+      }
+    }
+
+    async function submitNasiyaPay(event) {
+      if (event) event.preventDefault();
+      if (!currentNasiyaPayTarget) return;
+
+      const btn = document.getElementById('btnSubmitNasiyaPay');
+      const amountVal = parseFloat(document.getElementById('nasiyaPayAmountInput').value) || 0;
+      const methodVal = document.getElementById('nasiyaPayMethodSelect').value;
+      const noteVal = document.getElementById('nasiyaPayNoteInput').value;
+
+      const remaining = parseFloat(currentNasiyaPayTarget.remainingDebt) || 0;
+      if (amountVal <= 0) {
+        alert("To'lov summasi 0 dan katta bo'lishi kerak!");
+        return;
+      }
+      if (amountVal > remaining) {
+        alert(`To'lov summasi qoldiq qarzdan (${remaining.toLocaleString()} so'm) ko'p bo'lishi mumkin emas!`);
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = "To'lov saqlanmoqda...";
+
+      try {
+        const res = await fetch(`/api/my/nasiya/${currentNasiyaPayTarget.id}/pay`, {
+          method: 'POST',
+          headers: getAuthHeaders(),
+          body: JSON.stringify({
+            amount: amountVal,
+            paymentMethod: methodVal,
+            note: noteVal
+          })
+        });
+
+        const data = await res.json();
+        if (!res.ok) {
+          alert(data.detail || "To'lovni qabul qilishda xatolik yuz berdi!");
+          return;
+        }
+
+        alert(`✅ To'lov muvaffaqiyatli qabul qilindi!\nTo'langan summa: ${amountVal.toLocaleString()} so'm\nQoldiq qarz: ${(parseFloat(data.remainingDebt) || 0).toLocaleString()} so'm`);
+        closeNasiyaPayModal();
+        await loadNasiyaList();
+        await loadCurrentShift();
+        await loadShifts();
+
+      } catch (err) {
+        alert("Server bilan ulanishda xatolik!");
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i><span>To'lovni Tasdiqlash</span>`;
+        lucide.createIcons();
+      }
+    }
+
+    function openNasiyaDetailsModal(nasiyaId) {
+      const item = (nasiyaList || []).find(n => n.id === nasiyaId);
+      if (!item) return;
+
+      const total = parseFloat(item.totalAmount) || 0;
+      const paid = parseFloat(item.paidAmount) || 0;
+      const remaining = parseFloat(item.remainingDebt) || 0;
+
+      document.getElementById('modalDtNasiyaSubtitle').textContent = `${item.id || item.orderId || '-'}  •  ${item.date || ''}`;
+      document.getElementById('modalDtNasiyaCustomer').textContent = item.customer || 'Xaridor';
+      document.getElementById('modalDtNasiyaPhone').textContent = item.phone || 'Telefon kiritilmagan';
+      document.getElementById('modalDtNasiyaTotal').textContent = `${total.toLocaleString()} so'm`;
+      document.getElementById('modalDtNasiyaPaid').textContent = `To'langan: ${paid.toLocaleString()} so'm`;
+      document.getElementById('modalDtNasiyaRemaining').textContent = `${remaining.toLocaleString()} so'm`;
+      document.getElementById('modalDtNasiyaDueDate').textContent = item.dueDate ? `Qaytarish muddati: ${item.dueDate}` : 'Muddati belgilanmagan';
+
+      // Items table
+      const itemsBody = document.getElementById('modalDtNasiyaItemsBody');
+      const items = item.items || [];
+      if (items.length === 0) {
+        itemsBody.innerHTML = `<tr><td colspan="4" class="p-3 text-center text-slate-500">Tovar tafsilotlari mavjud emas</td></tr>`;
+      } else {
+        itemsBody.innerHTML = items.map((it, idx) => {
+          const qty = parseFloat(it.quantity) || 1;
+          const price = parseFloat(it.price) || 0;
+          return `
+            <tr class="hover:bg-[#1a1a1a]">
+              <td class="p-2.5 pl-3 font-bold text-white">${idx + 1}. ${it.name}</td>
+              <td class="p-2.5 text-center text-slate-300 font-mono">${qty}</td>
+              <td class="p-2.5 text-right text-slate-300">${price.toLocaleString()} so'm</td>
+              <td class="p-2.5 pr-3 text-right font-black text-amber-400">${(qty * price).toLocaleString()} so'm</td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      // Payments history table
+      const paymentsBody = document.getElementById('modalDtNasiyaPaymentsBody');
+      const history = item.paymentsHistory || [];
+      if (history.length === 0) {
+        paymentsBody.innerHTML = `<tr><td colspan="4" class="p-3 text-center text-slate-500">Hozircha to'lovlar amalga oshirilmagan</td></tr>`;
+      } else {
+        paymentsBody.innerHTML = history.map(h => `
+          <tr class="hover:bg-[#1a1a1a]">
+            <td class="p-2.5 pl-3 font-mono text-[11px] text-slate-300">${h.date || '-'}</td>
+            <td class="p-2.5 text-slate-200 font-bold">${h.paymentMethod || 'Naqd pul'}</td>
+            <td class="p-2.5 text-slate-400 text-[11px]">${h.note || '-'}</td>
+            <td class="p-2.5 pr-3 text-right font-black text-emerald-400">+${(parseFloat(h.amount) || 0).toLocaleString()} so'm</td>
+          </tr>
+        `).join('');
+      }
+
+      showModal('nasiyaDetailsModal');
+    }
+
+    function closeNasiyaDetailsModal(event) {
+      if (event) event.stopPropagation();
+      hideModal('nasiyaDetailsModal');
     }
 
     // Escape klavishi bosilganda barcha ochiq modal oynalarni yopish
