@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kirish va Do'kon Ochish — BeeAnaliz</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            amber: { 450: '#f59e0b', 500: '#f59e0b', 600: '#d97706' }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col justify-center items-center p-4 selection:bg-amber-500 selection:text-slate-950 relative overflow-x-hidden">
+  
+  <!-- Background Glow -->
+  <div class="absolute -top-40 -left-40 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+  <div class="absolute -bottom-40 -right-40 w-96 h-96 bg-yellow-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+  <!-- Header / Back Link -->
+  <div class="w-full max-w-md mb-6 flex items-center justify-between z-10">
+    <a href="/" class="inline-flex items-center space-x-2 text-xs font-bold text-slate-400 hover:text-white transition">
+      <i data-lucide="arrow-left" class="w-4 h-4"></i>
+      <span>Asosiy sahifaga qaytish</span>
+    </a>
+    <div class="flex items-center space-x-2">
+      <div class="w-7 h-7 rounded-lg bg-amber-500 flex items-center justify-center text-slate-950 font-black text-sm">🐝</div>
+      <span class="font-black tracking-tight text-white text-sm">Bee<span class="text-amber-500">Analiz</span></span>
+    </div>
+  </div>
+
+  <!-- Auth Card -->
+  <div class="w-full max-w-md bg-slate-800/90 border border-slate-700/80 rounded-3xl p-6 sm:p-8 shadow-2xl backdrop-blur-xl z-10">
+    
+    <!-- Tab Switcher -->
+    <div class="grid grid-cols-2 p-1 bg-slate-900/80 rounded-2xl mb-6 border border-slate-700/50">
+      <button id="tabLoginBtn" onclick="switchAuthTab('login')" class="py-2.5 text-xs font-black rounded-xl transition flex items-center justify-center space-x-1.5 bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20">
+        <i data-lucide="log-in" class="w-4 h-4"></i>
+        <span>Tizimga Kirish</span>
+      </button>
+      <button id="tabRegisterBtn" onclick="switchAuthTab('register')" class="py-2.5 text-xs font-bold text-slate-400 hover:text-white rounded-xl transition flex items-center justify-center space-x-1.5">
+        <i data-lucide="store" class="w-4 h-4"></i>
+        <span>Yangi Do'kon Ochish</span>
+      </button>
+    </div>
+
+    <!-- Feedback Message Alert -->
+    <div id="authAlert" class="hidden mb-5 p-3.5 rounded-2xl text-xs font-bold border"></div>
+
+    <!-- 1. LOGIN FORM -->
+    <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4">
+      <div>
+        <label class="block text-xs font-bold text-slate-300 mb-1.5">Telefon raqam</label>
+        <div class="relative">
+          <i data-lucide="phone" class="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5"></i>
+          <input type="text" id="loginPhone" required placeholder="998901234567" 
+            class="w-full bg-slate-900 border border-slate-700 focus:border-amber-500 text-white rounded-xl pl-10 pr-4 py-2.5 text-xs font-medium focus:outline-none transition">
+        </div>
+      </div>
+
+      <div>
+        <div class="flex justify-between items-center mb-1.5">
+          <label class="block text-xs font-bold text-slate-300">Parol</label>
+          <span class="text-[10px] text-slate-400">Standart: admin</span>
+        </div>
+        <div class="relative">
+          <i data-lucide="lock" class="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5"></i>
+          <input type="password" id="loginPassword" required placeholder="••••••••" 
+            class="w-full bg-slate-900 border border-slate-700 focus:border-amber-500 text-white rounded-xl pl-10 pr-4 py-2.5 text-xs font-medium focus:outline-none transition">
+        </div>
+      </div>
+
+      <button type="submit" id="loginSubmitBtn" class="w-full py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-xl text-xs transition shadow-lg shadow-amber-500/20 flex items-center justify-center space-x-2">
+        <span>Dashboardga Kirish</span>
+        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+      </button>
+
+      <!-- Quick Demo Login Button -->
+      <div class="pt-3 border-t border-slate-700/60">
+        <button type="button" onclick="fillDemoCredentials()" class="w-full py-2 bg-slate-700/50 hover:bg-slate-700 text-amber-400 rounded-xl text-[11px] font-bold transition flex items-center justify-center space-x-1.5">
+          <i data-lucide="key" class="w-3.5 h-3.5"></i>
+          <span>Demo do'konga 1 bosishda kirish (998901234567 / admin)</span>
+        </button>
+      </div>
+    </form>
+
+    <!-- 2. REGISTER FORM (New Seller & Store) -->
+    <form id="registerForm" onsubmit="handleRegister(event)" class="space-y-4 hidden">
+      <div>
+        <label class="block text-xs font-bold text-slate-300 mb-1.5">Do'kon nomi *</label>
+        <div class="relative">
+          <i data-lucide="store" class="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5"></i>
+          <input type="text" id="regStoreName" required placeholder="Masalan: Omad Minimarket" 
+            class="w-full bg-slate-900 border border-slate-700 focus:border-amber-500 text-white rounded-xl pl-10 pr-4 py-2.5 text-xs font-medium focus:outline-none transition">
+        </div>
+        <p class="text-[10px] text-slate-400 mt-1">Har bir do'kon uchun alohida JSON fayl va ombor bazasi yaratiladi.</p>
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold text-slate-300 mb-1.5">Do'kon egasi yoki Sotuvchi ismi *</label>
+        <div class="relative">
+          <i data-lucide="user" class="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5"></i>
+          <input type="text" id="regOwnerName" required placeholder="Jaloliddin" 
+            class="w-full bg-slate-900 border border-slate-700 focus:border-amber-500 text-white rounded-xl pl-10 pr-4 py-2.5 text-xs font-medium focus:outline-none transition">
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold text-slate-300 mb-1.5">Telefon raqam (Kirish logini) *</label>
+        <div class="relative">
+          <i data-lucide="phone" class="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5"></i>
+          <input type="text" id="regPhone" required placeholder="998901234567" 
+            class="w-full bg-slate-900 border border-slate-700 focus:border-amber-500 text-white rounded-xl pl-10 pr-4 py-2.5 text-xs font-medium focus:outline-none transition">
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold text-slate-300 mb-1.5">Parol *</label>
+        <div class="relative">
+          <i data-lucide="lock" class="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5"></i>
+          <input type="password" id="regPassword" required placeholder="Yangi parol o'ylab toping" 
+            class="w-full bg-slate-900 border border-slate-700 focus:border-amber-500 text-white rounded-xl pl-10 pr-4 py-2.5 text-xs font-medium focus:outline-none transition">
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold text-slate-300 mb-1.5">Manzil (shahar, tuman)</label>
+        <div class="relative">
+          <i data-lucide="map-pin" class="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5"></i>
+          <input type="text" id="regAddress" placeholder="Toshkent sh., Chilonzor tumani" 
+            class="w-full bg-slate-900 border border-slate-700 focus:border-amber-500 text-white rounded-xl pl-10 pr-4 py-2.5 text-xs font-medium focus:outline-none transition">
+        </div>
+      </div>
+
+      <button type="submit" id="regSubmitBtn" class="w-full py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-xl text-xs transition shadow-lg shadow-amber-500/20 flex items-center justify-center space-x-2">
+        <span>Do'konni Ro'yxatdan O'tkazish</span>
+        <i data-lucide="check-circle" class="w-4 h-4"></i>
+      </button>
+    </form>
+
+  </div>
+
+  <!-- Footer note -->
+  <p class="mt-8 text-center text-[11px] text-slate-500">
+    BeeAnaliz &copy; 2026. 100% Python FastAPI va JSON xotirada ishlaydi.
+  </p>
+
+  <script>
+    lucide.createIcons();
+
+    // Check query params for default tab
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('tab') === 'register') {
+      switchAuthTab('register');
+    }
+
+    function switchAuthTab(tab) {
+      const loginBtn = document.getElementById('tabLoginBtn');
+      const registerBtn = document.getElementById('tabRegisterBtn');
+      const loginForm = document.getElementById('loginForm');
+      const registerForm = document.getElementById('registerForm');
+      const alertBox = document.getElementById('authAlert');
+      alertBox.classList.add('hidden');
+
+      if (tab === 'login') {
+        loginBtn.className = "py-2.5 text-xs font-black rounded-xl transition flex items-center justify-center space-x-1.5 bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20";
+        registerBtn.className = "py-2.5 text-xs font-bold text-slate-400 hover:text-white rounded-xl transition flex items-center justify-center space-x-1.5";
+        loginForm.classList.remove('hidden');
+        registerForm.classList.add('hidden');
+      } else {
+        registerBtn.className = "py-2.5 text-xs font-black rounded-xl transition flex items-center justify-center space-x-1.5 bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20";
+        loginBtn.className = "py-2.5 text-xs font-bold text-slate-400 hover:text-white rounded-xl transition flex items-center justify-center space-x-1.5";
+        registerForm.classList.remove('hidden');
+        loginForm.classList.add('hidden');
+      }
+      lucide.createIcons();
+    }
+
+    function showAlert(msg, isError = false) {
+      const alertBox = document.getElementById('authAlert');
+      alertBox.textContent = msg;
+      alertBox.className = isError 
+        ? "mb-5 p-3.5 rounded-2xl text-xs font-bold border border-red-500/30 bg-red-500/10 text-red-400 block"
+        : "mb-5 p-3.5 rounded-2xl text-xs font-bold border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 block";
+    }
+
+    function fillDemoCredentials() {
+      document.getElementById('loginPhone').value = '998901234567';
+      document.getElementById('loginPassword').value = 'admin';
+      showAlert("Demo ma'lumotlar to'ldirildi. 'Dashboardga Kirish' tugmasini bosing!", false);
+    }
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      const phone = document.getElementById('loginPhone').value.trim();
+      const password = document.getElementById('loginPassword').value.trim();
+      const btn = document.getElementById('loginSubmitBtn');
+
+      btn.disabled = true;
+      btn.innerHTML = `<span>Tekshirilmoqda...</span>`;
+
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ phone, password })
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          showAlert(data.detail || "Kirishda xatolik yuz berdi!", true);
+          btn.disabled = false;
+          btn.innerHTML = `<span>Dashboardga Kirish</span> <i data-lucide="arrow-right" class="w-4 h-4"></i>`;
+          lucide.createIcons();
+          return;
+        }
+
+        // Save token
+        localStorage.setItem('bee_token', data.token);
+        localStorage.setItem('bee_store_id', data.store_id);
+        localStorage.setItem('bee_store_name', data.store_name);
+        showAlert("Muvaffaqiyatli kirildi! Dashboard ochilmoqda...", false);
+
+        setTimeout(() => {
+          window.location.href = '/dashboard';
+        }, 600);
+
+      } catch (err) {
+        showAlert("Server bilan ulanishda xatolik!", true);
+        btn.disabled = false;
+        btn.innerHTML = `<span>Dashboardga Kirish</span> <i data-lucide="arrow-right" class="w-4 h-4"></i>`;
+        lucide.createIcons();
+      }
+    }
+
+    async function handleRegister(e) {
+      e.preventDefault();
+      const store_name = document.getElementById('regStoreName').value.trim();
+      const owner_name = document.getElementById('regOwnerName').value.trim();
+      const phone = document.getElementById('regPhone').value.trim();
+      const password = document.getElementById('regPassword').value.trim();
+      const address = document.getElementById('regAddress').value.trim();
+      const btn = document.getElementById('regSubmitBtn');
+
+      btn.disabled = true;
+      btn.innerHTML = `<span>Do'kon yaratilmoqda...</span>`;
+
+      try {
+        const res = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ store_name, owner_name, phone, password, address })
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          showAlert(data.detail || "Ro'yxatdan o'tishda xatolik!", true);
+          btn.disabled = false;
+          btn.innerHTML = `<span>Do'konni Ro'yxatdan O'tkazish</span> <i data-lucide="check-circle" class="w-4 h-4"></i>`;
+          lucide.createIcons();
+          return;
+        }
+
+        localStorage.setItem('bee_token', data.token);
+        localStorage.setItem('bee_store_id', data.store_id);
+        localStorage.setItem('bee_store_name', data.store_name);
+        showAlert("Do'koningiz va JSON ombor bazasi yaratildi! Kabinetga yo'naltirilmoqda...", false);
+
+        setTimeout(() => {
+          window.location.href = '/dashboard';
+        }, 700);
+
+      } catch (err) {
+        showAlert("Server bilan ulanishda xatolik!", true);
+        btn.disabled = false;
+        btn.innerHTML = `<span>Do'konni Ro'yxatdan O'tkazish</span> <i data-lucide="check-circle" class="w-4 h-4"></i>`;
+        lucide.createIcons();
+      }
+    }
+  </script>
+</body>
+</html>

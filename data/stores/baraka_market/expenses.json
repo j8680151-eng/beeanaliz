@@ -1,0 +1,66 @@
+[
+  {
+    "id": "EXP-202827",
+    "title": "Maosh: Bonu",
+    "category": "Oylik Maosh",
+    "amount": 112137.0,
+    "date": "2026-09-27",
+    "note": "Bonu (2026-09-27 kuni) maoshi to'lovi"
+  },
+  {
+    "id": "EXP-202728",
+    "title": "Hisobdan chiqarish: IPHONE 12 PRO 256GB",
+    "category": "Hisobdan chiqarish",
+    "amount": 2e+24,
+    "date": "2026-09-27",
+    "note": "1e+18 dona hisobdan chiqarildi: Kamomad (Yo'qolgan)"
+  },
+  {
+    "id": "EXP-210532",
+    "title": "Maosh: Bonu",
+    "category": "Oylik Maosh",
+    "amount": 27000.0,
+    "date": "2026-09-20",
+    "note": "Bonu (barcha vaqt) maoshi to'lovi"
+  },
+  {
+    "id": "EXP-135841",
+    "title": "Maosh: Abdurahmon",
+    "category": "Oylik Maosh",
+    "amount": 3000.0,
+    "date": "2026-09-20",
+    "note": "Abdurahmon oylik maoshi to'lovi"
+  },
+  {
+    "id": "EXP-103016",
+    "title": "Hisobdan chiqarish: Veshilka 40",
+    "category": "Hisobdan chiqarish",
+    "amount": 0.0,
+    "date": "2026-09-20",
+    "note": "0.0 dona hisobdan chiqarildi: Muddati o'tgan / Buzilgan"
+  },
+  {
+    "id": "EXP-101125",
+    "title": "Tushlik 10 kishi uchun",
+    "category": "Tushlik",
+    "amount": 1000000.0,
+    "date": "2026-09-20",
+    "note": "Abet uchun 1 million olindi"
+  },
+  {
+    "id": "EXP-094303",
+    "title": "Hisobdan chiqarish: Veshilka 40",
+    "category": "Hisobdan chiqarish",
+    "amount": 0.0,
+    "date": "2026-09-20",
+    "note": "0.0 dona hisobdan chiqarildi: Muddati o'tgan / Buzilgan"
+  },
+  {
+    "id": "EXP-094254",
+    "title": "Hisobdan chiqarish: Veshilka 40",
+    "category": "Hisobdan chiqarish",
+    "amount": 20000.0,
+    "date": "2026-09-20",
+    "note": "1.0 dona hisobdan chiqarildi: Muddati o'tgan / Buzilgan"
+  }
+]

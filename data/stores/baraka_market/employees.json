@@ -1,0 +1,47 @@
+[
+  {
+    "id": "EMP-14093246",
+    "name": "Bonu",
+    "phone": "+998 90 000 00 00",
+    "role": "Sotuvchi",
+    "salaryType": "percent",
+    "salaryValue": 0.1,
+    "status": "active",
+    "createdAt": "2026-09-20",
+    "payoutsHistory": [
+      {
+        "id": "PAY-28273906",
+        "date": "2026-09-27 20:28",
+        "amount": 112137.0,
+        "paymentMethod": "Plastik karta",
+        "note": "Bonu (2026-09-27 kuni) maoshi to'lovi"
+      },
+      {
+        "id": "PAY-05329111",
+        "date": "2026-09-20 21:05",
+        "amount": 27000.0,
+        "paymentMethod": "Plastik karta",
+        "note": "Bonu (barcha vaqt) maoshi to'lovi"
+      }
+    ]
+  },
+  {
+    "id": "EMP-13315898",
+    "name": "Abdurahmon",
+    "phone": "+998 90 000 00 00",
+    "role": "Menejer",
+    "salaryType": "percent",
+    "salaryValue": 0.1,
+    "status": "active",
+    "createdAt": "2026-09-20",
+    "payoutsHistory": [
+      {
+        "id": "PAY-58417181",
+        "date": "2026-09-20 13:58",
+        "amount": 3000.0,
+        "paymentMethod": "Naqd pul",
+        "note": "Abdurahmon oylik maoshi to'lovi"
+      }
+    ]
+  }
+]

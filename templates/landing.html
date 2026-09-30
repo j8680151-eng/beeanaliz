@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BeeAnaliz — Zamonaviy Do'kon Boshqaruvi va Kassa Tizimi</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            amber: { 450: '#f59e0b', 500: '#f59e0b', 600: '#d97706' }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col font-sans selection:bg-amber-500 selection:text-slate-950">
+
+  <!-- TOP NAV -->
+  <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200/80 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-2.5 cursor-pointer">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-yellow-400 flex items-center justify-center shadow-md shadow-amber-500/20">
+          <span class="text-xl">🐝</span>
+        </div>
+        <div>
+          <span class="text-xl font-black tracking-tight text-slate-900">Bee<span class="text-amber-500">Analiz</span></span>
+          <p class="text-[10px] font-bold text-slate-400 -mt-0.5">Do'kon & POS Tizimi</p>
+        </div>
+      </div>
+
+      <nav class="hidden md:flex items-center space-x-6 text-xs font-bold text-slate-600">
+        <a href="#features" class="hover:text-amber-600 transition">Imkoniyatlar</a>
+        <a href="#lead-section" class="hover:text-amber-600 transition">So'rov Qoldirish</a>
+        <a href="#about" class="hover:text-amber-600 transition">Tizim Haqida</a>
+      </nav>
+
+      <div class="flex items-center space-x-3">
+        <a href="/login" class="px-4 py-2 text-xs font-bold text-slate-700 hover:text-slate-950 hover:bg-slate-100 rounded-xl transition">
+          Kirish
+        </a>
+        <a href="/login?tab=register" class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-slate-950 font-black rounded-xl text-xs shadow-md shadow-amber-500/20 transition flex items-center space-x-1.5">
+          <i data-lucide="store" class="w-3.5 h-3.5"></i>
+          <span>Do'kon Ochish</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="py-12 sm:py-20 max-w-5xl mx-auto px-4 text-center space-y-6">
+    <div class="inline-flex items-center space-x-2 bg-amber-50 border border-amber-200 text-amber-900 px-4 py-1.5 rounded-full text-xs font-bold">
+      <span class="w-2 h-2 rounded-full bg-amber-500 animate-ping"></span>
+      <span>100% Python + JSON Bazasida Ishlovchi Yagona Ekotizim</span>
+    </div>
+
+    <h1 class="text-4xl sm:text-6xl font-black tracking-tight text-slate-900 leading-tight">
+      Savdongizni Raqamlashtiring,<br/>
+      <span class="text-amber-500">Kamomad va Qarzlarni</span> Unuting!
+    </h1>
+
+    <p class="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
+      Har bir sotuvchi uchun alohida JSON bazasi, skaner apparatli kassa, tezkor tovar qabuli, qarzlar daftari va minimalistik toza shtrix-kod narxnomalari.
+    </p>
+
+    <div class="pt-4 flex flex-wrap justify-center gap-3">
+      <a href="/login" class="px-7 py-3.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-black rounded-xl text-sm shadow-xl shadow-amber-500/20 transition flex items-center space-x-2">
+        <i data-lucide="log-in" class="w-4 h-4"></i>
+        <span>Sotuvchi Kabinetiga Kirish</span>
+      </a>
+      <a href="#lead-section" class="px-7 py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-sm transition flex items-center space-x-2">
+        <i data-lucide="file-text" class="w-4 h-4 text-amber-400"></i>
+        <span>Do'konga O'rnatish Uchun So'rov</span>
+      </a>
+    </div>
+
+    <!-- Quick Stat Badges -->
+    <div class="pt-10 grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-3xl mx-auto">
+      <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm">
+        <span class="text-2xl font-black text-slate-900 block font-mono">0.3 soniya</span>
+        <span class="text-[11px] font-bold text-slate-500">Skaner orqali savdo</span>
+      </div>
+      <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm">
+        <span class="text-2xl font-black text-emerald-600 block font-mono">100%</span>
+        <span class="text-[11px] font-bold text-slate-500">Alohida JSON Baza</span>
+      </div>
+      <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm">
+        <span class="text-2xl font-black text-blue-600 block font-mono">0 ta xato</span>
+        <span class="text-[11px] font-bold text-slate-500">Kassa va Nasiya balansi</span>
+      </div>
+      <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm">
+        <span class="text-2xl font-black text-purple-600 block font-mono">Code128</span>
+        <span class="text-[11px] font-bold text-slate-500">Termal Shtrix-kod</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 BILLZ EKOTIZIM MODULLARI -->
+  <section id="features" class="py-12 bg-white border-y border-slate-200/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 space-y-10">
+      <div class="text-center max-w-2xl mx-auto space-y-2">
+        <span class="text-xs font-black uppercase tracking-wider text-amber-600">BILLZ Standartidagi 7 Imkoniyat</span>
+        <h2 class="text-3xl font-black text-slate-900">Do'koningiz Uchun Kerak Bo'lgan Hamma Narsa</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- 01 -->
+        <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 hover:border-amber-300 transition space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-600 flex items-center justify-center font-black">01</div>
+          <h3 class="font-extrabold text-base text-slate-900">Tovarlarning hisob-kitobi</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Tovarlarni kategoriyalarga ajratish, ommaviy katalog, omborga kirim qilish, qayta baholash va faqat nomi, |||||| chiziqlari va raqami aks etgan toza shtrix-kod chop etish.
+          </p>
+        </div>
+
+        <!-- 02 -->
+        <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 hover:border-blue-300 transition space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-600 flex items-center justify-center font-black">02</div>
+          <h3 class="font-extrabold text-base text-slate-900">Mijozlar & Nasiya Daftari</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Mijozlarga nasiyaga berilgan tovarlar, qarzni so'ndirish muddatlari, qisman yoki to'liq qarz to'lovlarini qabul qilish va eslatmalar.
+          </p>
+        </div>
+
+        <!-- 03 -->
+        <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 hover:border-emerald-300 transition space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center font-black">03</div>
+          <h3 class="font-extrabold text-base text-slate-900">Skanerli Kassa (POS)</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Skaner apparat shtrix-kodni o'qishi bilan tovar nomi va narxi chiqadi, savatga yig'iladi. Tovarlarni alohida ajratib qo'yish (Otlojka) va toza termal chek chiqarish.
+          </p>
+        </div>
+
+        <!-- 04 -->
+        <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 hover:border-purple-300 transition space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-600 flex items-center justify-center font-black">04</div>
+          <h3 class="font-extrabold text-base text-slate-900">Hisobot va Tahlillar (BI)</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Kunlik savdo tushumi, hisoblangan sof foyda, kassa balansi, cheklar soni va Z-hisobot hisob-kitoblari.
+          </p>
+        </div>
+
+        <!-- 05 -->
+        <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 hover:border-rose-300 transition space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-600 flex items-center justify-center font-black">05</div>
+          <h3 class="font-extrabold text-base text-slate-900">Ta'minotchilar Hisobi</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Yetkazib beruvchilar ro'yxati, keltirilgan tovarlar summasi, to'langan pullar va qarz qoldig'ini boshqarish.
+          </p>
+        </div>
+
+        <!-- 06 -->
+        <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 hover:border-cyan-300 transition space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-cyan-500/10 text-cyan-600 flex items-center justify-center font-black">06</div>
+          <h3 class="font-extrabold text-base text-slate-900">Har Bir Sotuvchiga Shaxsiy Baza</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Har bir do'kon ro'yxatdan o'tgach o'zining mustaqil JSON fayllariga ega bo'ladi. Hech qanday aralashuvsiz to'liq ma'lumot xavfsizligi.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LEAD INQUIRY FORM (SO'ROV QOLDIRISH) -->
+  <section id="lead-section" class="py-14 max-w-xl mx-auto px-4 w-full">
+    <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-xl space-y-6">
+      <div class="text-center space-y-1">
+        <h2 class="text-2xl font-black text-slate-900">Do'koningizda BeeAnalizni Ishlatish</h2>
+        <p class="text-xs text-slate-500">Ariza qoldiring, mutaxassislarimiz do'koningizga moslab sozlab berishadi</p>
+      </div>
+
+      <div id="leadSuccessNotice" class="hidden p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-2xl text-xs font-bold text-center">
+        ✓ Rahmat! Arizangiz qabul qilindi. Tez orada mutaxassisimiz siz bilan bog'lanadi.
+      </div>
+
+      <form id="leadForm" onsubmit="handleLeadSubmit(event)" class="space-y-4 text-xs font-bold text-slate-700">
+        <div>
+          <label class="block mb-1">Do'kon Nomi *</label>
+          <input type="text" id="leadStoreName" required placeholder="Masalan: Baraka Oziq-ovqat" class="w-full bg-slate-50 px-4 py-2.5 rounded-xl border border-slate-200 text-sm text-slate-900 focus:bg-white focus:outline-none focus:border-amber-500">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block mb-1">Ismingiz *</label>
+            <input type="text" id="leadOwnerName" required placeholder="Jaloliddin" class="w-full bg-slate-50 px-4 py-2.5 rounded-xl border border-slate-200 text-sm text-slate-900 focus:bg-white focus:outline-none focus:border-amber-500">
+          </div>
+          <div>
+            <label class="block mb-1">Telefon Raqamingiz *</label>
+            <input type="text" id="leadPhone" required placeholder="+998 90 123 45 67" class="w-full bg-slate-50 px-4 py-2.5 rounded-xl border border-slate-200 text-sm text-slate-900 focus:bg-white focus:outline-none focus:border-amber-500">
+          </div>
+        </div>
+
+        <div>
+          <label class="block mb-1">Faoliyat Turi</label>
+          <select id="leadStoreType" class="w-full bg-slate-50 px-4 py-2.5 rounded-xl border border-slate-200 text-xs text-slate-900 focus:bg-white focus:outline-none focus:border-amber-500">
+            <option value="Oziq-ovqat va Supermarket">Oziq-ovqat va Supermarket</option>
+            <option value="Kiyim-kechak va Poyabzal">Kiyim-kechak va Poyabzal</option>
+            <option value="Xo'jalik mollari va Parfyumeriya">Xo'jalik mollari va Parfyumeriya</option>
+            <option value="Qurilish mollari">Qurilish mollari</option>
+            <option value="Avto ehtiyot qismlar">Avto ehtiyot qismlar</option>
+          </select>
+        </div>
+
+        <button type="submit" class="w-full py-3.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-black rounded-xl text-sm shadow-lg shadow-amber-500/20 transition flex items-center justify-center space-x-2">
+          <i data-lucide="send" class="w-4 h-4"></i>
+          <span>SO'ROV YUBORISH</span>
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="mt-auto bg-slate-900 text-slate-400 py-8 border-t border-slate-800 text-xs">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center space-x-2">
+        <span class="text-xl">🐝</span>
+        <span class="font-extrabold text-white text-sm">BeeAnaliz</span>
+        <span>— Zamonaviy Do'kon Boshqaruvi</span>
+      </div>
+      <div class="flex items-center space-x-4">
+        <a href="/login" class="text-amber-400 hover:underline">Sotuvchi Kabineti</a>
+        <a href="/login?tab=register" class="text-slate-300 hover:underline">Yangi Do'kon</a>
+      </div>
+      <div>&copy; 2026 BeeAnaliz. Barcha huquqlar himoyalangan.</div>
+    </div>
+  </footer>
+
+  <script>
+    lucide.createIcons();
+
+    async function handleLeadSubmit(e) {
+      e.preventDefault();
+      const payload = {
+        store_name: document.getElementById('leadStoreName').value.trim(),
+        owner_name: document.getElementById('leadOwnerName').value.trim(),
+        phone: document.getElementById('leadPhone').value.trim(),
+        store_type: document.getElementById('leadStoreType').value
+      };
+
+      try {
+        const res = await fetch('/api/leads', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (res.ok) {
+          document.getElementById('leadForm').reset();
+          document.getElementById('leadSuccessNotice').classList.remove('hidden');
+        }
+      } catch (err) {
+        alert("So'rov yuborishda xatolik yuz berdi");
+      }
+    }
+  </script>
+</body>
+</html>

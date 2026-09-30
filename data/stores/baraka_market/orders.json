@@ -1,0 +1,764 @@
+[
+  {
+    "id": "ORD-1642",
+    "storeId": "baraka_market",
+    "storeName": "MENVIO",
+    "storePhone": "+998 90 123 45 67",
+    "storeAddress": "Namangan Shahar Chorsu Bozori",
+    "receiptFooter": "Xaridingiz uchun rahmat!Yana kutib qolamiz.",
+    "date": "2026-09-29 14:16",
+    "customerName": "Xaridor",
+    "employeeId": "",
+    "employeeName": "Mobil Kassir",
+    "paymentMethod": "NAQD",
+    "cashAmount": 57000000.0,
+    "cardAmount": 0.0,
+    "cashGiven": 57000000.0,
+    "itemsCount": 19,
+    "totalAmount": 57000000.0,
+    "profit": 19000000.0,
+    "items": [
+      {
+        "name": "IPHONE 12 PRO 256GB",
+        "barcode": "478766840",
+        "quantity": 19.0,
+        "unit": "dona",
+        "price": 3000000.0,
+        "cost": 2000000.0
+      }
+    ]
+  },
+  {
+    "id": "ORD-5931",
+    "storeId": "baraka_market",
+    "storeName": "MENVIO",
+    "storePhone": "+998 90 123 45 67",
+    "storeAddress": "Namangan Shahar Chorsu Bozori",
+    "receiptFooter": "Xaridingiz uchun rahmat!Yana kutib qolamiz.",
+    "date": "2026-09-29 13:59",
+    "customerName": "Xaridor",
+    "employeeId": "",
+    "employeeName": "Mobil Kassir",
+    "paymentMethod": "NAQD",
+    "cashAmount": 66069000.0,
+    "cardAmount": 0.0,
+    "cashGiven": 66069000.0,
+    "itemsCount": 23,
+    "totalAmount": 66069000.0,
+    "profit": 22039000.0,
+    "items": [
+      {
+        "name": "IPHONE 12 PRO 256GB",
+        "barcode": "478766840",
+        "quantity": 22.0,
+        "unit": "dona",
+        "price": 3000000.0,
+        "cost": 2000000.0
+      },
+      {
+        "name": "Oq Trusik ANDSS 2 talik qutida",
+        "barcode": "6945128581380",
+        "quantity": 1.0,
+        "unit": "dona",
+        "price": 69000.0,
+        "cost": 30000.0
+      }
+    ]
+  },
+  {
+    "id": "ORD-2609",
+    "storeId": "baraka_market",
+    "storeName": "MENVIO",
+    "storePhone": "+998 90 123 45 67",
+    "storeAddress": "Namangan Shahar Chorsu Bozori",
+    "receiptFooter": "Xaridingiz uchun rahmat!Yana kutib qolamiz.",
+    "date": "2026-09-28 13:26",
+    "customerName": "Xaridor",
+    "employeeId": "EMP-14093246",
+    "employeeName": "Bonu",
+    "paymentMethod": "NAQD PUL",
+    "cashAmount": 47000.0,
+    "cardAmount": 0.0,
+    "cashGiven": 47000.0,
+    "itemsCount": 2,
+    "totalAmount": 47000.0,
+    "profit": 30000.0,
+    "items": [
+      {
+        "name": "Tilla Quti",
+        "barcode": "478360775",
+        "quantity": 1.0,
+        "unit": "dona",
+        "price": 35000.0,
+        "cost": 15000.0
+      },
+      {
+        "name": "Veshilka 40",
+        "barcode": "478964231",
+        "quantity": 1.0,
+        "unit": "dona",
+        "price": 12000.0,
+        "cost": 2000.0
+      }
+    ],
+    "shiftId": "SMN-0004",
+    "shiftNumber": 4
+  },
+  {
+    "id": "ORD-5908",
+    "storeId": "baraka_market",
+    "storeName": "MENVIO",
+    "storePhone": "+998 90 123 45 67",
+    "storeAddress": "Namangan Shahar Chorsu Bozori",
+    "receiptFooter": "Xaridingiz uchun rahmat!Yana kutib qolamiz.",
+    "date": "2026-09-27 19:59",
+    "customerName": "Xaridor",
+    "employeeId": "EMP-14093246",
+    "employeeName": "Bonu",
+    "paymentMethod": "NAQD PUL",
+    "cashAmount": 51735000.0,
+    "cardAmount": 0.0,
+    "cashGiven": 51735000.0,
+    "itemsCount": 38,
+    "totalAmount": 51735000.0,
+    "profit": 17420000.0,
+    "items": [
+      {
+        "name": "IPHONE 12 PRO 256GB",
+        "barcode": "478766840",
+        "quantity": 17.0,
+        "unit": "dona",
+        "price": 3000000.0,
+        "cost": 2000000.0
+      },
+      {
+        "name": "Tilla Quti",
+        "barcode": "478360775",
+        "quantity": 21.0,
+        "unit": "dona",
+        "price": 35000.0,
+        "cost": 15000.0
+      }
+    ],
+    "shiftId": "SMN-0004",
+    "shiftNumber": 4
+  },
+  {
+    "id": "ORD-2431",
+    "storeId": "baraka_market",
+    "storeName": "MENVIO",
+    "storePhone": "+998 90 123 45 67",
+    "storeAddress": "Namangan Shahar Chorsu Bozori",
+    "receiptFooter": "Xaridingiz uchun rahmat!Yana kutib qolamiz.",
+    "date": "2026-09-27 19:24",
+    "customerName": "Xaridor",
+    "employeeId": "EMP-14093246",
+    "employeeName": "Bonu",
+    "paymentMethod": "ARALASH",
+    "cashAmount": 25500000.0,
+    "cardAmount": 25500000.0,
+    "cashGiven": 25500000.0,
+    "itemsCount": 17,
+    "totalAmount": 51000000.0,
+    "profit": 17000000.0,
+    "items": [
+      {
+        "name": "IPHONE 12 PRO 256GB",
+        "barcode": "478766840",
+        "quantity": 17.0,
+        "unit": "dona",
+        "price": 3000000.0,
+        "cost": 2000000.0
+      }
+    ],
+    "returnsHistory": [
+      {
+        "date": "2026-09-27 19:27",
+        "items": [
+          {
+            "name": "IPHONE 12 PRO 256GB",
+            "barcode": "478766840",
+            "quantity": 17.0,
+            "price": 3000000.0
+          }
+        ],
+        "reason": "Mijoz fikridan qaytdi",
+        "refundMethod": "Naqd pul",
+        "refundAmount": 51000000.0
+      }
+    ],
+    "returnedAmount": 51000000.0,
+    "status": "Qaytarilgan"
+  },
+  {
+    "id": "ORD-4630",
+    "storeId": "baraka_market",
+    "storeName": "MENVIO",
+    "storePhone": "+998 90 123 45 67",
+    "storeAddress": "Namangan Shahar Chorsu Bozori",
+    "receiptFooter": "Xaridingiz uchun rahmat!Yana kutib qolamiz.",
+    "date": "2026-09-27 18:46",
+    "customerName": "Xaridor",
+    "employeeId": "EMP-14093246",
+    "employeeName": "Bonu",
+    "paymentMethod": "NAQD PUL",
+    "itemsCount": 3,
+    "totalAmount": 36000.0,
+    "profit": 30000.0,
+    "items": [
+      {
+        "name": "Veshilka 40",
+        "barcode": "478964231",
+        "quantity": 3.0,
+        "unit": "dona",
+        "price": 12000.0,
+        "cost": 2000.0
+      }
+    ]
+  },
+  {
+    "id": "ORD-4337",
+    "storeId": "baraka_market",
+    "storeName": "Baraka Savdo Markazi",
+    "storePhone": "+998 90 123 45 67",
+    "storeAddress": "Toshkent sh., Chilonzor tumani",
+    "receiptFooter": "Xaridingiz uchun rahmat!\nYana kutib qolamiz.",
+    "date": "2026-09-27 18:43",
+    "customerName": "Xaridor",
+    "employeeId": "EMP-14093246",
+    "employeeName": "Bonu",
+    "paymentMethod": "NAQD PUL",
+    "itemsCount": 1,
+    "totalAmount": 69000.0,
+    "profit": 39000.0,
+    "items": [
+      {
+        "name": "Oq Trusik ANDSS 2 talik qutida",
+        "barcode": "6945128581380",
+        "quantity": 1.0,
+        "unit": "dona",
+        "price": 69000.0,
+        "cost": 30000.0
+      }
+    ]
+  },
+  {
+    "id": "ORD-3942",
+    "storeId": "baraka_market",
+    "storeName": "Baraka Savdo Markazi",
+    "storePhone": "",
+    "storeAddress": "",
+    "receiptFooter": "",
+    "date": "2026-09-27 18:39",
+    "customerName": "Xaridor",
+    "employeeId": "EMP-14093246",
+    "employeeName": "Bonu",
+    "paymentMethod": "NAQD PUL",
+    "itemsCount": 1,
+    "totalAmount": 69000.0,
+    "profit": 39000.0,
+    "items": [
+      {
+        "name": "Oq Trusik ANDSS 2 talik qutida",
+        "barcode": "6945128581380",
+        "quantity": 1.0,
+        "unit": "dona",
+        "price": 69000.0,
+        "cost": 30000.0
+      }
+    ]
+  },
+  {
+    "id": "ORD-3822",
+    "storeId": "baraka_market",
+    "storeName": "Baraka Savdo Markazi",
+    "storePhone": "",
+    "storeAddress": "",
+    "receiptFooter": "",
+    "date": "2026-09-27 18:38",
+    "customerName": "Xaridor",
+    "employeeId": "EMP-14093246",
+    "employeeName": "Bonu",
+    "paymentMethod": "NAQD PUL",
+    "itemsCount": 1,
+    "totalAmount": 15000.0,
+    "profit": 14000.0,
+    "items": [
+      {
+        "name": "Olma",
+        "barcode": "478104662",
+        "quantity": 1.0,
+        "unit": "kg",
+        "price": 15000.0,
+        "cost": 1000.0
+      }
+    ]
+  },
+  {
+    "id": "ORD-3116",
+    "date": "2026-09-27 18:31",
+    "customerName": "Xaridor",
+    "employeeId": "EMP-14093246",
+    "employeeName": "Bonu",
+    "paymentMethod": "NAQD PUL",
+    "itemsCount": 5,
+    "totalAmount": 3131000.0,
+    "profit": 1083000.0,
+    "items": [
+      {
+        "name": "Oq Trusik ANDSS 2 talik qutida",
+        "barcode": "6945128581380",
+        "quantity": 1.0,
+        "unit": "dona",
+        "price": 69000.0,
+        "cost": 30000.0
+      },
+      {
+        "name": "Veshilka 40",
+        "barcode": "478964231",
+        "quantity": 1.0,
+        "unit": "dona",
+        "price": 12000.0,
+        "cost": 2000.0
+      },
+      {
+        "name": "Tilla Quti",
+        "barcode": "478360775",
+        "quantity": 1.0,
+        "unit": "dona",
+        "price": 35000.0,
+        "cost": 15000.0
+      },
+      {
+        "name": "Olma",
+        "barcode": "478104662",
+        "quantity": 1.0,
+        "unit": "kg",
+        "price": 15000.0,
+        "cost": 1000.0
+      },
+      {
+        "name": "IPHONE 12 PRO 256GB",
+        "barcode": "478766840",
+        "quantity": 1.0,
+        "unit": "dona",
+        "price": 3000000.0,
+        "cost": 2000000.0
+      }
+    ]
+  },
+  {
+    "id": "ORD-0341",
+    "date": "2026-09-27 15:03",
+    "customerName": "Xaridor",
+    "employeeId": "EMP-14093246",
+    "employeeName": "Bonu",
+    "paymentMethod": "NAQD PUL",
+    "itemsCount": 5,
+    "totalAmount": 6082000.0,
+    "profit": 2050000.0,
+    "items": [
+      {
+        "name": "Veshilka 40",
+        "barcode": "478964231",
+        "quantity": 1.0,
+        "unit": "dona",
+        "price": 12000.0,
+        "cost": 2000.0
+      },
+      {
+        "name": "Tilla Quti",
+        "barcode": "478360775",
+        "quantity": 2.0,
+        "unit": "dona",
+        "price": 35000.0,
+        "cost": 15000.0
+      },
+      {
+        "name": "IPHONE 12 PRO 256GB",
+        "barcode": "478766840",
+        "quantity": 2.0,
+        "unit": "dona",
+        "price": 3000000.0,
+        "cost": 2000000.0
+      }
+    ]
+  },
+  {
+    "id": "ORD-0958",
+    "date": "2026-09-20 14:09",
+    "customerName": "Xaridor",
+    "employeeId": "EMP-14093246",
+    "employeeName": "Bonu",
+    "paymentMethod": "NAQD PUL",
+    "itemsCount": 9,
+    "totalAmount": 27000000.0,
+    "profit": 9000000.0,
+    "items": [
+      {
+        "name": "IPHONE 12 PRO 256GB",
+        "barcode": "478766840",
+        "quantity": 9.0,
+        "unit": "dona",
+        "price": 3000000.0,
+        "cost": 2000000.0
+      }
+    ]
+  },
+  {
+    "id": "ORD-3224",
+    "date": "2026-09-20 13:32",
+    "customerName": "Xaridor",
+    "employeeId": "EMP-13315898",
+    "employeeName": "Abdurahmon (Menejer)",
+    "paymentMethod": "NAQD PUL",
+    "itemsCount": 1,
+    "totalAmount": 3000000.0,
+    "profit": 1000000.0,
+    "items": [
+      {
+        "name": "IPHONE 12 PRO 256GB",
+        "barcode": "478766840",
+        "quantity": 1.0,
+        "unit": "dona",
+        "price": 3000000.0,
+        "cost": 2000000.0
+      }
+    ]
+  },
+  {
+    "id": "ORD-3044",
+    "date": "2026-09-20 13:30",
+    "customerName": "Xaridor",
+    "employeeId": "EMP-001",
+    "employeeName": "Bosh Kassir (Bosh Kassir)",
+    "paymentMethod": "NAQD PUL",
+    "itemsCount": 1,
+    "totalAmount": 3000000.0,
+    "profit": 1000000.0,
+    "items": [
+      {
+        "name": "IPHONE 12 PRO 256GB",
+        "barcode": "478766840",
+        "quantity": 1.0,
+        "unit": "dona",
+        "price": 3000000.0,
+        "cost": 2000000.0
+      }
+    ]
+  },
+  {
+    "id": "ORD-3104",
+    "date": "2026-09-20 10:31",
+    "customerName": "Xaridor",
+    "paymentMethod": "NAQD PUL",
+    "itemsCount": 1,
+    "totalAmount": 3000000.0,
+    "profit": 1000000.0,
+    "items": [
+      {
+        "name": "IPHONE 12 PRO 256GB",
+        "barcode": "478766840",
+        "quantity": 1.0,
+        "unit": "dona",
+        "price": 3000000.0,
+        "cost": 2000000.0
+      }
+    ]
+  },
+  {
+    "id": "ORD-0947",
+    "date": "2026-09-20 10:09",
+    "customerName": "Xaridor",
+    "paymentMethod": "KARTA",
+    "itemsCount": 842,
+    "totalAmount": 29470000.0,
+    "profit": 16840000.0,
+    "items": [
+      {
+        "name": "Tilla Quti",
+        "barcode": "478360775",
+        "quantity": 842.0,
+        "unit": "dona",
+        "price": 35000.0,
+        "cost": 15000.0
+      }
+    ]
+  },
+  {
+    "id": "ORD-0629",
+    "date": "2026-09-20 10:06",
+    "customerName": "Xaridor",
+    "paymentMethod": "NAQD PUL",
+    "itemsCount": 1000,
+    "totalAmount": 3000000000.0,
+    "profit": 1000000000.0,
+    "items": [
+      {
+        "name": "IPHONE 12 PRO 256GB",
+        "barcode": "478766840",
+        "quantity": 1000.0,
+        "unit": "dona",
+        "price": 3000000.0,
+        "cost": 2000000.0
+      }
+    ],
+    "returnsHistory": [
+      {
+        "date": "2026-09-20 10:22",
+        "items": [
+          {
+            "name": "IPHONE 12 PRO 256GB",
+            "barcode": "478766840",
+            "quantity": 1.0,
+            "price": 3000000.0
+          }
+        ],
+        "reason": "Mijoz fikridan qaytdi",
+        "refundMethod": "Naqd pul",
+        "refundAmount": 3000000.0
+      },
+      {
+        "date": "2026-09-20 10:21",
+        "items": [
+          {
+            "name": "IPHONE 12 PRO 256GB",
+            "barcode": "478766840",
+            "quantity": 1.0,
+            "price": 3000000.0
+          }
+        ],
+        "reason": "Mijoz fikridan qaytdi",
+        "refundMethod": "Naqd pul",
+        "refundAmount": 3000000.0
+      }
+    ],
+    "returnedAmount": 6000000.0,
+    "status": "Qisman qaytarilgan"
+  },
+  {
+    "id": "ORD-0105",
+    "date": "2026-09-20 10:01",
+    "customerName": "Xaridor",
+    "paymentMethod": "NAQD PUL",
+    "itemsCount": 58,
+    "totalAmount": 2030000.0,
+    "profit": 1160000.0,
+    "items": [
+      {
+        "name": "Tilla Quti",
+        "barcode": "478360775",
+        "quantity": 58.0,
+        "unit": "dona",
+        "price": 35000.0,
+        "cost": 15000.0
+      }
+    ]
+  },
+  {
+    "id": "ORD-5736",
+    "date": "2026-09-20 09:57",
+    "customerName": "Xaridor",
+    "paymentMethod": "KARTA",
+    "itemsCount": 100,
+    "totalAmount": 3500000.0,
+    "profit": 2000000.0,
+    "items": [
+      {
+        "name": "Tilla Quti",
+        "barcode": "478360775",
+        "quantity": 100.0,
+        "unit": "dona",
+        "price": 35000.0,
+        "cost": 15000.0
+      }
+    ]
+  },
+  {
+    "id": "ORD-5352",
+    "date": "2026-09-20 09:53",
+    "customerName": "Xaridor",
+    "paymentMethod": "KARTA",
+    "itemsCount": 4,
+    "totalAmount": 48000.0,
+    "profit": 40000.0,
+    "items": [
+      {
+        "name": "Veshilka 40",
+        "barcode": "478964231",
+        "quantity": 4.0,
+        "unit": "dona",
+        "price": 12000.0,
+        "cost": 2000.0
+      }
+    ]
+  },
+  {
+    "id": "ORD-1200",
+    "date": "2026-09-20 08:12",
+    "customerName": "Xaridor",
+    "paymentMethod": "NAQD PUL",
+    "itemsCount": 16,
+    "totalAmount": 472000.0,
+    "profit": 260000.0,
+    "items": [
+      {
+        "name": "Veshilka 40",
+        "barcode": "478415550",
+        "quantity": 10.0,
+        "unit": "dona",
+        "price": 40000.0,
+        "cost": 20000.0
+      },
+      {
+        "name": "Veshilka 40",
+        "barcode": "478964231",
+        "quantity": 6.0,
+        "unit": "dona",
+        "price": 12000.0,
+        "cost": 2000.0
+      }
+    ]
+  },
+  {
+    "id": "ORD-0856",
+    "date": "2026-09-19 23:08",
+    "customerName": "Xaridor",
+    "paymentMethod": "NAQD PUL",
+    "itemsCount": 56,
+    "totalAmount": 840000.0,
+    "profit": 620000.0,
+    "items": [
+      {
+        "name": "Veshilka 40",
+        "barcode": "478964231",
+        "quantity": 50.0,
+        "unit": "dona",
+        "price": 12000.0,
+        "cost": 2000.0
+      },
+      {
+        "name": "Veshilka 40",
+        "barcode": "478415550",
+        "quantity": 6.0,
+        "unit": "dona",
+        "price": 40000.0,
+        "cost": 20000.0
+      }
+    ]
+  },
+  {
+    "id": "ORD-0617",
+    "date": "2026-09-19 23:06",
+    "customerName": "Xaridor",
+    "paymentMethod": "NAQD PUL",
+    "itemsCount": 1,
+    "totalAmount": 40000.0,
+    "profit": 20000.0,
+    "items": [
+      {
+        "name": "Veshilka 40",
+        "barcode": "478415550",
+        "quantity": 1.0,
+        "unit": "dona",
+        "price": 40000.0,
+        "cost": 20000.0
+      }
+    ]
+  },
+  {
+    "id": "ORD-4734",
+    "date": "2026-09-19 22:47",
+    "customerName": "aa",
+    "paymentMethod": "NASIYA",
+    "itemsCount": 1,
+    "totalAmount": 40000.0,
+    "profit": 20000.0,
+    "items": [
+      {
+        "name": "Veshilka 40",
+        "barcode": "478415550",
+        "quantity": 1.0,
+        "unit": "dona",
+        "price": 40000.0,
+        "cost": 20000.0
+      }
+    ]
+  },
+  {
+    "id": "ORD-1008",
+    "date": "2026-09-19 22:10",
+    "customerName": "Xaridor",
+    "paymentMethod": "NAQD PUL",
+    "itemsCount": 2,
+    "totalAmount": 80000.0,
+    "profit": 40000.0,
+    "items": [
+      {
+        "name": "Veshilka 40",
+        "barcode": "478415550",
+        "quantity": 2.0,
+        "unit": "dona",
+        "price": 40000.0,
+        "cost": 20000.0
+      }
+    ]
+  },
+  {
+    "id": "ORD-0841",
+    "date": "2026-09-19 22:08",
+    "customerName": "Xaridor",
+    "paymentMethod": "NAQD PUL",
+    "itemsCount": 1,
+    "totalAmount": 12000.0,
+    "profit": 10000.0,
+    "items": [
+      {
+        "name": "Veshilka 40",
+        "barcode": "478964231",
+        "quantity": 1.0,
+        "unit": "dona",
+        "price": 12000.0,
+        "cost": 2000.0
+      }
+    ]
+  },
+  {
+    "id": "ORD-4859",
+    "date": "2026-09-19 21:48",
+    "customerName": "Xaridor",
+    "paymentMethod": "NAQD PUL",
+    "itemsCount": 8,
+    "totalAmount": 96000.0,
+    "profit": 80000.0,
+    "items": [
+      {
+        "name": "Veshilka 40",
+        "barcode": "478964231",
+        "quantity": 8.0,
+        "unit": "dona",
+        "price": 12000.0,
+        "cost": 2000.0
+      }
+    ]
+  },
+  {
+    "id": "ORD-4824",
+    "date": "2026-09-19 21:48",
+    "customerName": "Xaridor",
+    "paymentMethod": "NAQD PUL",
+    "itemsCount": 1,
+    "totalAmount": 12000.0,
+    "profit": 10000.0,
+    "items": [
+      {
+        "name": "Veshilka 40",
+        "barcode": "478964231",
+        "quantity": 1.0,
+        "unit": "dona",
+        "price": 12000.0,
+        "cost": 2000.0
+      }
+    ]
+  }
+]

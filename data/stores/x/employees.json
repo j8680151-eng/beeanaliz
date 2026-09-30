@@ -1,0 +1,12 @@
+[
+  {
+    "id": "EMP-001",
+    "name": "Bosh Kassir",
+    "phone": "+998 90 000 00 00",
+    "role": "Bosh Kassir",
+    "salaryType": "fixed",
+    "salaryValue": 0.0,
+    "status": "Faol",
+    "createdAt": "2026-09-29"
+  }
+]

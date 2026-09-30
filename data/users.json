@@ -1,0 +1,80 @@
+[
+  {
+    "phone": "998901234567",
+    "password": "admin",
+    "store_id": "baraka_market",
+    "store_name": "MENVIO",
+    "owner_name": "Jaloliddin",
+    "token": "9425190ea9ff2da1a3c193b4d80e965765bc6191458bc9c1",
+    "tokens": [
+      "4852a67aec20037013b306b0e72df0790149fc6ffdbafbc6",
+      "a225cda098f114ad9493d125095ff7cd6a1cc39d9df482f0",
+      "e605920b5576f4fd767c9cb31f3768c818ede6aab8a27eba",
+      "7299b6277881c20200f86394c91fa3702e0a9371292f499b",
+      "90a37ec865e03170c486ade56683afe1ff36c8a5ae4a89e4",
+      "74dcffcf465bb60bf7d4177c4fca225f83ff50eecdec5de2",
+      "334195b48cbe3f193c331d80a5a3b66f92def2b20a42369d",
+      "bfb780084b6422eee7421ade93c20084dcd869524999e009",
+      "67ac4a90581062492b1f08b9a82f01d94e97b16b1ff71c45",
+      "58c1fb9f435a1c0ad99c489e9fdcb5abbe0fa63f6ce001ca",
+      "98ae15e4acd1b5f1a60e47e27c38c14bf08065d5201c4bf4",
+      "d7d2872c310990c900114a858e5a6db23f599107431c0444",
+      "33c393841fc1998226ee5644f9e71a03f57c67c66706ab2a",
+      "9425190ea9ff2da1a3c193b4d80e965765bc6191458bc9c1"
+    ]
+  },
+  {
+    "phone": "998939998877",
+    "password": "pass",
+    "store_id": "zafar_supermarket",
+    "store_name": "Zafar Supermarket",
+    "owner_name": "Zafarbek",
+    "token": "00f8c8382946b6e46804418ac6491cdd95c8b32b801e60c1",
+    "tokens": [
+      "00f8c8382946b6e46804418ac6491cdd95c8b32b801e60c1"
+    ]
+  },
+  {
+    "phone": "9989112345678",
+    "password": "11",
+    "store_id": "x",
+    "store_name": "x",
+    "owner_name": "x",
+    "token": "dd4a4ff3327ae9b2e3222e590caa5c3f70b9d403cbbcbccd",
+    "tokens": [
+      "dd4a4ff3327ae9b2e3222e590caa5c3f70b9d403cbbcbccd"
+    ]
+  },
+  {
+    "phone": "998911112233",
+    "password": "pass",
+    "store_id": "sardor_brend_dokoni",
+    "store_name": "Sardor Brend Dokoni",
+    "owner_name": "Sardorbek",
+    "token": "65fb6c3892469c7573487c58d890ef8a83bd2942423d700d",
+    "tokens": [
+      "65fb6c3892469c7573487c58d890ef8a83bd2942423d700d"
+    ]
+  },
+  {
+    "phone": "99898913551677",
+    "password": "jaloli",
+    "store_id": "x",
+    "store_name": "x",
+    "owner_name": "x",
+    "token": "d041ff7908b0279286d1d12b0b2de697427c405500ebcd88",
+    "tokens": [
+      "dec27e357184722359c672c4ed8cb8a5a1391eeb71ee2eec",
+      "44ea9cd7276aa4a7623246462a05b3c915b14739bc14c0d8",
+      "e472f719a8a70877bdf39d9bc3102e13d11fb6d0aa24fa04",
+      "a532cfc04fb59ed44d6b1af37037362c846e282131c06086",
+      "457fdac7f6d5afcc980b7f2a5b419153dc1957bdebf79dd7",
+      "6808c2905410f2b0e61356bd76a030d7f69c11dcc9e87fcf",
+      "8316f5c40e8376eb3234c199f399bb083013e0a2183eeef5",
+      "a44293cb914561569cd9c627b096ede195fa0f5d73b056f6",
+      "7688ef899f3fcc5a945b1e1adb83528dca377105f3c59706",
+      "e94d833f873d6a23b19fe380e6170e68ba2cde9663bc074b",
+      "d041ff7908b0279286d1d12b0b2de697427c405500ebcd88"
+    ]
+  }
+]

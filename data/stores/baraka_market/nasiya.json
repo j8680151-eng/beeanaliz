@@ -1,0 +1,27 @@
+[
+  {
+    "id": "NAS-224734",
+    "customerName": "aa",
+    "phone": "+998911234567",
+    "date": "2026-09-19 22:47",
+    "dueDate": "2026-09-19",
+    "totalAmount": 40000.0,
+    "paidAmount": 40000.0,
+    "remainingDebt": 0.0,
+    "status": "To'liq yopilgan",
+    "items": [
+      {
+        "name": "Veshilka 40",
+        "quantity": 1.0,
+        "price": 40000.0
+      }
+    ],
+    "paymentsHistory": [
+      {
+        "date": "2026-09-19 22:48",
+        "amount": 40000.0,
+        "note": "Qarz to'landi"
+      }
+    ]
+  }
+]
