@@ -3,4 +3,3 @@ uvicorn>=0.28.0
 pydantic>=2.6.4
 python-barcode>=0.16.0
 aiofiles>=23.2.1
-a2wsgi>=1.10.0
