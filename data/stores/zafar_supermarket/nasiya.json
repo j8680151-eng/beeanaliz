@@ -1,0 +1,35 @@
+[
+  {
+    "id": "NAS-39167208",
+    "orderId": "ORD-3916",
+    "customer": "Alihan",
+    "phone": "+998901234567",
+    "dueDate": "2026-10-08",
+    "date": "2026-10-01 10:39",
+    "totalAmount": 100000.0,
+    "paidAmount": 60000.0,
+    "remainingDebt": 40000.0,
+    "status": "Qisman to'langan",
+    "items": [
+      {
+        "name": "Tilla Quti",
+        "quantity": 1.0,
+        "price": 100000.0
+      }
+    ],
+    "paymentsHistory": [
+      {
+        "date": "2026-10-01 12:32",
+        "amount": 40000.0,
+        "paymentMethod": "Naqd pul",
+        "note": "Alihan qarz to'lovi"
+      },
+      {
+        "date": "2026-10-01 10:39",
+        "amount": 20000.0,
+        "paymentMethod": "Boshlang'ich to'lov",
+        "note": "Kassadagi to'lov (Naqd: 0, Karta: 20,000)"
+      }
+    ]
+  }
+]

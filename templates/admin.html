@@ -51,47 +51,6 @@
     <span id="toastMsg">Xabar</span>
   </div>
 
-  <!-- AUTH CHECK OVERLAY / LOGIN FORM IF NOT LOGGED IN AS ADMIN -->
-  <div id="adminLoginOverlay" class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4 hidden">
-    <div class="w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl p-7 shadow-2xl relative">
-      <div class="text-center mb-6">
-        <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-400 mb-3">
-          <i data-lucide="shield-check" class="w-7 h-7"></i>
-        </div>
-        <h2 class="text-xl font-black text-white">Super Admin Kirish</h2>
-        <p class="text-xs text-slate-400 mt-1">Boshqaruv paneliga kirish uchun administrator parolini kiriting</p>
-      </div>
-
-      <form onsubmit="handleAdminLogin(event)" class="space-y-4">
-        <div>
-          <label class="block text-xs font-bold text-slate-300 mb-1.5">Telefon raqam yoki Login</label>
-          <div class="relative">
-            <i data-lucide="phone" class="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5"></i>
-            <input type="text" id="adminLoginPhone" value="998901234567" required placeholder="998901234567" 
-              class="w-full bg-slate-950 border border-slate-800 focus:border-amber-500 text-white rounded-xl pl-10 pr-4 py-2.5 text-xs font-semibold focus:outline-none transition">
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-xs font-bold text-slate-300 mb-1.5">Parol</label>
-          <div class="relative">
-            <i data-lucide="lock" class="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5"></i>
-            <input type="password" id="adminLoginPass" value="admin" required placeholder="admin" 
-              class="w-full bg-slate-950 border border-slate-800 focus:border-amber-500 text-white rounded-xl pl-10 pr-4 py-2.5 text-xs font-semibold focus:outline-none transition">
-          </div>
-        </div>
-
-        <button type="submit" id="adminLoginBtn" class="w-full py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-xl text-xs transition shadow-lg shadow-amber-500/20 flex items-center justify-center space-x-2">
-          <span>Admin Panelga Kirish</span>
-          <i data-lucide="arrow-right" class="w-4 h-4"></i>
-        </button>
-
-        <div class="text-center pt-2">
-          <a href="/login" class="text-xs text-slate-400 hover:text-amber-400 transition font-medium">← Oddiy sotuvchi login sahifasiga qaytish</a>
-        </div>
-      </form>
-    </div>
-  </div>
 
   <!-- MAIN ADMIN DASHBOARD -->
   <div id="adminMainContent" class="flex-1 flex flex-col">
@@ -117,6 +76,11 @@
         <div class="flex items-center space-x-3">
           <button onclick="loadStores()" class="p-2 text-slate-400 hover:text-white bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 rounded-xl transition" title="Yangilash">
             <i data-lucide="refresh-cw" id="refreshIcon" class="w-4 h-4"></i>
+          </button>
+
+          <button onclick="openSecurityModal()" class="inline-flex items-center space-x-1.5 px-3 py-2 text-xs font-bold text-amber-300 hover:text-amber-200 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 rounded-xl transition shadow-sm" title="Super Admin Login va Parolini o'zgartirish">
+            <i data-lucide="shield-check" class="w-3.5 h-3.5 text-amber-400"></i>
+            <span>Xavfsizlik & Parol</span>
           </button>
 
           <a href="/dashboard" class="hidden sm:inline-flex items-center space-x-1.5 px-3 py-2 text-xs font-bold text-slate-300 hover:text-white bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 rounded-xl transition">
@@ -348,10 +312,93 @@
     </div>
   </div>
 
+  <!-- SECURITY CREDENTIALS MODAL -->
+  <div id="adminSecurityModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl relative space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+        <div class="flex items-center space-x-2.5">
+          <div class="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400">
+            <i data-lucide="shield-check" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="text-sm font-black text-white">Super Admin Xavfsizlik Sozlamalari</h3>
+            <p class="text-[11px] text-slate-400">Login va parolni faqat shu yerdan o'zgartirish</p>
+          </div>
+        </div>
+        <button onclick="closeSecurityModal()" class="text-slate-400 hover:text-white p-1 rounded-lg">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="p-3 bg-amber-500/10 border border-amber-500/20 rounded-2xl text-[11px] text-amber-200/90 leading-relaxed">
+        <span class="font-bold">⚠️ Muhim:</span> Yangi login yoki parol o'rnatilgach, boshqa barcha eski sessiyalar xavfsizlik maqsadida bekor qilinadi. Login va parolingizni eslab qoling!
+      </div>
+
+      <div class="p-2.5 bg-slate-950 rounded-xl border border-slate-800 flex items-center justify-between text-xs">
+        <span class="text-slate-400 font-medium">Joriy Admin Logini:</span>
+        <span id="currentAdminLoginDisplay" class="font-mono font-bold text-amber-400">Yuklanmoqda...</span>
+      </div>
+
+      <form onsubmit="handleSaveSecurityCredentials(event)" class="space-y-3.5">
+        <div>
+          <label class="block text-xs font-bold text-slate-300 mb-1">Hozirgi Admin Paroli *</label>
+          <div class="relative">
+            <input type="password" id="secCurrentPassword" required placeholder="Hozirgi parolni kiriting"
+              class="w-full bg-slate-950 border border-slate-800 focus:border-amber-500 text-white rounded-xl pl-3.5 pr-10 py-2.5 text-xs font-bold focus:outline-none">
+            <button type="button" onclick="togglePassVisibility('secCurrentPassword', 'eyeSecCurrent')" class="absolute right-3 top-2.5 text-slate-500 hover:text-slate-300">
+              <i id="eyeSecCurrent" data-lucide="eye" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-300 mb-1">Yangi Login (Ixtiyoriy)</label>
+          <input type="text" id="secNewLogin" placeholder="Masalan: bosh_admin yoki 998901234567"
+            class="w-full bg-slate-950 border border-slate-800 focus:border-amber-500 text-white rounded-xl px-3.5 py-2.5 text-xs font-bold focus:outline-none font-mono">
+          <p class="text-[10px] text-slate-500 mt-1">Faqat loginni o'zgartirmoqchi bo'lsangiz yozing (kamida 3 ta belgi)</p>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-300 mb-1">Yangi Parol (Ixtiyoriy)</label>
+          <div class="relative">
+            <input type="password" id="secNewPassword" oninput="onNewPasswordInput()" placeholder="Faqat parolni o'zgartirmoqchi bo'lsangiz yozing"
+              class="w-full bg-slate-950 border border-slate-800 focus:border-amber-500 text-white rounded-xl pl-3.5 pr-10 py-2.5 text-xs font-bold focus:outline-none">
+            <button type="button" onclick="togglePassVisibility('secNewPassword', 'eyeSecNew')" class="absolute right-3 top-2.5 text-slate-500 hover:text-slate-300">
+              <i id="eyeSecNew" data-lucide="eye" class="w-4 h-4"></i>
+            </button>
+          </div>
+          <p class="text-[10px] text-slate-500 mt-1">Eski parol qolishi uchun bo'sh qoldiring (kamida 4 ta belgi)</p>
+        </div>
+
+        <div id="secConfirmPasswordBlock" class="hidden">
+          <label class="block text-xs font-bold text-slate-300 mb-1">Yangi Parolni Takrorlang *</label>
+          <div class="relative">
+            <input type="password" id="secConfirmPassword" placeholder="Yangi parolni qayta kiriting"
+              class="w-full bg-slate-950 border border-slate-800 focus:border-amber-500 text-white rounded-xl pl-3.5 pr-10 py-2.5 text-xs font-bold focus:outline-none">
+            <button type="button" onclick="togglePassVisibility('secConfirmPassword', 'eyeSecConfirm')" class="absolute right-3 top-2.5 text-slate-500 hover:text-slate-300">
+              <i id="eyeSecConfirm" data-lucide="eye" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-end space-x-2 pt-2 border-t border-slate-800/80">
+          <button type="button" onclick="closeSecurityModal()" class="px-4 py-2.5 text-xs font-bold text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-xl transition">
+            Bekor qilish
+          </button>
+          <button type="submit" id="secSubmitBtn" class="px-5 py-2.5 text-xs font-black bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-xl transition flex items-center space-x-1.5 shadow-lg shadow-amber-500/20">
+            <i data-lucide="check" class="w-4 h-4"></i>
+            <span>Saqlash va Yangilash</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- JAVASCRIPT LOGIC -->
   <script>
     let allStores = [];
     let currentFilter = 'all';
+    let currentAdminInfo = null;
 
     // On Load
     document.addEventListener('DOMContentLoaded', () => {
@@ -361,74 +408,158 @@
 
     // Check Admin Auth
     async function checkAdminAuth() {
+      const token = localStorage.getItem('bee_token');
+      if (!token) {
+        window.location.replace('/login');
+        return;
+      }
       try {
         const res = await fetch('/api/admin/check', {
-          headers: { 'Authorization': 'Bearer ' + (localStorage.getItem('bee_token') || '') }
+          headers: { 'Authorization': 'Bearer ' + token }
         });
         if (!res.ok) {
-          showAdminLogin();
+          window.location.replace('/login');
           return;
         }
-        hideAdminLogin();
+        currentAdminInfo = await res.json();
+        const displayEl = document.getElementById('currentAdminLoginDisplay');
+        if (displayEl && currentAdminInfo.phone) {
+          displayEl.textContent = currentAdminInfo.phone;
+        }
         loadStores();
       } catch (e) {
-        showAdminLogin();
-      }
-    }
-
-    function showAdminLogin() {
-      document.getElementById('adminLoginOverlay').classList.remove('hidden');
-      lucide.createIcons();
-    }
-
-    function hideAdminLogin() {
-      document.getElementById('adminLoginOverlay').classList.add('hidden');
-    }
-
-    async function handleAdminLogin(e) {
-      e.preventDefault();
-      const phone = document.getElementById('adminLoginPhone').value.trim();
-      const password = document.getElementById('adminLoginPass').value.trim();
-      const btn = document.getElementById('adminLoginBtn');
-
-      btn.disabled = true;
-      btn.innerHTML = `<span>Tekshirilmoqda...</span>`;
-
-      try {
-        const res = await fetch('/api/auth/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ phone, password })
-        });
-        const data = await res.json();
-
-        if (!res.ok || !data.is_admin) {
-          showToast(data.detail || "Faqat Super Administrator kira oladi!", true);
-          btn.disabled = false;
-          btn.innerHTML = `<span>Admin Panelga Kirish</span> <i data-lucide="arrow-right" class="w-4 h-4"></i>`;
-          lucide.createIcons();
-          return;
-        }
-
-        localStorage.setItem('bee_token', data.token);
-        localStorage.setItem('bee_is_admin', 'true');
-        showToast("Xush kelibsiz, Administrator!", false);
-        hideAdminLogin();
-        loadStores();
-
-      } catch (err) {
-        showToast("Server bilan ulanishda xatolik!", true);
-        btn.disabled = false;
-        btn.innerHTML = `<span>Admin Panelga Kirish</span> <i data-lucide="arrow-right" class="w-4 h-4"></i>`;
-        lucide.createIcons();
+        window.location.replace('/login');
       }
     }
 
     function adminLogout() {
       localStorage.removeItem('bee_token');
       localStorage.removeItem('bee_is_admin');
-      showToast("Chiqildi", false);
-      showAdminLogin();
+      document.cookie = "bee_token=; path=/; max-age=0; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+      window.location.replace('/login');
+    }
+
+    function openSecurityModal() {
+      if (currentAdminInfo && currentAdminInfo.phone) {
+        document.getElementById('currentAdminLoginDisplay').textContent = currentAdminInfo.phone;
+        document.getElementById('secNewLogin').value = currentAdminInfo.phone;
+      }
+      document.getElementById('secCurrentPassword').value = '';
+      document.getElementById('secNewPassword').value = '';
+      document.getElementById('secConfirmPassword').value = '';
+      document.getElementById('adminSecurityModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeSecurityModal() {
+      document.getElementById('adminSecurityModal').classList.add('hidden');
+    }
+
+    function togglePassVisibility(inputId, iconId) {
+      const input = document.getElementById(inputId);
+      const icon = document.getElementById(iconId);
+      if (!input) return;
+      if (input.type === 'password') {
+        input.type = 'text';
+        if (icon) icon.setAttribute('data-lucide', 'eye-off');
+      } else {
+        input.type = 'password';
+        if (icon) icon.setAttribute('data-lucide', 'eye');
+      }
+      lucide.createIcons();
+    }
+
+    function onNewPasswordInput() {
+      const p = document.getElementById('secNewPassword').value;
+      const block = document.getElementById('secConfirmPasswordBlock');
+      if (p.length > 0) {
+        block.classList.remove('hidden');
+      } else {
+        block.classList.add('hidden');
+      }
+      lucide.createIcons();
+    }
+
+    async function handleSaveSecurityCredentials(e) {
+      e.preventDefault();
+      const current_password = document.getElementById('secCurrentPassword').value.trim();
+      const new_login = document.getElementById('secNewLogin').value.trim();
+      const new_password = document.getElementById('secNewPassword').value.trim();
+      const confirm_password = document.getElementById('secConfirmPassword').value.trim();
+      const btn = document.getElementById('secSubmitBtn');
+
+      if (!current_password) {
+        showToast("Iltimos, hozirgi parolingizni kiriting!", true);
+        return;
+      }
+
+      if (!new_login && !new_password) {
+        showToast("O'zgartirish uchun yangi login yoki yangi parol kiriting!", true);
+        return;
+      }
+
+      if (new_password) {
+        if (new_password.length < 4) {
+          showToast("Yangi parol kamida 4 ta belgidan iborat bo'lishi kerak!", true);
+          return;
+        }
+        if (new_password !== confirm_password) {
+          showToast("Yangi parollar bir-biriga mos kelmadi!", true);
+          return;
+        }
+      }
+
+      if (new_login && new_login.length < 3) {
+        showToast("Yangi login kamida 3 ta belgidan iborat bo'lishi kerak!", true);
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = "Saqlanmoqda...";
+
+      try {
+        const payload = { current_password };
+        if (new_login) payload.new_login = new_login;
+        if (new_password) payload.new_password = new_password;
+
+        const res = await fetch('/api/admin/change-credentials', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + (localStorage.getItem('bee_token') || '')
+          },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+
+        btn.disabled = false;
+        btn.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i><span>Saqlash va Yangilash</span>`;
+        lucide.createIcons();
+
+        if (!res.ok) {
+          showToast(data.detail || "Xatolik yuz berdi!", true);
+          return;
+        }
+
+        if (data.token) {
+          localStorage.setItem('bee_token', data.token);
+          document.cookie = "bee_token=" + data.token + "; path=/; max-age=" + (86400 * 30);
+        }
+        if (data.new_login) {
+          if (currentAdminInfo) currentAdminInfo.phone = data.new_login;
+          const disp = document.getElementById('currentAdminLoginDisplay');
+          if (disp) disp.textContent = data.new_login;
+        }
+
+        showToast(data.message || "Admin login va paroli muvaffaqiyatli saqlandi!", false);
+        closeSecurityModal();
+
+      } catch (err) {
+        btn.disabled = false;
+        btn.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i><span>Saqlash va Yangilash</span>`;
+        lucide.createIcons();
+        showToast("Server bilan aloqada xatolik yuz berdi!", true);
+      }
     }
 
     // Load Stores from API
@@ -444,7 +575,7 @@
 
         if (!res.ok) {
           if (res.status === 401 || res.status === 403) {
-            showAdminLogin();
+            window.location.replace('/login');
           } else {
             showToast("Do'konlarni yuklashda xatolik!", true);
           }

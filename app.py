@@ -82,27 +82,27 @@ def init_system():
     
     # Ensure existing users have status and role
     changed = False
+    has_superadmin = any(u.get("role") == "superadmin" for u in users)
     for u in users:
         if "status" not in u:
             u["status"] = "active"
             changed = True
-        if u.get("phone") in ("998901234567", "admin"):
-            if u.get("role") != "superadmin":
-                u["role"] = "superadmin"
-                changed = True
-            if u.get("status") != "active":
-                u["status"] = "active"
-                changed = True
+        if not has_superadmin and u.get("phone") in ("998901234567", "admin"):
+            u["role"] = "superadmin"
+            u["status"] = "active"
+            changed = True
+            has_superadmin = True
 
-    # 1. Default Super Admin: 998901234567 / admin
-    if not any(u.get("phone") == "998901234567" for u in users):
+    # 1. Default Super Admin: only if none exists
+    if not has_superadmin:
         users.append({
             "phone": "998901234567",
             "password": "admin",
             "store_id": default_store_slug,
             "store_name": "Baraka Savdo Markazi",
             "owner_name": "Jaloliddin",
-            "token": "demo_token_123",
+            "token": secrets.token_hex(24),
+            "tokens": [],
             "status": "active",
             "role": "superadmin",
             "created_at": datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -266,6 +266,15 @@ init_system()
 class LoginRequest(BaseModel):
     phone: str
     password: str
+
+class AdminLoginReq(BaseModel):
+    login: str
+    password: str
+
+class AdminChangeCredentialsReq(BaseModel):
+    current_password: str
+    new_login: Optional[str] = None
+    new_password: Optional[str] = None
 
 class RegisterRequest(BaseModel):
     store_name: str
@@ -456,7 +465,7 @@ def require_user(request: Request) -> Dict[str, Any]:
     if not user:
         raise HTTPException(status_code=401, detail="Tizimga kirish talab etiladi")
     
-    is_superadmin = (user.get("role") == "superadmin") or (user.get("phone") in ("998901234567", "admin"))
+    is_superadmin = (user.get("role") == "superadmin")
     if not is_superadmin:
         u_status = user.get("status", "active")
         if u_status == "blocked":
@@ -467,7 +476,7 @@ def require_user(request: Request) -> Dict[str, Any]:
 
 def require_admin(request: Request) -> Dict[str, Any]:
     user = require_user(request)
-    is_superadmin = (user.get("role") == "superadmin") or (user.get("phone") in ("998901234567", "admin"))
+    is_superadmin = (user.get("role") == "superadmin")
     if not is_superadmin:
         raise HTTPException(status_code=403, detail="Faqat Super Administrator uchun ruxsat berilgan!")
     return user
@@ -475,7 +484,7 @@ def require_admin(request: Request) -> Dict[str, Any]:
 def require_store(request: Request, store_id: Optional[str] = None) -> str:
     user = require_user(request)
     user_store = user.get("store_id")
-    is_superadmin = (user.get("role") == "superadmin") or (user.get("phone") in ("998901234567", "admin"))
+    is_superadmin = (user.get("role") == "superadmin")
     if store_id and store_id != user_store and not is_superadmin:
         raise HTTPException(status_code=403, detail="Ruxsat berilmagan! Siz faqat o'z do'koningiz ma'lumotlariga kira olasiz.")
     return user_store if not is_superadmin or not store_id else store_id
@@ -595,7 +604,7 @@ def auth_me(request: Request):
     user = get_current_user(request)
     if not user:
         raise HTTPException(status_code=401, detail="Kirilmagan")
-    is_superadmin = (user.get("role") == "superadmin") or (user.get("phone") in ("998901234567", "admin"))
+    is_superadmin = (user.get("role") == "superadmin")
     return {
         "phone": user["phone"],
         "store_id": user.get("store_id", ""),
@@ -610,6 +619,177 @@ def auth_me(request: Request):
 def auth_logout(response: Response):
     response.delete_cookie(key="bee_token")
     return {"message": "Tizimdan chiqildi"}
+
+# ----------------- SUPER ADMIN SECURITY & RATE LIMITING ----------------- #
+
+ADMIN_FAILED_ATTEMPTS: Dict[str, List[datetime.datetime]] = {}
+ADMIN_LOCKOUT_MINUTES = 15
+ADMIN_MAX_ATTEMPTS = 5
+
+def get_client_ip(request: Request) -> str:
+    forwarded = request.headers.get("X-Forwarded-For")
+    if forwarded:
+        return forwarded.split(",")[0].strip()
+    return request.client.host if request.client else "127.0.0.1"
+
+def check_admin_rate_limit(client_ip: str):
+    now = datetime.datetime.now()
+    cutoff = now - datetime.timedelta(minutes=ADMIN_LOCKOUT_MINUTES)
+    attempts = [t for t in ADMIN_FAILED_ATTEMPTS.get(client_ip, []) if t > cutoff]
+    ADMIN_FAILED_ATTEMPTS[client_ip] = attempts
+    if len(attempts) >= ADMIN_MAX_ATTEMPTS:
+        first_attempt = attempts[0]
+        unblock_time = first_attempt + datetime.timedelta(minutes=ADMIN_LOCKOUT_MINUTES)
+        remaining_secs = max(0, int((unblock_time - now).total_seconds()))
+        remaining_mins = max(1, (remaining_secs // 60) + 1)
+        raise HTTPException(
+            status_code=429,
+            detail=f"Xavfsizlik blokirovkasi! Ketma-ket 5 marta noto'g'ri urinish aniqlandi. Tizim {remaining_mins} daqiqaga bloklandi."
+        )
+
+def record_admin_failed_attempt(client_ip: str):
+    now = datetime.datetime.now()
+    if client_ip not in ADMIN_FAILED_ATTEMPTS:
+        ADMIN_FAILED_ATTEMPTS[client_ip] = []
+    ADMIN_FAILED_ATTEMPTS[client_ip].append(now)
+
+def reset_admin_failed_attempts(client_ip: str):
+    if client_ip in ADMIN_FAILED_ATTEMPTS:
+        ADMIN_FAILED_ATTEMPTS.pop(client_ip, None)
+
+@app.post("/api/admin/login")
+def api_admin_login(req: AdminLoginReq, request: Request, response: Response):
+    client_ip = get_client_ip(request)
+    check_admin_rate_limit(client_ip)
+
+    clean_login = req.login.strip()
+    clean_pass = req.password.strip()
+
+    users = load_json(USERS_FILE, [])
+    admin_user = next((
+        u for u in users
+        if u.get("role") == "superadmin" and (
+            str(u.get("phone", "")).lower() == clean_login.lower() or
+            clean_phone(str(u.get("phone", ""))) == clean_phone(clean_login)
+        )
+    ), None)
+
+    is_valid = False
+    if admin_user:
+        expected_pass = str(admin_user.get("password", "")).strip()
+        is_valid = secrets.compare_digest(expected_pass, clean_pass)
+
+    if not admin_user or not is_valid:
+        record_admin_failed_attempt(client_ip)
+        current_attempts = len(ADMIN_FAILED_ATTEMPTS.get(client_ip, []))
+        remaining = max(0, ADMIN_MAX_ATTEMPTS - current_attempts)
+        import time
+        time.sleep(1.0) # Timing mitigation & brute-force slowdown
+        if remaining == 0:
+            raise HTTPException(
+                status_code=429,
+                detail=f"Xavfsizlik blokirovkasi! 5 marta xato urinish bo'ldi. Admin panel {ADMIN_LOCKOUT_MINUTES} daqiqaga bloklandi."
+            )
+        raise HTTPException(
+            status_code=401,
+            detail=f"Admin login yoki parol noto'g'ri! Qolgan urinishlar soni: {remaining} ta."
+        )
+
+    reset_admin_failed_attempts(client_ip)
+    token = secrets.token_hex(32)
+    raw_tokens = admin_user.get("tokens", [])
+    tokens = list(raw_tokens) if isinstance(raw_tokens, list) else []
+    tokens.append(token)
+    if len(tokens) > 20:
+        tokens = tokens[-20:]
+    admin_user["tokens"] = tokens
+    admin_user["token"] = token
+    admin_user["last_login"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    admin_user["last_login_ip"] = client_ip
+    save_json(USERS_FILE, users)
+
+    response.set_cookie(key="bee_token", value=token, max_age=86400*7, httponly=False)
+    return {
+        "success": True,
+        "token": token,
+        "login": admin_user.get("phone"),
+        "owner_name": admin_user.get("owner_name", "Super Administrator"),
+        "role": "superadmin"
+    }
+
+@app.post("/api/admin/change-credentials")
+def api_admin_change_credentials(req: AdminChangeCredentialsReq, request: Request, response: Response):
+    admin_user = require_admin(request)
+    
+    current_pass = req.current_password.strip()
+    expected_pass = str(admin_user.get("password", "")).strip()
+    if not secrets.compare_digest(expected_pass, current_pass):
+        raise HTTPException(status_code=400, detail="Hozirgi admin paroli noto'g'ri kiritildi!")
+
+    users = load_json(USERS_FILE, [])
+    target = next((u for u in users if u.get("role") == "superadmin"), None)
+    if not target:
+        raise HTTPException(status_code=404, detail="Super Administrator topilmadi")
+
+    changes = []
+
+    # 1. New Login
+    new_login = (req.new_login or "").strip()
+    if new_login and new_login != target.get("phone"):
+        if len(new_login) < 3:
+            raise HTTPException(status_code=400, detail="Yangi login kamida 3 ta belgidan iborat bo'lishi kerak!")
+        for u in users:
+            if u != target and str(u.get("phone", "")).lower() == new_login.lower():
+                raise HTTPException(status_code=400, detail=f"'{new_login}' logini boshqa foydalanuvchi tomonidan band qilingan!")
+        target["phone"] = new_login
+        changes.append("login")
+
+    # 2. New Password
+    new_pass = (req.new_password or "").strip()
+    if new_pass:
+        if len(new_pass) < 4:
+            raise HTTPException(status_code=400, detail="Yangi parol kamida 4 ta belgidan iborat bo'lishi kerak!")
+        target["password"] = new_pass
+        changes.append("parol")
+
+    if not changes:
+        return {
+            "success": True,
+            "message": "Hech qanday o'zgarish kiritilmadi (login yoki parol o'zgartirilmagan).",
+            "new_login": target.get("phone"),
+            "token": target.get("token")
+        }
+
+    # Generate fresh token, keep existing active so current session stays alive
+    new_token = secrets.token_hex(32)
+    target["token"] = new_token
+    raw_tokens = target.get("tokens", [])
+    tokens = list(raw_tokens) if isinstance(raw_tokens, list) else []
+    tokens.append(new_token)
+    target["tokens"] = tokens[-15:]
+    target["credentials_updated_at"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    save_json(USERS_FILE, users)
+
+    response.set_cookie(key="bee_token", value=new_token, max_age=86400*30, httponly=False)
+    change_msg = " va ".join(changes)
+    return {
+        "success": True,
+        "message": f"Super Administrator {change_msg}i muvaffaqiyatli saqlandi!",
+        "new_login": target.get("phone"),
+        "token": new_token
+    }
+
+@app.get("/api/admin/check")
+def api_admin_check(request: Request):
+    user = require_admin(request)
+    return {
+        "status": "ok",
+        "phone": user.get("phone"),
+        "owner_name": user.get("owner_name", "Super Administrator"),
+        "role": user.get("role", "superadmin"),
+        "last_login": user.get("last_login", "-"),
+        "last_login_ip": user.get("last_login_ip", "-")
+    }
 
 # ----------------- SUPER ADMIN ENDPOINTS ----------------- #
 
@@ -775,6 +955,11 @@ def admin_create_store(req: AdminCreateStoreReq, request: Request):
 @app.post("/api/my/change-password")
 def change_my_password(req: ChangePasswordReq, request: Request):
     user = require_user(request)
+    if user.get("role") == "superadmin":
+        raise HTTPException(
+            status_code=403,
+            detail="Xavfsizlik talabi: Super Administrator login va parolini faqat Super Admin Panel orqali o'zgartirish mumkin!"
+        )
     users = load_json(USERS_FILE, [])
     target = next((u for u in users if u.get("phone") == user.get("phone") or u.get("store_id") == user.get("store_id")), None)
     if not target:
@@ -1061,6 +1246,9 @@ def pos_checkout(store_id: str, req: CheckoutReq):
         "paymentMethod": req_pay_type,
         "cashAmount": cash_amount,
         "cardAmount": card_amount,
+        "nasiyaAmount": nasiya_debt,
+        "nasiyaDueDate": (req.nasiyaDueDate or "").strip(),
+        "nasiyaPhone": (req.nasiyaPhone or "").strip(),
         "cashGiven": float(req.cashGiven or cash_amount),
         "itemsCount": sum(int(i.quantity) for i in req.items),
         "totalAmount": total_amount,
@@ -2519,6 +2707,7 @@ def print_receipt(store_id: str = "", order_id: str = ""):
         barcode_str = it.get("barcode", "-")
         unit_str = it.get("unit", "dona")
         it_name = it.get("name", "Tovar")
+        q_str = f"{int(q)}" if q == int(q) else f"{q:g}"
         items_html += f"""
         <div style="border-bottom: 1px dashed #ccc; padding: 4px 0;">
             <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 11px;">
@@ -2527,7 +2716,7 @@ def print_receipt(store_id: str = "", order_id: str = ""):
             </div>
             <div style="display: flex; justify-content: space-between; font-size: 10px; color: #444; font-family: monospace;">
                 <span>Shtrix: {barcode_str}</span>
-                <span>{q} {unit_str} x {p:,.0f} so'm</span>
+                <span>{q_str} {unit_str} x {p:,.0f} so'm</span>
             </div>
         </div>
         """
@@ -2691,7 +2880,10 @@ def page_dashboard(request: Request):
 
 # 4. Super Admin Boshqaruv Paneli
 @app.get("/admin", response_class=HTMLResponse)
-def page_admin():
+def page_admin(request: Request):
+    user = get_current_user(request)
+    if not user or user.get("role") != "superadmin":
+        return RedirectResponse(url="/login", status_code=302)
     admin_file = TEMPLATES_DIR / "admin.html"
     if not admin_file.exists():
         return HTMLResponse("<h1>Super Admin Paneli yuklanmoqda...</h1>")

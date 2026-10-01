@@ -41,6 +41,17 @@
     ::-webkit-scrollbar-thumb { background: #383838; border-radius: 9999px; }
     ::-webkit-scrollbar-thumb:hover { background: #525252; }
 
+    /* Hide number input spinners (<> / up-down arrows) across all browsers */
+    input[type=number]::-webkit-inner-spin-button, 
+    input[type=number]::-webkit-outer-spin-button { 
+      -webkit-appearance: none; 
+      margin: 0; 
+    }
+    input[type=number] {
+      -moz-appearance: textfield;
+      appearance: textfield;
+    }
+
     /* Force all white backgrounds to BILLZ matte dark */
     html, body, main {
       background-color: #181818 !important;
@@ -695,6 +706,21 @@
     .sidebar-link.bg-amber-500 svg {
       color: #0f172a !important;
     }
+
+    /* iOS Bottom Tab Bar & Safe Area */
+    .pb-safe {
+      padding-bottom: max(10px, env(safe-area-inset-bottom, 10px));
+    }
+    .ios-dock {
+      background: rgba(22, 22, 22, 0.85) !important;
+      backdrop-filter: blur(24px) saturate(180%) !important;
+      -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+      border-top: 0.5px solid rgba(255, 255, 255, 0.14) !important;
+    }
+    .mobile-tab-btn {
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
   </style>
 </head>
 <body class="bg-[#181818] text-[#f4f4f5] min-h-screen flex font-sans antialiased selection:bg-blue-600 selection:text-white">
@@ -958,18 +984,22 @@
                   </div>
                 </div>
 
-                <div class="grid grid-cols-3 gap-2">
-                  <button onclick="openCheckoutModal('Naqd pul')" class="py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-xl text-xs transition flex flex-col sm:flex-row items-center justify-center space-x-1 shadow-sm">
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  <button onclick="openCheckoutModal('Naqd pul')" class="py-3 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-black rounded-xl text-xs transition flex flex-col sm:flex-row items-center justify-center space-x-1 shadow-sm cursor-pointer">
                     <i data-lucide="banknote" class="w-4 h-4"></i>
                     <span>Naqd</span>
                   </button>
-                  <button onclick="openCheckoutModal('Karta')" class="py-3 bg-sky-600 hover:bg-sky-700 text-white font-black rounded-xl text-xs transition flex flex-col sm:flex-row items-center justify-center space-x-1 shadow-sm">
+                  <button onclick="openCheckoutModal('Karta')" class="py-3 bg-sky-600 hover:bg-sky-700 active:scale-95 text-white font-black rounded-xl text-xs transition flex flex-col sm:flex-row items-center justify-center space-x-1 shadow-sm cursor-pointer">
                     <i data-lucide="credit-card" class="w-4 h-4"></i>
                     <span>Karta</span>
                   </button>
-                  <button onclick="openCheckoutModal('Aralash')" class="py-3 bg-purple-600 hover:bg-purple-700 text-white font-black rounded-xl text-xs transition flex flex-col sm:flex-row items-center justify-center space-x-1 shadow-sm" title="Qisman naqd, qisman karta orqali to'lov">
+                  <button onclick="openCheckoutModal('Aralash')" class="py-3 bg-purple-600 hover:bg-purple-700 active:scale-95 text-white font-black rounded-xl text-xs transition flex flex-col sm:flex-row items-center justify-center space-x-1 shadow-sm cursor-pointer" title="Naqd + Karta aralash to'lov">
                     <i data-lucide="split" class="w-4 h-4"></i>
                     <span>Aralash</span>
+                  </button>
+                  <button onclick="openCheckoutModal('Nasiya')" class="py-3 bg-amber-600 hover:bg-amber-700 active:scale-95 text-white font-black rounded-xl text-xs transition flex flex-col sm:flex-row items-center justify-center space-x-1 shadow-sm cursor-pointer" title="Qarz daftari (Nasiyaga sotish)">
+                    <i data-lucide="book-open" class="w-4 h-4"></i>
+                    <span>Nasiya</span>
                   </button>
                 </div>
               </div>
@@ -2694,167 +2724,372 @@
     </div>
   </div>
 
-  <!-- 5. CHECKOUT (TO'LOV VA CHEK) MODAL -->
-  <div id="checkoutModal" onclick="if (event.target === this) closeCheckoutModal(event)" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div onclick="event.stopPropagation()" class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl border border-slate-200 space-y-4">
-      <div class="flex items-center justify-between">
-        <div class="flex items-center space-x-2">
-          <div class="p-2 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-emerald-400">
+  <!-- 5. CHECKOUT (TO'LOV VA CHEK) MODAL - SENSORLI EKRAN UCHUN GORIZONTAL VERSIYA -->
+  <div id="checkoutModal" onclick="if (event.target === this) closeCheckoutModal(event)" class="fixed inset-0 bg-slate-900/75 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-5 hidden">
+    <div onclick="event.stopPropagation()" class="bg-white w-full max-w-5xl rounded-3xl p-5 sm:p-7 shadow-2xl border border-slate-200 flex flex-col max-h-[95vh] overflow-hidden">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between pb-4 border-b border-slate-100 shrink-0">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-2xl bg-emerald-50 border border-emerald-200/80 flex items-center justify-center text-emerald-600 shadow-sm">
             <i data-lucide="wallet" class="w-5 h-5"></i>
           </div>
           <div>
-            <h3 class="text-sm font-black text-white">Savdoni Yakunlash</h3>
-            <p class="text-[11px] text-slate-400">To'lov turini tanlang va chek chiqaring</p>
+            <h3 class="text-base sm:text-lg font-black text-slate-900">Kassa To'lovini Qabul Qilish</h3>
+            <p class="text-xs text-slate-500 font-medium">To'lov turini tanlang va tezkor chek chiqaring</p>
           </div>
         </div>
-        <button onclick="closeCheckoutModal()" class="text-slate-400 hover:text-white p-1">
+        <button onclick="closeCheckoutModal()" class="w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-400 hover:text-slate-700 flex items-center justify-center transition">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
 
-      <div class="p-3.5 bg-slate-900 text-white rounded-2xl flex justify-between items-center shadow-sm">
-        <div>
-          <span class="text-[10px] uppercase tracking-wider text-slate-400 block font-bold">To'lanishi kerak:</span>
-          <span id="checkoutTotalAmount" class="text-2xl font-black text-amber-400">0 so'm</span>
-        </div>
-        <span class="text-xs px-2.5 py-1 rounded-xl bg-slate-800 text-slate-300 font-bold" id="checkoutItemCount">0 tovar</span>
-      </div>
-
-      <!-- Payment method buttons (3 options: Naqd, Karta, Aralash) -->
-      <div class="grid grid-cols-3 gap-2">
-        <button type="button" onclick="selectPayType('Naqd pul')" id="payBtn-Naqd" 
-          class="py-2.5 px-2 rounded-xl text-xs font-bold border-2 border-amber-500 bg-amber-500/10 text-amber-400 text-center flex flex-col items-center justify-center space-y-1 transition shadow-sm">
-          <i data-lucide="banknote" class="w-4 h-4"></i>
-          <span>Naqd pul</span>
-        </button>
-        <button type="button" onclick="selectPayType('Karta')" id="payBtn-Karta" 
-          class="py-2.5 px-2 rounded-xl text-xs font-bold border border-slate-200 bg-slate-50 text-slate-400 hover:text-white hover:bg-slate-100 text-center flex flex-col items-center justify-center space-y-1 transition">
-          <i data-lucide="credit-card" class="w-4 h-4"></i>
-          <span>Plastik Karta</span>
-        </button>
-        <button type="button" onclick="selectPayType('Aralash')" id="payBtn-Aralash" 
-          class="py-2.5 px-2 rounded-xl text-xs font-bold border border-slate-200 bg-slate-50 text-slate-400 hover:text-white hover:bg-slate-100 text-center flex flex-col items-center justify-center space-y-1 transition">
-          <i data-lucide="split" class="w-4 h-4"></i>
-          <span>Aralash / Nasiya</span>
-        </button>
-      </div>
-
-      <!-- Mode 1: Naqd pul fields -->
-      <div id="checkoutCashFields" class="space-y-2 bg-[#181818] p-3.5 rounded-2xl border border-[#333333]">
-        <label class="block text-xs font-bold text-slate-300">Mijoz bergan naqd pul:</label>
-        <input type="number" id="checkoutCashGiven" oninput="calculateChange()" placeholder="0" 
-          class="w-full bg-[#222222] border border-[#333333] rounded-xl px-3 py-2 text-sm font-black text-white focus:border-amber-500 focus:outline-none">
-        <div class="flex justify-between items-center text-xs font-bold text-slate-400 pt-1 border-t border-[#333333]">
-          <span>Qaytim:</span>
-          <span id="checkoutChangeAmount" class="text-sm font-black text-emerald-400">0 so'm</span>
-        </div>
-      </div>
-
-      <!-- Mode 2: Karta fields -->
-      <div id="checkoutCardFields" class="hidden p-3.5 bg-[#181818] rounded-2xl border border-[#333333] text-xs font-bold space-y-1">
-        <div class="flex items-center space-x-2 text-emerald-400">
-          <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i>
-          <span class="text-white">To'liq summa terminal (Humo/Uzcard) orqali yechiladi</span>
-        </div>
-        <p class="text-[11px] font-normal text-slate-400 pl-6">Terminaldan to'lov o'tgach, "To'lovni Tasdiqlash" tugmasini bosing.</p>
-      </div>
-
-      <!-- Mode 3: Aralash (Naqd + Karta + Nasiya) fields -->
-      <div id="checkoutSplitFields" class="hidden space-y-3 bg-[#181818] p-3.5 rounded-2xl border border-[#333333]">
-        <div class="flex items-center justify-between text-xs font-black">
-          <span class="flex items-center space-x-1.5 text-slate-200">
-            <i data-lucide="split" class="w-4 h-4 text-amber-400"></i>
-            <span>Taqsimot (Naqd / Karta / Nasiya):</span>
-          </span>
-          <span id="splitBadgeStatus" class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800 font-bold">✓ To'liq qoplandi</span>
-        </div>
-
-        <!-- 3 ta to'lov turi taqsimoti -->
-        <div class="grid grid-cols-3 gap-2">
-          <div>
-            <label class="block text-[11px] font-bold text-slate-300 mb-1">💵 Naqd:</label>
-            <input type="number" id="splitCashAmount" oninput="onSplitInputsChange('cash')" placeholder="0" 
-              class="w-full bg-[#222222] border border-[#333333] focus:border-amber-500 rounded-xl px-2.5 py-2 text-xs font-black text-white focus:outline-none">
-          </div>
-          <div>
-            <label class="block text-[11px] font-bold text-slate-300 mb-1">💳 Karta:</label>
-            <input type="number" id="splitCardAmount" oninput="onSplitInputsChange('card')" placeholder="0" 
-              class="w-full bg-[#222222] border border-[#333333] focus:border-amber-500 rounded-xl px-2.5 py-2 text-xs font-black text-white focus:outline-none">
-          </div>
-          <div>
-            <label class="block text-[11px] font-bold text-amber-400 mb-1">📝 Nasiya (Qarz):</label>
-            <input type="number" id="splitNasiyaAmount" oninput="onSplitInputsChange('nasiya')" placeholder="0" 
-              class="w-full bg-[#222222] border border-amber-500/50 focus:border-amber-500 rounded-xl px-2.5 py-2 text-xs font-black text-amber-400 focus:outline-none">
-          </div>
-        </div>
-
-        <!-- Tezkor taqsimot tugmalari -->
-        <div class="flex items-center space-x-1.5 pt-0.5">
-          <button type="button" onclick="setSplitPreset('all-nasiya')" class="px-2 py-1 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 text-amber-400 border border-amber-500/30 text-[10px] font-bold transition">
-            100% Nasiya
-          </button>
-          <button type="button" onclick="setSplitPreset('all-cash')" class="px-2 py-1 rounded-lg bg-[#252525] hover:bg-[#303030] text-slate-300 text-[10px] font-bold transition">
-            100% Naqd
-          </button>
-          <button type="button" onclick="setSplitPreset('split-half')" class="px-2 py-1 rounded-lg bg-[#252525] hover:bg-[#303030] text-slate-300 text-[10px] font-bold transition">
-            50% Naqd / 50% Nasiya
-          </button>
-        </div>
-
-        <!-- NASIYA BERISH UCHUN XARIDOR MA'LUMOTLARI -->
-        <div id="splitNasiyaCustomerBox" class="p-3 bg-amber-950/20 border border-amber-500/30 rounded-xl space-y-2">
-          <div class="flex items-center justify-between">
-            <span class="text-[11px] font-black text-amber-400 flex items-center space-x-1.5">
-              <i data-lucide="user-check" class="w-3.5 h-3.5"></i>
-              <span>Nasiya oluvchi mijoz:</span>
-            </span>
-            <span class="text-[10px] text-amber-300/80 font-bold">*Majburiy</span>
-          </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+      <!-- Gorizontal Asosiy Tana (2 Ustun: Chapda To'lov turi & Jami, O'ngda To'lov tafsilotlari) -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 py-4 overflow-y-auto flex-1 items-stretch">
+        
+        <!-- CHAP USTUN (lg:col-span-5): Jami summa + 3 ta to'lov turi kartasi -->
+        <div class="lg:col-span-5 flex flex-col justify-between space-y-4">
+          
+          <!-- Jami to'lanadigan summa paneli -->
+          <div class="p-4 bg-slate-900 text-white rounded-2xl flex items-center justify-between shadow-md">
             <div>
-              <label class="block text-[10px] font-bold text-slate-300 mb-0.5">Mijoz Ismi / F.I.SH:</label>
-              <input type="text" id="splitNasiyaCustomer" placeholder="Masalan: Jamshid aka (bozorchi)" 
-                class="w-full bg-[#141414] border border-amber-500/40 rounded-xl px-2.5 py-1.5 text-xs font-bold text-white focus:border-amber-400 focus:outline-none">
+              <span class="text-[11px] uppercase tracking-wider text-slate-400 block font-bold">To'lanishi kerak:</span>
+              <span id="checkoutTotalAmount" class="text-2xl sm:text-3xl font-black text-amber-400">0 so'm</span>
+            </div>
+            <div class="text-right">
+              <span class="text-xs px-3 py-1.5 rounded-xl bg-slate-800 text-slate-200 font-black border border-slate-700/60 block" id="checkoutItemCount">0 tovar</span>
+            </div>
+          </div>
+
+          <!-- To'lov turlarini tanlash (Sensorli ekran uchun 4 ta KATTA va QULAY karta) -->
+          <div class="space-y-2 flex-1 flex flex-col justify-center">
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block">To'lov usulini tanlang:</span>
+            
+            <!-- 1. NAQD PUL -->
+            <button type="button" onclick="selectPayType('Naqd pul')" id="payBtn-Naqd" 
+              class="w-full p-3 sm:p-3.5 rounded-2xl border-2 border-emerald-500 bg-emerald-50/80 text-emerald-950 font-bold flex items-center justify-between shadow-sm transition hover:bg-emerald-50 cursor-pointer">
+              <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-md shadow-emerald-600/20 shrink-0">
+                  <i data-lucide="banknote" class="w-5 h-5"></i>
+                </div>
+                <div class="text-left">
+                  <div class="text-sm font-black text-slate-900">Naqd pul</div>
+                  <div class="text-[11px] text-slate-500">Mijozdan naqd kupyura qabul qilish</div>
+                </div>
+              </div>
+              <span class="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-bold check-indicator">✓</span>
+            </button>
+
+            <!-- 2. PLASTIK KARTA -->
+            <button type="button" onclick="selectPayType('Karta')" id="payBtn-Karta" 
+              class="w-full p-3 sm:p-3.5 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold flex items-center justify-between transition cursor-pointer">
+              <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-sky-600 text-white flex items-center justify-center shadow-md shadow-sky-600/20 shrink-0">
+                  <i data-lucide="credit-card" class="w-5 h-5"></i>
+                </div>
+                <div class="text-left">
+                  <div class="text-sm font-black text-slate-900">Plastik Karta</div>
+                  <div class="text-[11px] text-slate-500">Terminal (Uzcard / Humo / Visa)</div>
+                </div>
+              </div>
+              <span class="w-5 h-5 rounded-full border border-slate-300 flex items-center justify-center text-xs check-indicator"></span>
+            </button>
+
+            <!-- 3. ARALASH (FAQAT NAQD + KARTA) -->
+            <button type="button" onclick="selectPayType('Aralash')" id="payBtn-Aralash" 
+              class="w-full p-3 sm:p-3.5 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold flex items-center justify-between transition cursor-pointer">
+              <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-purple-600 text-white flex items-center justify-center shadow-md shadow-purple-600/20 shrink-0">
+                  <i data-lucide="split" class="w-5 h-5"></i>
+                </div>
+                <div class="text-left">
+                  <div class="text-sm font-black text-slate-900">Aralash to'lov</div>
+                  <div class="text-[11px] text-slate-500">Qisman naqd + qisman karta</div>
+                </div>
+              </div>
+              <span class="w-5 h-5 rounded-full border border-slate-300 flex items-center justify-center text-xs check-indicator"></span>
+            </button>
+
+            <!-- 4. NASIYA (ARALASHNING PASTIDA ALOHIDA BO'LIM) -->
+            <button type="button" onclick="selectPayType('Nasiya')" id="payBtn-Nasiya" 
+              class="w-full p-3 sm:p-3.5 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold flex items-center justify-between transition cursor-pointer">
+              <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-amber-600 text-white flex items-center justify-center shadow-md shadow-amber-600/20 shrink-0">
+                  <i data-lucide="book-open" class="w-5 h-5"></i>
+                </div>
+                <div class="text-left">
+                  <div class="text-sm font-black text-slate-900">Nasiya daftari</div>
+                  <div class="text-[11px] text-slate-500">Xaridor nomiga qarzga berish</div>
+                </div>
+              </div>
+              <span class="w-5 h-5 rounded-full border border-slate-300 flex items-center justify-center text-xs check-indicator"></span>
+            </button>
+          </div>
+
+        </div>
+
+        <!-- O'NG USTUN (lg:col-span-7): Har bir to'lov turi bo'yicha sensorli ekran kiritish paneli -->
+        <div class="lg:col-span-7 bg-slate-50/90 p-4 sm:p-5 rounded-2xl border border-slate-200 flex flex-col justify-between space-y-4">
+          
+          <!-- Mode 1: NAQD PUL MAYDONLARI -->
+          <div id="checkoutCashFields" class="space-y-4 flex-1 flex flex-col justify-between">
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <label class="block text-xs sm:text-sm font-black text-slate-800">Mijoz bergan naqd pul:</label>
+                <span class="text-xs text-slate-500 font-medium">Kupyurani bosing yoki kiriting</span>
+              </div>
+              
+              <!-- Katta sensorli input -->
+              <div class="relative">
+                <input type="number" id="checkoutCashGiven" oninput="calculateChange()" placeholder="0" 
+                  class="w-full bg-white border-2 border-emerald-500/60 focus:border-emerald-600 rounded-2xl px-4 py-3 sm:py-3.5 text-xl sm:text-2xl font-black text-slate-900 focus:outline-none shadow-sm pr-16">
+                <span class="absolute right-4 top-1/2 -translate-y-1/2 text-sm font-bold text-slate-400">so'm</span>
+              </div>
+
+              <!-- Sensorli ekran uchun TEZKOR KUPYURA tugmalari (One-touch Quick Cash Buttons) -->
+              <div>
+                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">Tezkor kupyuralar:</span>
+                <div class="grid grid-cols-3 sm:grid-cols-4 gap-2">
+                  <button type="button" onclick="setQuickCash('exact')" 
+                    class="py-2.5 px-2 bg-emerald-100/70 hover:bg-emerald-200/80 text-emerald-800 font-black rounded-xl text-xs transition border border-emerald-300/60 active:scale-95 flex items-center justify-center space-x-1 cursor-pointer">
+                    <span>Aniq summa</span>
+                  </button>
+                  <button type="button" onclick="setQuickCash(10000)" 
+                    class="py-2.5 px-2 bg-white hover:bg-slate-100 text-slate-800 font-bold rounded-xl text-xs transition border border-slate-200 shadow-2xs active:scale-95 cursor-pointer">
+                    10 000
+                  </button>
+                  <button type="button" onclick="setQuickCash(20000)" 
+                    class="py-2.5 px-2 bg-white hover:bg-slate-100 text-slate-800 font-bold rounded-xl text-xs transition border border-slate-200 shadow-2xs active:scale-95 cursor-pointer">
+                    20 000
+                  </button>
+                  <button type="button" onclick="setQuickCash(50000)" 
+                    class="py-2.5 px-2 bg-white hover:bg-slate-100 text-slate-800 font-bold rounded-xl text-xs transition border border-slate-200 shadow-2xs active:scale-95 cursor-pointer">
+                    50 000
+                  </button>
+                  <button type="button" onclick="setQuickCash(100000)" 
+                    class="py-2.5 px-2 bg-white hover:bg-slate-100 text-slate-800 font-bold rounded-xl text-xs transition border border-slate-200 shadow-2xs active:scale-95 cursor-pointer">
+                    100 000
+                  </button>
+                  <button type="button" onclick="setQuickCash(200000)" 
+                    class="py-2.5 px-2 bg-white hover:bg-slate-100 text-slate-800 font-bold rounded-xl text-xs transition border border-slate-200 shadow-2xs active:scale-95 cursor-pointer">
+                    200 000
+                  </button>
+                  <button type="button" onclick="setQuickCash('+10000')" 
+                    class="py-2.5 px-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition border border-slate-200 active:scale-95 cursor-pointer">
+                    +10 000
+                  </button>
+                  <button type="button" onclick="setQuickCash('+50000')" 
+                    class="py-2.5 px-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition border border-slate-200 active:scale-95 cursor-pointer">
+                    +50 000
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Qaytim hisoblagichi (Katta va yaqqol ko'rinadigan) -->
+            <div class="p-4 bg-white rounded-2xl border border-slate-200/90 shadow-sm flex items-center justify-between mt-2">
+              <div>
+                <span class="text-xs uppercase font-bold text-slate-400 block tracking-wider">Xaridorga qaytim:</span>
+                <span id="checkoutChangeAmount" class="text-2xl sm:text-3xl font-black text-emerald-600">0 so'm</span>
+              </div>
+              <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                <i data-lucide="coins" class="w-6 h-6"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mode 2: KARTA REJIMI -->
+          <div id="checkoutCardFields" class="hidden flex-1 flex flex-col justify-center items-center text-center p-6 bg-white rounded-2xl border border-slate-200 space-y-3">
+            <div class="w-16 h-16 rounded-2xl bg-sky-50 text-sky-600 border border-sky-100 flex items-center justify-center shadow-sm">
+              <i data-lucide="credit-card" class="w-8 h-8"></i>
             </div>
             <div>
-              <label class="block text-[10px] font-bold text-slate-300 mb-0.5">Telefon raqami:</label>
-              <input type="text" id="splitNasiyaPhone" placeholder="+998 90 123 45 67" 
-                class="w-full bg-[#141414] border border-amber-500/40 rounded-xl px-2.5 py-1.5 text-xs font-bold text-white focus:border-amber-400 focus:outline-none">
+              <h4 class="text-base font-black text-slate-900">Bank Terminali (Uzcard / Humo / Visa)</h4>
+              <p class="text-xs text-slate-500 max-w-sm mt-1">To'liq summa terminal orqali qabul qilinadi. Terminaldan chek chiqqach, pastdagi "To'lovni Qabul Qilish" tugmasini bosing.</p>
+            </div>
+            <div class="inline-flex items-center space-x-2 px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 font-bold text-xs border border-emerald-200">
+              <i data-lucide="check-circle" class="w-4 h-4"></i>
+              <span>Terminalga kiritishga tayyor</span>
             </div>
           </div>
-          <div>
-            <label class="block text-[10px] font-bold text-slate-300 mb-0.5">Qaytarish muddati (ixtiyoriy):</label>
-            <input type="date" id="splitNasiyaDueDate" 
-              class="w-full bg-[#141414] border border-[#333333] rounded-xl px-2.5 py-1.5 text-xs font-bold text-slate-300 focus:border-amber-400 focus:outline-none">
-          </div>
-        </div>
 
-        <!-- Optional: Mijoz naqd qismi uchun bergan kupyura -->
-        <div id="splitCashChangeBox" class="pt-2 border-t border-[#333333]">
-          <div class="flex items-center justify-between">
-            <label class="text-[10px] font-bold text-slate-300">Naqd qismi uchun berilgan kupyura:</label>
-            <span class="text-[10px] text-slate-500 font-semibold">(agar ko'proq bersa)</span>
-          </div>
-          <div class="flex items-center space-x-2 mt-1.5">
-            <input type="number" id="splitCashGiven" oninput="calculateSplitChange()" placeholder="Masalan: 50000" 
-              class="flex-1 bg-[#222222] border border-[#333333] rounded-xl px-2.5 py-1.5 text-xs font-bold text-white focus:border-amber-500 focus:outline-none">
-            <div class="text-right shrink-0">
-              <span class="text-[10px] text-slate-400 block">Qaytim:</span>
-              <span id="splitChangeAmount" class="text-xs font-black text-emerald-400">0 so'm</span>
+          <!-- Mode 3: ARALASH (FAQAT NAQD + KARTA) MAYDONLARI -->
+          <div id="checkoutSplitFields" class="hidden space-y-3.5 flex-1 flex flex-col justify-between">
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="text-xs sm:text-sm font-black text-slate-800 flex items-center space-x-1.5">
+                  <i data-lucide="split" class="w-4 h-4 text-purple-600"></i>
+                  <span>Aralash Taqsimot (Naqd va Karta):</span>
+                </span>
+                <span id="splitBadgeStatus" class="text-[10px] px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200 font-black">✓ To'liq qoplandi</span>
+              </div>
+
+              <!-- 2 ta to'lov turi (Naqd va Karta) -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-2xs">
+                  <label class="block text-xs font-bold text-slate-700 mb-1.5 flex items-center space-x-1">
+                    <span class="text-base">💵</span>
+                    <span class="font-black text-slate-800">Naqd qismi:</span>
+                  </label>
+                  <div class="relative">
+                    <input type="number" id="splitCashAmount" oninput="onSplitInputsChange('cash')" placeholder="0" 
+                      class="w-full bg-slate-50 border border-slate-200 focus:border-emerald-500 rounded-xl px-3 py-2.5 text-base font-black text-slate-900 focus:outline-none">
+                    <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400">so'm</span>
+                  </div>
+                </div>
+                <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-2xs">
+                  <label class="block text-xs font-bold text-slate-700 mb-1.5 flex items-center space-x-1">
+                    <span class="text-base">💳</span>
+                    <span class="font-black text-slate-800">Karta qismi:</span>
+                  </label>
+                  <div class="relative">
+                    <input type="number" id="splitCardAmount" oninput="onSplitInputsChange('card')" placeholder="0" 
+                      class="w-full bg-slate-50 border border-slate-200 focus:border-sky-500 rounded-xl px-3 py-2.5 text-base font-black text-slate-900 focus:outline-none">
+                    <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400">so'm</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tezkor taqsimot tugmalari -->
+              <div>
+                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Tezkor taqsimot:</span>
+                <div class="flex flex-wrap items-center gap-2">
+                  <button type="button" onclick="setSplitPreset('split-half')" class="px-3 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-900 border border-purple-200 text-xs font-bold transition active:scale-95 cursor-pointer">
+                    50% Naqd / 50% Karta
+                  </button>
+                  <button type="button" onclick="setSplitPreset('all-cash')" class="px-3 py-1.5 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 text-xs font-bold transition active:scale-95 cursor-pointer">
+                    100% Naqd
+                  </button>
+                  <button type="button" onclick="setSplitPreset('all-card')" class="px-3 py-1.5 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 text-xs font-bold transition active:scale-95 cursor-pointer">
+                    100% Karta
+                  </button>
+                </div>
+              </div>
+
+              <!-- Naqd qismi uchun qaytim hisobi -->
+              <div id="splitCashChangeBox" class="p-3 bg-white rounded-2xl border border-slate-200 flex items-center justify-between">
+                <div class="flex-1 pr-3">
+                  <label class="text-xs font-bold text-slate-600 block mb-1">Naqd qismi uchun berilgan kupyura:</label>
+                  <input type="number" id="splitCashGiven" oninput="calculateSplitChange()" placeholder="0" 
+                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-sm font-black text-slate-900 focus:outline-none">
+                </div>
+                <div class="text-right shrink-0">
+                  <span class="text-[11px] text-slate-400 block font-bold">Qaytim:</span>
+                  <span id="splitChangeAmount" class="text-base font-black text-emerald-600">0 so'm</span>
+                </div>
+              </div>
             </div>
           </div>
+
+          <!-- Mode 4: NASIYA MAYDONLARI (ALOHIDA BO'LIM) -->
+          <div id="checkoutNasiyaFields" class="hidden space-y-3.5 flex-1 flex flex-col justify-between">
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="text-xs sm:text-sm font-black text-amber-950 flex items-center space-x-1.5">
+                  <i data-lucide="book-open" class="w-4 h-4 text-amber-600"></i>
+                  <span>Nasiya Daftari (Qarzga Sotish):</span>
+                </span>
+                <span class="text-[10px] px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300 font-black">
+                  📝 Nasiya daftarga yoziladi
+                </span>
+              </div>
+
+              <!-- Jami nasiya summasi va boshlang'ich to'lov -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div class="p-3 bg-amber-50/90 rounded-2xl border border-amber-300 shadow-2xs">
+                  <label class="block text-xs font-bold text-amber-900 mb-1">Umumiy Nasiya Summasi:</label>
+                  <div id="nasiyaTotalDebtDisplay" class="text-xl sm:text-2xl font-black text-amber-700">0 so'm</div>
+                  <span class="text-[10px] text-amber-700/80 font-medium">Savatdagi jami xarid summasi</span>
+                </div>
+                <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-2xs">
+                  <label class="block text-xs font-bold text-slate-700 mb-1">Boshlang'ich to'lov (Avans):</label>
+                  <div class="relative">
+                    <input type="number" id="nasiyaUpfrontAmount" oninput="calculateNasiyaDebt()" placeholder="0" 
+                      class="w-full bg-slate-50 border border-slate-200 focus:border-amber-500 rounded-xl px-3 py-2 text-sm font-black text-slate-900 focus:outline-none">
+                    <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400">so'm</span>
+                  </div>
+                  <div class="flex items-center space-x-3 mt-1.5 text-xs text-slate-600 font-bold">
+                    <label class="flex items-center space-x-1 cursor-pointer">
+                      <input type="radio" name="nasiyaUpfrontType" value="Naqd" checked class="text-amber-600">
+                      <span>Naqd</span>
+                    </label>
+                    <label class="flex items-center space-x-1 cursor-pointer">
+                      <input type="radio" name="nasiyaUpfrontType" value="Karta" class="text-amber-600">
+                      <span>Karta</span>
+                    </label>
+                    <span class="text-[10px] text-slate-400 font-normal">(agar hozir bersa)</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Xaridor ma'lumotlari -->
+              <div class="p-3.5 bg-white rounded-2xl border border-slate-200 space-y-2.5 shadow-2xs">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-black text-slate-800 flex items-center space-x-1.5">
+                    <i data-lucide="user-check" class="w-4 h-4 text-emerald-600"></i>
+                    <span>Xaridor (Qarzdor) ma'lumotlari:</span>
+                  </span>
+                  <span class="text-[10px] text-red-500 font-bold">*Majburiy maydonlar</span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  <div>
+                    <label class="block text-[11px] font-bold text-slate-700 mb-1">Mijoz Ismi / F.I.SH: *</label>
+                    <input type="text" id="nasiyaCustomer" placeholder="Masalan: Jamshid aka (bozorchi)" 
+                      class="w-full bg-slate-50 border border-slate-200 focus:border-amber-500 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none">
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-bold text-slate-700 mb-1">Telefon raqami: *</label>
+                    <input type="text" id="nasiyaPhone" placeholder="+998 90 123 45 67" 
+                      class="w-full bg-slate-50 border border-slate-200 focus:border-amber-500 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none">
+                  </div>
+                </div>
+
+                <div>
+                  <div class="flex items-center justify-between mb-1">
+                    <label class="text-[11px] font-bold text-slate-700">Qaytarish muddati:</label>
+                    <div class="flex items-center space-x-1">
+                      <button type="button" onclick="setNasiyaDays(3)" class="px-2 py-0.5 bg-slate-100 hover:bg-slate-200 rounded text-[10px] font-bold text-slate-700 transition cursor-pointer">3 kun</button>
+                      <button type="button" onclick="setNasiyaDays(7)" class="px-2 py-0.5 bg-slate-100 hover:bg-slate-200 rounded text-[10px] font-bold text-slate-700 transition cursor-pointer">1 hafta</button>
+                      <button type="button" onclick="setNasiyaDays(15)" class="px-2 py-0.5 bg-slate-100 hover:bg-slate-200 rounded text-[10px] font-bold text-slate-700 transition cursor-pointer">15 kun</button>
+                      <button type="button" onclick="setNasiyaDays(30)" class="px-2 py-0.5 bg-slate-100 hover:bg-slate-200 rounded text-[10px] font-bold text-slate-700 transition cursor-pointer">1 oy</button>
+                    </div>
+                  </div>
+                  <input type="date" id="nasiyaDueDate" 
+                    class="w-full bg-slate-50 border border-slate-200 focus:border-amber-500 rounded-xl px-3 py-1.5 text-xs font-bold text-slate-800 focus:outline-none">
+                </div>
+              </div>
+
+              <!-- Qoldiq Nasiya Qarz Xulosasi -->
+              <div class="p-3 bg-amber-50 rounded-2xl border border-amber-200 flex items-center justify-between">
+                <div>
+                  <span class="text-xs uppercase font-bold text-amber-800 block tracking-wider">Daftarga yoziladigan qarz:</span>
+                  <span id="nasiyaRemainingDebtDisplay" class="text-xl sm:text-2xl font-black text-amber-900">0 so'm</span>
+                </div>
+                <div class="w-10 h-10 rounded-xl bg-amber-600 text-white flex items-center justify-center shadow-sm">
+                  <i data-lucide="file-text" class="w-5 h-5"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
+
       </div>
 
-      <div class="pt-2 flex items-center space-x-2">
-        <button type="button" onclick="confirmCheckout()" id="confirmCheckoutBtn" class="flex-1 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-xl text-xs transition shadow-md shadow-emerald-600/20 flex items-center justify-center space-x-1.5">
-          <i data-lucide="check" class="w-4 h-4"></i>
-          <span>To'lovni Qabul Qilish va Chek</span>
+      <!-- Pastki Amal Tugmalari (Katta, sensorli ekranda bosish oson) -->
+      <div class="pt-3 border-t border-slate-100 flex items-center space-x-3 shrink-0">
+        <button type="button" onclick="confirmCheckout()" id="confirmCheckoutBtn" 
+          class="flex-1 py-3.5 sm:py-4 bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] text-white font-black rounded-2xl text-sm sm:text-base transition shadow-lg shadow-emerald-600/25 flex items-center justify-center space-x-2 cursor-pointer">
+          <i data-lucide="check" class="w-5 h-5"></i>
+          <span>To'lovni Qabul Qilish va Chek Chiqarish</span>
         </button>
-        <button type="button" onclick="closeCheckoutModal()" class="px-4 py-3 bg-slate-100 hover:bg-slate-200 text-slate-300 hover:text-white font-bold rounded-xl text-xs transition">
-          Bekor
+        <button type="button" onclick="closeCheckoutModal()" 
+          class="px-5 sm:px-6 py-3.5 sm:py-4 bg-slate-100 hover:bg-slate-200 active:scale-[0.99] text-slate-600 hover:text-slate-900 font-bold rounded-2xl text-xs sm:text-sm transition cursor-pointer">
+          Bekor qilish
         </button>
       </div>
+
     </div>
   </div>
 
@@ -4343,12 +4578,13 @@
             <div>
               <div class="flex items-center justify-between mb-1">
                 <span class="text-[9px] font-black px-1.5 py-0.2 bg-slate-200/80 text-slate-700 rounded">${country}</span>
+                ${p.unit === 'kg' ? `<span class="text-[9px] font-black px-1.5 py-0.2 bg-amber-100 text-amber-900 border border-amber-300 rounded">Vaznli (KG)</span>` : ''}
               </div>
               <p class="text-xs font-black text-slate-900 line-clamp-2">${p.name}</p>
               <p class="text-[10px] text-slate-400 font-mono mt-0.5">${p.barcode}</p>
             </div>
             <div class="mt-2 flex items-center justify-between">
-              <span class="text-xs font-black text-amber-600">${sell.toLocaleString()} so'm</span>
+              <span class="text-xs font-black text-amber-600">${sell.toLocaleString()} so'm${p.unit === 'kg' ? '/kg' : ''}</span>
               <span class="text-[10px] font-bold ${stock <= 5 ? 'text-red-500' : 'text-slate-400'}">${stock} ${p.unit || 'dona'}</span>
             </div>
           </div>
@@ -4580,15 +4816,16 @@
 
       const existing = cart.find(c => c.barcode === barcode);
       if (existing) {
-        if (existing.quantity + addQty <= (parseFloat(prod.stock) || 9999)) {
-          existing.quantity += addQty;
+        const nextQty = Math.round((existing.quantity + addQty) * 1000) / 1000;
+        if (nextQty <= (parseFloat(prod.stock) || 9999)) {
+          existing.quantity = nextQty;
         } else {
-          alert(`Omborda faqat ${prod.stock} dona qolgan!`);
+          alert(`Omborda faqat ${prod.stock} ${prod.unit || 'dona'} qolgan!`);
           return;
         }
       } else {
         if ((parseFloat(prod.stock) || 0) < addQty) {
-          alert(`Omborda yetarli mahsulot yo'q! Qoldiq: ${prod.stock}`);
+          alert(`Omborda yetarli mahsulot yo'q! Qoldiq: ${prod.stock} ${prod.unit || 'dona'}`);
           return;
         }
         cart.push({
@@ -4609,15 +4846,128 @@
       const item = cart.find(c => c.barcode === barcode);
       if (!item) return;
 
-      if (newQty <= 0) {
+      const parsed = parseFloat(newQty);
+      if (isNaN(parsed) || parsed <= 0) {
         cart = cart.filter(c => c.barcode !== barcode);
-      } else if (newQty > item.maxStock) {
-        alert(`Omborda faqat ${item.maxStock} dona mavjud!`);
+      } else if (parsed > item.maxStock) {
+        alert(`Omborda faqat ${item.maxStock} ${item.unit} mavjud!`);
         item.quantity = item.maxStock;
       } else {
-        item.quantity = newQty;
+        item.quantity = Math.round(parsed * 1000) / 1000;
       }
       renderCart();
+    }
+
+    function incrementCartQty(barcode) {
+      const item = cart.find(c => c.barcode === barcode);
+      if (!item) return;
+      const isKg = (item.unit === 'kg');
+      const step = isKg ? 0.1 : 1;
+      const newQty = Math.round((item.quantity + step) * 1000) / 1000;
+      updateCartQty(barcode, newQty);
+    }
+
+    function decrementCartQty(barcode) {
+      const item = cart.find(c => c.barcode === barcode);
+      if (!item) return;
+      const isKg = (item.unit === 'kg');
+      const step = isKg ? 0.1 : 1;
+      const newQty = Math.round((item.quantity - step) * 1000) / 1000;
+      if (newQty <= 0.0001) {
+        updateCartQty(barcode, 0);
+      } else {
+        updateCartQty(barcode, newQty);
+      }
+    }
+
+    function setCartWeight(barcode, weightInKg) {
+      updateCartQty(barcode, weightInKg);
+    }
+
+    function promptCartGramm(barcode) {
+      const item = cart.find(c => c.barcode === barcode);
+      if (!item) return;
+      const currentGr = Math.round(item.quantity * 1000);
+      const val = prompt(`"${item.name}" uchun gramm miqdorini kiriting:\n(Masalan: 100, 200, 350, 750)`, currentGr || 100);
+      if (val === null) return;
+      const parsed = parseFloat(String(val).replace(',', '.'));
+      if (isNaN(parsed) || parsed <= 0) {
+        alert("Iltimos, to'g'ri gramm miqdorini kiriting!");
+        return;
+      }
+      const kg = Math.round((parsed / 1000) * 1000) / 1000;
+      updateCartQty(barcode, kg);
+    }
+
+    function formatWeightDisplay(qty) {
+      if (qty < 1) {
+        return `${Math.round(qty * 1000)} gr (${qty} kg)`;
+      } else {
+        const gr = Math.round(qty * 1000) % 1000;
+        if (gr === 0) {
+          return `${qty} kg`;
+        } else {
+          return `${qty} kg (${Math.round(qty * 1000)} gr)`;
+        }
+      }
+    }
+
+    function handleCartQtyInput(barcode, val, isFinal = false) {
+      const item = cart.find(c => c.barcode === barcode);
+      if (!item) return;
+      const parsed = parseFloat(String(val).replace(',', '.'));
+      if (isNaN(parsed) || parsed <= 0) {
+        if (isFinal) {
+          updateCartQty(barcode, 0);
+        }
+        return;
+      }
+      if (parsed > item.maxStock) {
+        if (isFinal) {
+          alert(`Omborda faqat ${item.maxStock} ${item.unit} mavjud!`);
+          item.quantity = item.maxStock;
+          renderCart();
+        }
+        return;
+      }
+      item.quantity = Math.round(parsed * 1000) / 1000;
+
+      // Update row total dynamically without re-rendering everything so focus isn't lost
+      const itemSum = Math.round(item.price * item.quantity);
+      const rowSumEl = document.getElementById(`rowItemSum_${barcode}`);
+      if (rowSumEl) rowSumEl.textContent = `${itemSum.toLocaleString()} so'm`;
+
+      const weightEl = document.getElementById(`rowWeightText_${barcode}`);
+      if (weightEl && item.unit === 'kg') {
+        weightEl.textContent = '• ' + formatWeightDisplay(item.quantity);
+      }
+
+      // Update bottom totals
+      recalcCartBottomTotals();
+
+      if (isFinal) {
+        renderCart();
+      }
+    }
+
+    function recalcCartBottomTotals() {
+      let totalSum = 0;
+      let totalQty = 0;
+      for (const i of cart) {
+        totalSum += i.price * i.quantity;
+        totalQty += i.quantity;
+      }
+      const totalSumEl = document.getElementById('cartTotalSum');
+      const totalItemsEl = document.getElementById('cartTotalItems');
+      if (totalSumEl) totalSumEl.textContent = `${Math.round(totalSum).toLocaleString()} so'm`;
+      if (totalItemsEl) {
+        const hasKg = cart.some(i => i.unit === 'kg');
+        if (hasKg) {
+          totalItemsEl.textContent = `${cart.length} tovar (${Math.round(totalQty * 100) / 100} jami)`;
+        } else {
+          totalItemsEl.textContent = `${Math.round(totalQty)} dona`;
+        }
+      }
     }
 
     function clearCart() {
@@ -4663,33 +5013,80 @@
       let totalQty = 0;
 
       container.innerHTML = cart.map((item, idx) => {
-        const itemSum = item.price * item.quantity;
+        const itemSum = Math.round(item.price * item.quantity);
         totalSum += itemSum;
         totalQty += item.quantity;
+        const isKg = (item.unit === 'kg');
 
         return `
-          <div class="p-2.5 bg-slate-50 border border-slate-200/80 rounded-xl flex items-center justify-between space-x-2">
-            <div class="flex-1 truncate">
-              <p class="text-xs font-black text-slate-900 truncate">${idx+1}. ${item.name}</p>
-              <p class="text-[10px] text-slate-500">${item.price.toLocaleString()} so'm / ${item.unit}</p>
-            </div>
-            
-            <div class="flex items-center space-x-1.5 shrink-0">
-              <button onclick="updateCartQty('${item.barcode}', ${item.quantity - 1})" class="w-6 h-6 rounded-lg bg-slate-200 hover:bg-slate-300 font-bold text-xs flex items-center justify-center">-</button>
-              <span class="text-xs font-black w-6 text-center">${item.quantity}</span>
-              <button onclick="updateCartQty('${item.barcode}', ${item.quantity + 1})" class="w-6 h-6 rounded-lg bg-slate-200 hover:bg-slate-300 font-bold text-xs flex items-center justify-center">+</button>
+          <div class="p-2.5 bg-slate-50 border border-slate-200/90 rounded-2xl flex flex-col space-y-1.5 transition hover:border-amber-300">
+            <!-- Row top: Title, price/unit and Delete -->
+            <div class="flex items-start justify-between gap-2">
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center space-x-1.5 flex-wrap">
+                  <span class="text-xs font-black text-slate-900 truncate">${idx+1}. ${item.name}</span>
+                  ${isKg ? `<span class="px-1.5 py-0.2 text-[9px] font-black uppercase rounded bg-amber-100 text-amber-900 border border-amber-300">KG / Gramm</span>` : ''}
+                </div>
+                <div class="text-[10px] text-slate-500 flex items-center space-x-1 mt-0.5">
+                  <span>${item.price.toLocaleString()} so'm / ${item.unit}</span>
+                  ${isKg ? `<span id="rowWeightText_${item.barcode}" class="text-amber-700 font-bold ml-1">• ${formatWeightDisplay(item.quantity)}</span>` : ''}
+                </div>
+              </div>
+
+              <!-- Item Total and Delete -->
+              <div class="text-right shrink-0">
+                <span id="rowItemSum_${item.barcode}" class="text-xs font-black text-slate-900 block">${itemSum.toLocaleString()} so'm</span>
+                <button type="button" onclick="updateCartQty('${item.barcode}', 0)" class="text-[10px] text-red-500 hover:text-red-700 font-bold hover:underline cursor-pointer">O'chirish</button>
+              </div>
             </div>
 
-            <div class="text-right shrink-0 min-w-[70px]">
-              <span class="text-xs font-black text-slate-900 block">${itemSum.toLocaleString()}</span>
-              <button onclick="updateCartQty('${item.barcode}', 0)" class="text-[10px] text-red-500 hover:underline">O'chirish</button>
+            <!-- Row bottom: Direct Quantity Input and +/- Buttons -->
+            <div class="flex items-center justify-between pt-1 border-t border-slate-200/60 gap-2">
+              ${isKg ? `
+                <!-- Quick weight chips for KG items -->
+                <div class="flex flex-wrap items-center gap-1">
+                  <span class="text-[9px] font-bold text-slate-400">Vazn:</span>
+                  <button type="button" onclick="setCartWeight('${item.barcode}', 0.1)" class="px-1.5 py-0.5 text-[9.5px] font-bold rounded ${Math.abs(item.quantity - 0.1) < 0.001 ? 'bg-amber-500 text-slate-950 font-black shadow-xs' : 'bg-slate-200/80 hover:bg-amber-100 text-slate-700'} transition cursor-pointer" title="100 gramm">100g</button>
+                  <button type="button" onclick="setCartWeight('${item.barcode}', 0.25)" class="px-1.5 py-0.5 text-[9.5px] font-bold rounded ${Math.abs(item.quantity - 0.25) < 0.001 ? 'bg-amber-500 text-slate-950 font-black shadow-xs' : 'bg-slate-200/80 hover:bg-amber-100 text-slate-700'} transition cursor-pointer" title="250 gramm">250g</button>
+                  <button type="button" onclick="setCartWeight('${item.barcode}', 0.5)" class="px-1.5 py-0.5 text-[9.5px] font-bold rounded ${Math.abs(item.quantity - 0.5) < 0.001 ? 'bg-amber-500 text-slate-950 font-black shadow-xs' : 'bg-slate-200/80 hover:bg-amber-100 text-slate-700'} transition cursor-pointer" title="500 gramm (yarim kilo)">500g</button>
+                  <button type="button" onclick="setCartWeight('${item.barcode}', 1)" class="px-1.5 py-0.5 text-[9.5px] font-bold rounded ${Math.abs(item.quantity - 1) < 0.001 ? 'bg-amber-500 text-slate-950 font-black shadow-xs' : 'bg-slate-200/80 hover:bg-amber-100 text-slate-700'} transition cursor-pointer" title="1 kilogramm">1kg</button>
+                  <button type="button" onclick="promptCartGramm('${item.barcode}')" class="px-1.5 py-0.5 text-[9.5px] font-bold rounded bg-amber-50 border border-amber-200 text-amber-800 hover:bg-amber-100 transition cursor-pointer" title="Grammda aniq kiritish">⚖️ Gramm...</button>
+                </div>
+              ` : `
+                <!-- Dona info -->
+                <div class="text-[10px] text-slate-400 font-bold">
+                  Soni (dona):
+                </div>
+              `}
+
+              <!-- Clean Direct Quantity Input -->
+              <div class="flex items-center space-x-1.5 shrink-0 bg-white px-2.5 py-1 rounded-xl border border-slate-300 shadow-xs focus-within:border-amber-500 focus-within:ring-2 focus-within:ring-amber-500/20 transition">
+                <input type="number"
+                  id="cartQtyInput_${item.barcode}"
+                  value="${item.quantity}"
+                  step="${isKg ? '0.001' : '1'}"
+                  min="${isKg ? '0.001' : '1'}"
+                  max="${item.maxStock}"
+                  onfocus="this.select()"
+                  oninput="handleCartQtyInput('${item.barcode}', this.value, false)"
+                  onchange="handleCartQtyInput('${item.barcode}', this.value, true)"
+                  onkeydown="if(event.key === 'Enter') { this.blur(); }"
+                  class="w-16 text-center font-black text-xs text-slate-900 bg-transparent border-0 focus:outline-none p-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  title="Soni yoki vaznini kiriting">
+                <span class="text-[10.5px] font-bold text-slate-400 select-none">${item.unit}</span>
+              </div>
             </div>
           </div>
         `;
       }).join('');
 
-      totalSumEl.textContent = `${totalSum.toLocaleString()} so'm`;
-      totalItemsEl.textContent = `${totalQty} dona`;
+      totalSumEl.textContent = `${Math.round(totalSum).toLocaleString()} so'm`;
+      const hasKg = cart.some(i => i.unit === 'kg');
+      if (hasKg) {
+        totalItemsEl.textContent = `${cart.length} tovar (${Math.round(totalQty * 100) / 100} jami)`;
+      } else {
+        totalItemsEl.textContent = `${Math.round(totalQty)} dona`;
+      }
       lucide.createIcons();
     }
 
@@ -4705,35 +5102,54 @@
       const totalSum = cart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
       const totalItems = cart.reduce((sum, i) => sum + (parseFloat(i.quantity) || 1), 0);
 
-      document.getElementById('checkoutTotalAmount').textContent = `${totalSum.toLocaleString()} so'm`;
+      document.getElementById('checkoutTotalAmount').textContent = `${Math.round(totalSum).toLocaleString()} so'm`;
       const itemCountEl = document.getElementById('checkoutItemCount');
-      if (itemCountEl) itemCountEl.textContent = `${totalItems} dona`;
+      if (itemCountEl) {
+        const hasKg = cart.some(i => i.unit === 'kg');
+        if (hasKg) {
+          itemCountEl.textContent = `${cart.length} tovar (${Math.round(totalItems * 100) / 100} jami)`;
+        } else {
+          itemCountEl.textContent = `${Math.round(totalItems)} dona`;
+        }
+      }
 
       document.getElementById('checkoutCashGiven').value = totalSum;
       calculateChange();
 
-      // Initialize split values:
+      // Initialize split values (Aralash = Naqd + Karta):
       const splitCashInput = document.getElementById('splitCashAmount');
       const splitCardInput = document.getElementById('splitCardAmount');
-      const splitNasiyaInput = document.getElementById('splitNasiyaAmount');
       const splitGivenInput = document.getElementById('splitCashGiven');
-      const splitCustInput = document.getElementById('splitNasiyaCustomer');
-      const splitPhoneInput = document.getElementById('splitNasiyaPhone');
-      const splitDueDateInput = document.getElementById('splitNasiyaDueDate');
 
-      if (splitCashInput) splitCashInput.value = totalSum;
-      if (splitCardInput) splitCardInput.value = 0;
-      if (splitNasiyaInput) splitNasiyaInput.value = 0;
-      if (splitGivenInput) splitGivenInput.value = totalSum;
-      if (splitCustInput) splitCustInput.value = '';
-      if (splitPhoneInput) splitPhoneInput.value = '';
-      if (splitDueDateInput) splitDueDateInput.value = '';
+      if (splitCashInput) splitCashInput.value = Math.round(totalSum / 2);
+      if (splitCardInput) splitCardInput.value = totalSum - Math.round(totalSum / 2);
+      if (splitGivenInput) splitGivenInput.value = splitCashInput ? splitCashInput.value : 0;
 
       calculateSplitChange();
       updateSplitStatus();
 
+      // Initialize Nasiya values:
+      const nasiyaTotalDisplay = document.getElementById('nasiyaTotalDebtDisplay');
+      if (nasiyaTotalDisplay) nasiyaTotalDisplay.textContent = `${totalSum.toLocaleString()} so'm`;
+      const nasiyaUpfrontInput = document.getElementById('nasiyaUpfrontAmount');
+      if (nasiyaUpfrontInput) nasiyaUpfrontInput.value = '';
+      const nasiyaCustInput = document.getElementById('nasiyaCustomer');
+      if (nasiyaCustInput) nasiyaCustInput.value = '';
+      const nasiyaPhoneInput = document.getElementById('nasiyaPhone');
+      if (nasiyaPhoneInput) nasiyaPhoneInput.value = '';
+      const nasiyaDueDateInput = document.getElementById('nasiyaDueDate');
+      if (nasiyaDueDateInput) {
+        const d = new Date();
+        d.setDate(d.getDate() + 7);
+        nasiyaDueDateInput.value = d.toISOString().split('T')[0];
+      }
+      calculateNasiyaDebt();
+
       selectPayType(payType);
       showModal('checkoutModal');
+      if (window.lucide) {
+        lucide.createIcons();
+      }
     }
 
     function closeCheckoutModal() {
@@ -4742,27 +5158,41 @@
 
     function selectPayType(type) {
       currentPayType = type;
-      const types = ['Naqd', 'Karta', 'Aralash'];
+      const types = ['Naqd', 'Karta', 'Aralash', 'Nasiya'];
       types.forEach(t => {
         const btn = document.getElementById(`payBtn-${t}`);
         if (btn) {
           const isSelected = (type === 'Naqd pul' && t === 'Naqd') || 
                              (type === 'Naqd' && t === 'Naqd') ||
                              (type === 'Karta' && t === 'Karta') || 
-                             (type === 'Aralash' && t === 'Aralash');
-          btn.className = isSelected
-            ? "py-2.5 px-2 rounded-xl text-xs font-bold border-2 border-amber-500 bg-amber-500/10 text-amber-400 text-center flex flex-col items-center justify-center space-y-1 shadow-sm"
-            : "py-2.5 px-2 rounded-xl text-xs font-bold border border-slate-200 bg-slate-50 text-slate-400 hover:text-white hover:bg-slate-100 text-center flex flex-col items-center justify-center space-y-1 transition";
+                             (type === 'Aralash' && t === 'Aralash') ||
+                             (type === 'Nasiya' && t === 'Nasiya');
+          const indicator = btn.querySelector('.check-indicator');
+          if (isSelected) {
+            btn.className = "w-full p-3 sm:p-3.5 rounded-2xl border-2 border-emerald-500 bg-emerald-50/80 text-emerald-950 font-bold flex items-center justify-between shadow-sm transition hover:bg-emerald-50 cursor-pointer";
+            if (indicator) {
+              indicator.className = "w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-bold check-indicator";
+              indicator.textContent = "✓";
+            }
+          } else {
+            btn.className = "w-full p-3 sm:p-3.5 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold flex items-center justify-between transition cursor-pointer";
+            if (indicator) {
+              indicator.className = "w-5 h-5 rounded-full border border-slate-300 flex items-center justify-center text-xs check-indicator";
+              indicator.textContent = "";
+            }
+          }
         }
       });
 
       const cashBox = document.getElementById('checkoutCashFields');
       const cardBox = document.getElementById('checkoutCardFields');
       const splitBox = document.getElementById('checkoutSplitFields');
+      const nasiyaBox = document.getElementById('checkoutNasiyaFields');
 
       if (cashBox) cashBox.classList.add('hidden');
       if (cardBox) cardBox.classList.add('hidden');
       if (splitBox) splitBox.classList.add('hidden');
+      if (nasiyaBox) nasiyaBox.classList.add('hidden');
 
       if (type === 'Naqd pul' || type === 'Naqd') {
         if (cashBox) {
@@ -4786,6 +5216,18 @@
             if (cashInput) { cashInput.focus(); cashInput.select(); }
           }, 100);
         }
+      } else if (type === 'Nasiya') {
+        if (nasiyaBox) {
+          nasiyaBox.classList.remove('hidden');
+          calculateNasiyaDebt();
+          const custInput = document.getElementById('nasiyaCustomer');
+          setTimeout(() => {
+            if (custInput) custInput.focus();
+          }, 100);
+        }
+      }
+      if (window.lucide) {
+        lucide.createIcons();
       }
     }
 
@@ -4796,45 +5238,38 @@
       document.getElementById('checkoutChangeAmount').textContent = `${change.toLocaleString()} so'm`;
     }
 
+    function setQuickCash(amount) {
+      const totalSum = cart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
+      const input = document.getElementById('checkoutCashGiven');
+      if (!input) return;
+      if (amount === 'exact') {
+        input.value = totalSum;
+      } else if (typeof amount === 'string' && amount.startsWith('+')) {
+        const addVal = parseFloat(amount.replace('+', '')) || 0;
+        const currentVal = parseFloat(input.value) || 0;
+        input.value = currentVal + addVal;
+      } else {
+        input.value = amount;
+      }
+      calculateChange();
+    }
+
     function onSplitInputsChange(changedSource) {
       const totalSum = cart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
-      let cashVal = parseFloat(document.getElementById('splitCashAmount').value) || 0;
-      let cardVal = parseFloat(document.getElementById('splitCardAmount').value) || 0;
-      let nasiyaVal = parseFloat(document.getElementById('splitNasiyaAmount').value) || 0;
+      const cashInput = document.getElementById('splitCashAmount');
+      const cardInput = document.getElementById('splitCardAmount');
+
+      let cashVal = parseFloat(cashInput ? cashInput.value : 0) || 0;
+      let cardVal = parseFloat(cardInput ? cardInput.value : 0) || 0;
 
       if (changedSource === 'cash') {
         if (cashVal > totalSum) cashVal = totalSum;
-        const rem = Math.max(0, totalSum - cashVal);
-        if (cardVal > rem) {
-          cardVal = rem;
-          nasiyaVal = 0;
-        } else {
-          nasiyaVal = Math.max(0, rem - cardVal);
-        }
-        document.getElementById('splitCardAmount').value = cardVal;
-        document.getElementById('splitNasiyaAmount').value = nasiyaVal;
+        cardVal = Math.max(0, totalSum - cashVal);
+        if (cardInput) cardInput.value = cardVal;
       } else if (changedSource === 'card') {
         if (cardVal > totalSum) cardVal = totalSum;
-        const rem = Math.max(0, totalSum - cardVal);
-        if (cashVal > rem) {
-          cashVal = rem;
-          nasiyaVal = 0;
-        } else {
-          nasiyaVal = Math.max(0, rem - cashVal);
-        }
-        document.getElementById('splitCashAmount').value = cashVal;
-        document.getElementById('splitNasiyaAmount').value = nasiyaVal;
-      } else if (changedSource === 'nasiya') {
-        if (nasiyaVal > totalSum) nasiyaVal = totalSum;
-        const rem = Math.max(0, totalSum - nasiyaVal);
-        if (cashVal > rem) {
-          cashVal = rem;
-          cardVal = 0;
-        } else {
-          cardVal = Math.max(0, rem - cashVal);
-        }
-        document.getElementById('splitCashAmount').value = cashVal;
-        document.getElementById('splitCardAmount').value = cardVal;
+        cashVal = Math.max(0, totalSum - cardVal);
+        if (cashInput) cashInput.value = cashVal;
       }
 
       const splitGiven = document.getElementById('splitCashGiven');
@@ -4847,34 +5282,31 @@
 
     function setSplitPreset(preset) {
       const totalSum = cart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
-      if (preset === 'all-nasiya') {
-        document.getElementById('splitCashAmount').value = 0;
-        document.getElementById('splitCardAmount').value = 0;
-        document.getElementById('splitNasiyaAmount').value = totalSum;
-        document.getElementById('splitCashGiven').value = 0;
-        const custInput = document.getElementById('splitNasiyaCustomer');
-        if (custInput) setTimeout(() => custInput.focus(), 50);
-      } else if (preset === 'all-cash') {
-        document.getElementById('splitCashAmount').value = totalSum;
-        document.getElementById('splitCardAmount').value = 0;
-        document.getElementById('splitNasiyaAmount').value = 0;
-        document.getElementById('splitCashGiven').value = totalSum;
-      } else if (preset === 'split-half') {
+      const cashInput = document.getElementById('splitCashAmount');
+      const cardInput = document.getElementById('splitCardAmount');
+      const givenInput = document.getElementById('splitCashGiven');
+
+      if (preset === 'split-half') {
         const half = Math.round(totalSum / 2);
-        document.getElementById('splitCashAmount').value = half;
-        document.getElementById('splitCardAmount').value = 0;
-        document.getElementById('splitNasiyaAmount').value = totalSum - half;
-        document.getElementById('splitCashGiven').value = half;
-        const custInput = document.getElementById('splitNasiyaCustomer');
-        if (custInput) setTimeout(() => custInput.focus(), 50);
+        if (cashInput) cashInput.value = half;
+        if (cardInput) cardInput.value = totalSum - half;
+        if (givenInput) givenInput.value = half;
+      } else if (preset === 'all-cash') {
+        if (cashInput) cashInput.value = totalSum;
+        if (cardInput) cardInput.value = 0;
+        if (givenInput) givenInput.value = totalSum;
+      } else if (preset === 'all-card') {
+        if (cashInput) cashInput.value = 0;
+        if (cardInput) cardInput.value = totalSum;
+        if (givenInput) givenInput.value = 0;
       }
       calculateSplitChange();
       updateSplitStatus();
     }
 
     function calculateSplitChange() {
-      const cashVal = parseFloat(document.getElementById('splitCashAmount').value) || 0;
-      const givenVal = parseFloat(document.getElementById('splitCashGiven').value) || cashVal;
+      const cashVal = parseFloat(document.getElementById('splitCashAmount')?.value) || 0;
+      const givenVal = parseFloat(document.getElementById('splitCashGiven')?.value) || cashVal;
       const change = Math.max(0, givenVal - cashVal);
       const el = document.getElementById('splitChangeAmount');
       if (el) el.textContent = `${change.toLocaleString()} so'm`;
@@ -4882,38 +5314,43 @@
 
     function updateSplitStatus() {
       const totalSum = cart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
-      const cashVal = parseFloat(document.getElementById('splitCashAmount').value) || 0;
-      const cardVal = parseFloat(document.getElementById('splitCardAmount').value) || 0;
-      const nasiyaVal = parseFloat(document.getElementById('splitNasiyaAmount').value) || 0;
-      const sum = cashVal + cardVal + nasiyaVal;
+      const cashVal = parseFloat(document.getElementById('splitCashAmount')?.value) || 0;
+      const cardVal = parseFloat(document.getElementById('splitCardAmount')?.value) || 0;
+      const sum = cashVal + cardVal;
       const badge = document.getElementById('splitBadgeStatus');
-      const custBox = document.getElementById('splitNasiyaCustomerBox');
-
-      if (custBox) {
-        if (nasiyaVal > 0) {
-          custBox.classList.remove('hidden');
-        } else {
-          custBox.classList.add('hidden');
-        }
-      }
 
       if (!badge) return;
 
       if (Math.abs(sum - totalSum) < 1) {
-        if (nasiyaVal > 0) {
-          badge.textContent = `✓ Nasiya: ${nasiyaVal.toLocaleString()} so'm`;
-          badge.className = "text-[10px] px-2 py-0.5 rounded-full bg-amber-950 text-amber-300 border border-amber-800 font-black";
-        } else {
-          badge.textContent = "✓ To'liq qoplandi";
-          badge.className = "text-[10px] px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800 font-black";
-        }
+        badge.textContent = "✓ To'liq qoplandi";
+        badge.className = "text-[10px] px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 font-black";
       } else if (sum < totalSum) {
         badge.textContent = `Yetmayapti: ${(totalSum - sum).toLocaleString()} so'm`;
-        badge.className = "text-[10px] px-2 py-0.5 rounded-full bg-amber-950 text-amber-400 border border-amber-800 font-black";
+        badge.className = "text-[10px] px-2.5 py-0.5 rounded-full bg-red-100 text-red-800 border border-red-300 font-black";
       } else {
         badge.textContent = `Ortiqcha: ${(sum - totalSum).toLocaleString()} so'm`;
-        badge.className = "text-[10px] px-2 py-0.5 rounded-full bg-red-950 text-red-400 border border-red-800 font-black";
+        badge.className = "text-[10px] px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-800 border border-purple-300 font-black";
       }
+    }
+
+    function calculateNasiyaDebt() {
+      const totalSum = cart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
+      const upfront = parseFloat(document.getElementById('nasiyaUpfrontAmount')?.value) || 0;
+      const remaining = Math.max(0, totalSum - upfront);
+
+      const totalDisplay = document.getElementById('nasiyaTotalDebtDisplay');
+      if (totalDisplay) totalDisplay.textContent = `${totalSum.toLocaleString()} so'm`;
+
+      const remDisplay = document.getElementById('nasiyaRemainingDebtDisplay');
+      if (remDisplay) remDisplay.textContent = `${remaining.toLocaleString()} so'm`;
+    }
+
+    function setNasiyaDays(days) {
+      const d = new Date();
+      d.setDate(d.getDate() + days);
+      const dateStr = d.toISOString().split('T')[0];
+      const input = document.getElementById('nasiyaDueDate');
+      if (input) input.value = dateStr;
     }
 
     async function confirmCheckout() {
@@ -4936,58 +5373,85 @@
       let nasiyaCustomer = '';
       let nasiyaPhone = '';
       let nasiyaDueDate = '';
+      let paymentType = currentPayType;
 
       if (currentPayType === 'Naqd pul' || currentPayType === 'Naqd') {
         cashAmount = totalSum;
         cardAmount = 0;
         nasiyaAmount = 0;
         cashGiven = parseFloat(document.getElementById('checkoutCashGiven').value) || totalSum;
+        paymentType = 'Naqd pul';
       } else if (currentPayType === 'Karta') {
         cashAmount = 0;
         cardAmount = totalSum;
         nasiyaAmount = 0;
         cashGiven = 0;
+        paymentType = 'Karta';
       } else if (currentPayType === 'Aralash') {
         cashAmount = parseFloat(document.getElementById('splitCashAmount').value) || 0;
         cardAmount = parseFloat(document.getElementById('splitCardAmount').value) || 0;
-        nasiyaAmount = parseFloat(document.getElementById('splitNasiyaAmount').value) || 0;
+        nasiyaAmount = 0;
         cashGiven = parseFloat(document.getElementById('splitCashGiven').value) || cashAmount;
 
-        const sum = cashAmount + cardAmount + nasiyaAmount;
+        const sum = cashAmount + cardAmount;
         if (Math.abs(sum - totalSum) > 1) {
-          alert(`Taqsimot summasi jami summaga (${totalSum.toLocaleString()} so'm) teng bo'lishi kerak!\nHozirda: Naqd (${cashAmount.toLocaleString()}) + Karta (${cardAmount.toLocaleString()}) + Nasiya (${nasiyaAmount.toLocaleString()}) = ${sum.toLocaleString()} so'm`);
+          alert(`Taqsimot summasi jami summaga (${totalSum.toLocaleString()} so'm) teng bo'lishi kerak!\nHozirda: Naqd (${cashAmount.toLocaleString()}) + Karta (${cardAmount.toLocaleString()}) = ${sum.toLocaleString()} so'm`);
+          btn.disabled = false;
+          btn.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i><span>To'lovni Qabul Qilish va Chek</span>`;
+          lucide.createIcons();
+          return;
+        }
+        paymentType = 'ARALASH';
+      } else if (currentPayType === 'Nasiya') {
+        const upfront = parseFloat(document.getElementById('nasiyaUpfrontAmount').value) || 0;
+        const upfrontTypeRadio = document.querySelector('input[name="nasiyaUpfrontType"]:checked');
+        const upfrontType = upfrontTypeRadio ? upfrontTypeRadio.value : 'Naqd';
+
+        if (upfront > totalSum) {
+          alert(`Boshlang'ich to'lov jami summadan (${totalSum.toLocaleString()} so'm) ko'p bo'lishi mumkin emas!`);
           btn.disabled = false;
           btn.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i><span>To'lovni Qabul Qilish va Chek</span>`;
           lucide.createIcons();
           return;
         }
 
-        if (nasiyaAmount > 0) {
-          nasiyaCustomer = (document.getElementById('splitNasiyaCustomer').value || '').trim();
-          nasiyaPhone = (document.getElementById('splitNasiyaPhone').value || '').trim();
-          nasiyaDueDate = (document.getElementById('splitNasiyaDueDate').value || '').trim();
-
-          if (!nasiyaCustomer) {
-            alert("Nasiyaga sotish uchun iltimos mijoz ismini (F.I.SH) kiriting!");
-            document.getElementById('splitNasiyaCustomer').focus();
-            btn.disabled = false;
-            btn.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i><span>To'lovni Qabul Qilish va Chek</span>`;
-            lucide.createIcons();
-            return;
-          }
-          if (!nasiyaPhone) {
-            alert("Nasiyaga sotish uchun mijoz telefon raqamini kiriting!");
-            document.getElementById('splitNasiyaPhone').focus();
-            btn.disabled = false;
-            btn.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i><span>To'lovni Qabul Qilish va Chek</span>`;
-            lucide.createIcons();
-            return;
-          }
+        if (upfrontType === 'Karta') {
+          cashAmount = 0;
+          cardAmount = upfront;
+          cashGiven = 0;
+        } else {
+          cashAmount = upfront;
+          cardAmount = 0;
+          cashGiven = upfront;
         }
+
+        nasiyaAmount = Math.max(0, totalSum - upfront);
+        nasiyaCustomer = (document.getElementById('nasiyaCustomer').value || '').trim();
+        nasiyaPhone = (document.getElementById('nasiyaPhone').value || '').trim();
+        nasiyaDueDate = (document.getElementById('nasiyaDueDate').value || '').trim();
+
+        if (!nasiyaCustomer) {
+          alert("Nasiyaga sotish uchun iltimos xaridor ismini (F.I.SH) kiriting!");
+          document.getElementById('nasiyaCustomer').focus();
+          btn.disabled = false;
+          btn.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i><span>To'lovni Qabul Qilish va Chek</span>`;
+          lucide.createIcons();
+          return;
+        }
+        if (!nasiyaPhone) {
+          alert("Nasiyaga sotish uchun xaridor telefon raqamini kiriting!");
+          document.getElementById('nasiyaPhone').focus();
+          btn.disabled = false;
+          btn.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i><span>To'lovni Qabul Qilish va Chek</span>`;
+          lucide.createIcons();
+          return;
+        }
+
+        paymentType = 'NASIYA';
       }
 
       const payload = {
-        paymentType: nasiyaAmount > 0 ? (cashAmount > 0 || cardAmount > 0 ? 'ARALASH / NASIYA' : 'NASIYA') : (currentPayType === 'Aralash' ? 'ARALASH' : currentPayType),
+        paymentType: paymentType,
         cashGiven: cashGiven,
         cashAmount: cashAmount,
         cardAmount: cardAmount,

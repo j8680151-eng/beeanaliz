@@ -259,6 +259,7 @@
         localStorage.setItem('bee_token', data.token);
         localStorage.setItem('bee_store_id', data.store_id);
         localStorage.setItem('bee_store_name', data.store_name);
+        document.cookie = "bee_token=" + data.token + "; path=/; max-age=" + (86400 * 30);
         if (data.is_admin) {
           localStorage.setItem('bee_is_admin', 'true');
         } else {

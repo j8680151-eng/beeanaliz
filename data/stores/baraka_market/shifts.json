@@ -2,27 +2,30 @@
   {
     "id": "SMN-0009",
     "shiftNumber": 9,
-    "status": "open",
+    "status": "closed",
     "openedAt": "2026-09-29 18:14",
     "openedBy": "Bosh Kassir / Do'kon Egasi",
     "openedById": "",
     "openingCash": 50000.0,
-    "closedAt": null,
-    "closedBy": null,
-    "closedById": null,
-    "closingCashActual": null,
+    "closedAt": "2026-09-30 20:21",
+    "closedBy": "Bosh Kassir / Do'kon Egasi",
+    "closedById": "",
+    "closingCashActual": 50000.0,
     "expectedCash": 50000.0,
     "cashDifference": 0.0,
-    "totalSales": 0.0,
+    "totalSales": 3000000.0,
     "cashSales": 0.0,
     "cardSales": 0.0,
     "splitSales": 0.0,
-    "ordersCount": 0,
+    "ordersCount": 1,
     "returnsCount": 0,
     "returnsAmount": 0.0,
     "expensesAmount": 0.0,
     "note": "",
-    "orders": []
+    "orders": [
+      "ORD-1747"
+    ],
+    "closeNote": ""
   },
   {
     "id": "SMN-0008",

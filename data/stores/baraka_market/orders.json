@@ -1,5 +1,36 @@
 [
   {
+    "id": "ORD-1747",
+    "storeId": "baraka_market",
+    "storeName": "MENVIO",
+    "storePhone": "+998 90 123 45 67",
+    "storeAddress": "Namangan Shahar Chorsu Bozori",
+    "receiptFooter": "Xaridingiz uchun rahmat!Yana kutib qolamiz.",
+    "date": "2026-09-30 20:17",
+    "customerName": "Alihan",
+    "employeeId": "EMP-14093246",
+    "employeeName": "Bonu",
+    "paymentMethod": "NASIYA",
+    "cashAmount": 0.0,
+    "cardAmount": 0.0,
+    "cashGiven": 3000000.0,
+    "itemsCount": 1,
+    "totalAmount": 3000000.0,
+    "profit": 1000000.0,
+    "items": [
+      {
+        "name": "IPHONE 12 PRO 256GB",
+        "barcode": "478766840",
+        "quantity": 1.0,
+        "unit": "dona",
+        "price": 3000000.0,
+        "cost": 2000000.0
+      }
+    ],
+    "shiftId": "SMN-0009",
+    "shiftNumber": 9
+  },
+  {
     "id": "ORD-1642",
     "storeId": "baraka_market",
     "storeName": "MENVIO",

@@ -1,0 +1,247 @@
+[
+  {
+    "id": "ORD-1104",
+    "storeId": "zafar_supermarket",
+    "storeName": "Zafar Supermarket",
+    "storePhone": "998939998877",
+    "storeAddress": "O'zbekiston",
+    "receiptFooter": "Xaridingiz uchun rahmat!\nYana kutib qolamiz.",
+    "date": "2026-10-01 19:11",
+    "customerName": "Xaridor",
+    "employeeId": "EMP-001",
+    "employeeName": "Bosh Kassir",
+    "paymentMethod": "NAQD PUL",
+    "cashAmount": 1000000.0,
+    "cardAmount": 0.0,
+    "nasiyaAmount": 0.0,
+    "nasiyaDueDate": "",
+    "nasiyaPhone": "",
+    "cashGiven": 1000000.0,
+    "itemsCount": 100,
+    "totalAmount": 1000000.0,
+    "profit": 150000.0,
+    "items": [
+      {
+        "name": "Sayhun 10 Litr",
+        "barcode": "478229673",
+        "quantity": 100.0,
+        "unit": "dona",
+        "price": 10000.0,
+        "cost": 8500.0
+      }
+    ],
+    "shiftId": "SMN-0005",
+    "shiftNumber": 5
+  },
+  {
+    "id": "ORD-3719",
+    "storeId": "zafar_supermarket",
+    "storeName": "Zafar Supermarket",
+    "storePhone": "998939998877",
+    "storeAddress": "O'zbekiston",
+    "receiptFooter": "Xaridingiz uchun rahmat!\nYana kutib qolamiz.",
+    "date": "2026-10-01 18:37",
+    "customerName": "Xaridor",
+    "employeeId": "EMP-001",
+    "employeeName": "Bosh Kassir",
+    "paymentMethod": "NAQD PUL",
+    "cashAmount": 120000.0,
+    "cardAmount": 0.0,
+    "nasiyaAmount": 0.0,
+    "nasiyaDueDate": "",
+    "nasiyaPhone": "",
+    "cashGiven": 120000.0,
+    "itemsCount": 1,
+    "totalAmount": 120000.0,
+    "profit": 35000.0,
+    "items": [
+      {
+        "name": "Pista",
+        "barcode": "478878842",
+        "quantity": 1.0,
+        "unit": "kg",
+        "price": 120000.0,
+        "cost": 85000.0
+      }
+    ],
+    "shiftId": "SMN-0005",
+    "shiftNumber": 5
+  },
+  {
+    "id": "ORD-3444",
+    "storeId": "zafar_supermarket",
+    "storeName": "Zafar Supermarket",
+    "storePhone": "998939998877",
+    "storeAddress": "O'zbekiston",
+    "receiptFooter": "Xaridingiz uchun rahmat!\nYana kutib qolamiz.",
+    "date": "2026-10-01 18:34",
+    "customerName": "Xaridor",
+    "employeeId": "",
+    "employeeName": "Bosh Kassir",
+    "paymentMethod": "NAQD PUL",
+    "cashAmount": 17600.0,
+    "cardAmount": 0.0,
+    "nasiyaAmount": 0.0,
+    "nasiyaDueDate": "",
+    "nasiyaPhone": "",
+    "cashGiven": 17600.0,
+    "itemsCount": 2,
+    "totalAmount": 17600.0,
+    "profit": 4400.0,
+    "items": [
+      {
+        "name": "Olma Qizil Beshyulduz",
+        "barcode": "4780099120015",
+        "quantity": 0.1,
+        "unit": "kg",
+        "price": 16000.0,
+        "cost": 12000.0
+      },
+      {
+        "name": "Coca Cola 0.5L",
+        "barcode": "5449000000996",
+        "quantity": 2.0,
+        "unit": "dona",
+        "price": 8000.0,
+        "cost": 6000.0
+      }
+    ],
+    "shiftId": "SMN-0005",
+    "shiftNumber": 5
+  },
+  {
+    "id": "ORD-3916",
+    "storeId": "zafar_supermarket",
+    "storeName": "Zafar Supermarket",
+    "storePhone": "998939998877",
+    "storeAddress": "O'zbekiston",
+    "receiptFooter": "Xaridingiz uchun rahmat!\nYana kutib qolamiz.",
+    "date": "2026-10-01 10:39",
+    "customerName": "Alihan",
+    "employeeId": "EMP-001",
+    "employeeName": "Bosh Kassir",
+    "paymentMethod": "NASIYA",
+    "cashAmount": 0.0,
+    "cardAmount": 20000.0,
+    "nasiyaAmount": 80000.0,
+    "nasiyaDueDate": "2026-10-08",
+    "nasiyaPhone": "+998901234567",
+    "cashGiven": 0.0,
+    "itemsCount": 1,
+    "totalAmount": 100000.0,
+    "profit": 78000.0,
+    "items": [
+      {
+        "name": "Tilla Quti",
+        "barcode": "478360775",
+        "quantity": 1.0,
+        "unit": "dona",
+        "price": 100000.0,
+        "cost": 22000.0
+      }
+    ],
+    "shiftId": "SMN-0005",
+    "shiftNumber": 5
+  },
+  {
+    "id": "ORD-1549",
+    "storeId": "zafar_supermarket",
+    "storeName": "Zafar Supermarket",
+    "storePhone": "998939998877",
+    "storeAddress": "O'zbekiston",
+    "receiptFooter": "Xaridingiz uchun rahmat!\nYana kutib qolamiz.",
+    "date": "2026-10-01 10:15",
+    "customerName": "Xaridor",
+    "employeeId": "",
+    "employeeName": "Mobil Kassir",
+    "paymentMethod": "NAQD",
+    "cashAmount": 700000.0,
+    "cardAmount": 0.0,
+    "cashGiven": 700000.0,
+    "itemsCount": 20,
+    "totalAmount": 700000.0,
+    "profit": 260000.0,
+    "items": [
+      {
+        "name": "Dori",
+        "barcode": "4780063580409",
+        "quantity": 20.0,
+        "unit": "dona",
+        "price": 35000.0,
+        "cost": 22000.0
+      }
+    ],
+    "shiftId": "SMN-0005",
+    "shiftNumber": 5
+  },
+  {
+    "id": "ORD-1019",
+    "storeId": "zafar_supermarket",
+    "storeName": "Zafar Supermarket",
+    "storePhone": "998939998877",
+    "storeAddress": "O'zbekiston",
+    "receiptFooter": "Xaridingiz uchun rahmat!\nYana kutib qolamiz.",
+    "date": "2026-09-30 21:10",
+    "customerName": "Xaridor",
+    "employeeId": "",
+    "employeeName": "Mobil Kassir",
+    "paymentMethod": "NAQD",
+    "cashAmount": 74000.0,
+    "cardAmount": 0.0,
+    "cashGiven": 74000.0,
+    "itemsCount": 2,
+    "totalAmount": 74000.0,
+    "profit": 46800.0,
+    "items": [
+      {
+        "name": "Tilla Quti",
+        "barcode": "478360775",
+        "quantity": 1.0,
+        "unit": "dona",
+        "price": 52000.0,
+        "cost": 22000.0
+      },
+      {
+        "name": "Lampa 18w",
+        "barcode": "4780115630229",
+        "quantity": 1.0,
+        "unit": "dona",
+        "price": 22000.0,
+        "cost": 5200.0
+      }
+    ],
+    "shiftId": "SMN-0003",
+    "shiftNumber": 3
+  },
+  {
+    "id": "ORD-0625",
+    "storeId": "zafar_supermarket",
+    "storeName": "Zafar Supermarket",
+    "storePhone": "998939998877",
+    "storeAddress": "O'zbekiston",
+    "receiptFooter": "Xaridingiz uchun rahmat!\nYana kutib qolamiz.",
+    "date": "2026-09-30 21:06",
+    "customerName": "Xaridor",
+    "employeeId": "",
+    "employeeName": "Mobil Kassir",
+    "paymentMethod": "NAQD",
+    "cashAmount": 22000.0,
+    "cardAmount": 0.0,
+    "cashGiven": 22000.0,
+    "itemsCount": 1,
+    "totalAmount": 22000.0,
+    "profit": 16800.0,
+    "items": [
+      {
+        "name": "Lampa 18w",
+        "barcode": "4780115630229",
+        "quantity": 1.0,
+        "unit": "dona",
+        "price": 22000.0,
+        "cost": 5200.0
+      }
+    ],
+    "shiftId": "SMN-0003",
+    "shiftNumber": 3
+  }
+]
